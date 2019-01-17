@@ -153,7 +153,8 @@ class MysqlSchemaParser extends BaseSchemaParser
      */
     protected function addColumns(Table $table)
     {
-        $stmt = $this->dbh->query("SHOW COLUMNS FROM `" . $table->getName() . "`");
+        // CK Update: FULL - to add column comment/description from schema
+        $stmt = $this->dbh->query("SHOW FULL COLUMNS FROM `" . $table->getName() . "`");
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $column = $this->getColumnFromRow($row, $table);
@@ -259,6 +260,9 @@ class MysqlSchemaParser extends BaseSchemaParser
             $vi = $this->getNewVendorInfoObject($row);
             $column->addVendorInfo($vi);
         }
+
+        // CK Update: to add column comment/description from schema
+        $column->setDescription($row['Comment']);
 
         return $column;
     }
