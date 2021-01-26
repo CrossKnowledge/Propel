@@ -648,6 +648,24 @@ class PropelPDO extends PDO
     }
 
     /**
+     * Returns a string with files, lines e functions of the stacktrace to this method
+     *
+     * @return str
+     */
+    function generateCallTrace()
+    {
+      $stacktrace = debug_backtrace(2);
+      $stackLog   = '';
+      foreach ($stacktrace as $stack) {
+        $file     = isset($stack['file']) ? $stack['file'] : "Unknown file";
+        $line     = isset($stack['line']) ? $stack['line'] : "Unknown line";
+        $stackLog .= $file.':'.$line.' '.$stack['function']."()\n";
+      }
+
+      return $stackLog;
+    }
+
+    /**
      * Returns a snapshot of the current values of some functions useful in debugging.
      *
      * @return array
@@ -661,6 +679,7 @@ class PropelPDO extends PDO
                 'microtime'             => microtime(true),
                 'memory_get_usage'      => memory_get_usage($this->getLoggingConfig('realmemoryusage', false)),
                 'memory_get_peak_usage' => memory_get_peak_usage($this->getLoggingConfig('realmemoryusage', false)),
+                'stacktrace'            => $this->generateCallTrace(),
                 );
         } else {
             throw new PropelException('Should not get debug snapshot when not debugging');
@@ -752,6 +771,10 @@ class PropelPDO extends PDO
 
                 case 'connection':
                     $value = $this->connectionName;
+                    break;
+
+                case 'stacktrace':
+                    $value = $debugSnapshot['stacktrace'];
                     break;
 
                 default:
