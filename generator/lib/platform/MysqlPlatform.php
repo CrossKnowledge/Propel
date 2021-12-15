@@ -36,7 +36,8 @@ class MysqlPlatform extends DefaultPlatform
     protected function initialize()
     {
         parent::initialize();
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::BOOLEAN, "TINYINT", 1));
+        $this->setSchemaDomainMapping(new Domain(PropelTypes::BOOLEAN, "TINYINT", 1, null, null));
+        $this->setSchemaDomainMapping(new Domain(PropelTypes::MEDIUMINT, "MEDIUMINT"));
         $this->setSchemaDomainMapping(new Domain(PropelTypes::NUMERIC, "DECIMAL"));
         $this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARCHAR, "TEXT"));
         $this->setSchemaDomainMapping(new Domain(PropelTypes::BINARY, "BLOB"));
@@ -44,10 +45,11 @@ class MysqlPlatform extends DefaultPlatform
         $this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARBINARY, "LONGBLOB"));
         $this->setSchemaDomainMapping(new Domain(PropelTypes::BLOB, "LONGBLOB"));
         $this->setSchemaDomainMapping(new Domain(PropelTypes::CLOB, "LONGTEXT"));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::TIMESTAMP, "DATETIME"));
+        $this->setSchemaDomainMapping(new Domain(PropelTypes::TIMESTAMP, "TIMESTAMP"));
+        $this->setSchemaDomainMapping(new Domain(PropelTypes::DATETIME, "DATETIME"));
         $this->setSchemaDomainMapping(new Domain(PropelTypes::OBJECT, "TEXT"));
         $this->setSchemaDomainMapping(new Domain(PropelTypes::PHP_ARRAY, "TEXT"));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::ENUM, "TINYINT"));
+        $this->setSchemaDomainMapping(new Domain(PropelTypes::ENUM, "TINYINT", null, null, null));
     }
 
     public function setGeneratorConfig(GeneratorConfigInterface $generatorConfig)
@@ -231,15 +233,14 @@ SET FOREIGN_KEY_CHECKS = 1;
         }
 
         $tableOptions = $tableOptions ? ' ' . implode(' ', $tableOptions) : '';
-        $sep          = ",
-    ";
+        $sep          = ",\n    ";
 
-        $pattern = "
+        $pattern = /** @lang text*/ '
 CREATE TABLE %s
 (
     %s
 ) %s=%s%s;
-";
+';
 
         return sprintf($pattern,
             $this->quoteIdentifier($table->getName()),
@@ -329,11 +330,15 @@ DROP TABLE IF EXISTS " . $this->quoteIdentifier($table->getName()) . ";
         }
 
         $ddl = array($this->quoteIdentifier($col->getName()));
-        if ($this->hasSize($sqlType) && $col->isDefaultSqlType($this)) {
-            $ddl[] = $sqlType . $domain->printSize();
-        } else {
-            $ddl[] = $sqlType;
+        $ddlType = $sqlType;
+        if ($this->hasSize($domain->getType()) && $col->isDefaultSqlType($this)) {
+            $ddlType .= $domain->printSize();
         }
+        if ($col->getUnsigned() && stripos($ddlType, 'unsigned') === false) {
+            $ddlType .= ' unsigned';
+        }
+        $ddl[] = $ddlType;
+
         $colinfo = $col->getVendorInfoForType($this->getDatabaseType());
         if ($colinfo->hasParameter('Charset')) {
             $ddl[] = 'CHARACTER SET ' . $this->quote($colinfo->getParameter('Charset'));
@@ -367,9 +372,12 @@ DROP TABLE IF EXISTS " . $this->quoteIdentifier($table->getName()) . ";
         if ($autoIncrement = $col->getAutoIncrementString()) {
             $ddl[] = $autoIncrement;
         }
-        if ($col->getDescription()) {
-            $ddl[] = 'COMMENT ' . $this->quote($col->getDescription());
+
+        $description = $col->getEnhancedDescription();
+        if (!empty($description)) {
+            $ddl[] = 'COMMENT ' . $this->quote($description);
         }
+
 
         return implode(' ', $ddl);
     }
@@ -583,15 +591,37 @@ RENAME TABLE %s TO %s;
      */
     public function getRemoveColumnDDL(Column $column)
     {
-        $pattern = "
-ALTER TABLE %s DROP %s;
-";
+        $pattern = "\nALTER TABLE %s DROP %s;\n";
 
         return sprintf($pattern,
             $this->quoteIdentifier($column->getTable()->getName()),
             $this->quoteIdentifier($column->getName())
         );
     }
+
+    /**
+     * Builds the DDL SQL to drop a list of columns
+     *
+     * @return string
+     */
+    public function getRemoveColumnsDDL($columns)
+    {
+        $lines     = array();
+        $tableName = null;
+        /* @var Column $column */
+        foreach ($columns as $column) {
+            $lines[] = sprintf("DROP %s", $this->quoteIdentifier($column->getName()));
+        }
+
+        $pattern = "\nALTER TABLE %s\n    %s;\n";
+        $sep = ",\n    ";
+
+        return sprintf($pattern,
+            $this->quoteIdentifier($tableName),
+            implode($sep, $lines)
+        );
+    }
+
 
     /**
      * Builds the DDL SQL to rename a column
@@ -618,9 +648,7 @@ ALTER TABLE %s DROP %s;
      */
     public function getChangeColumnDDL($fromColumn, $toColumn)
     {
-        $pattern = "
-ALTER TABLE %s CHANGE %s %s;
-";
+        $pattern = /** @lang text*/ "\nALTER TABLE %s CHANGE %s %s;\n";
 
         return sprintf($pattern,
             $this->quoteIdentifier($fromColumn->getTable()->getName()),
@@ -709,9 +737,10 @@ ALTER TABLE %s
 
     public function hasSize($sqlType)
     {
-        return !("MEDIUMTEXT" == $sqlType || "LONGTEXT" == $sqlType
-            || "BLOB" == $sqlType || "MEDIUMBLOB" == $sqlType
-            || "LONGBLOB" == $sqlType);
+        return !in_array($sqlType, [
+            'MEDIUMTEXT', 'LONGTEXT', 'BLOB', 'MEDIUMBLOB', 'LONGBLOB',
+            'INTEGER', 'TINYINT', 'BOOLEAN', 'MEDIUMINT', 'INT', 'SMALLINT', 'BIGINT'
+        ]);
     }
 
     /**
@@ -753,8 +782,7 @@ ALTER TABLE %s
         // See http://pecl.php.net/bugs/bug.php?id=9919
         if ($column->getPDOType() == PDO::PARAM_BOOL) {
             return sprintf(
-                "
-%s\$stmt->bindValue(%s, (int) %s, PDO::PARAM_INT);",
+                "\n%s\$stmt->bindValue(%s, (int) %s, PDO::PARAM_INT);",
                 $tab,
                 $identifier,
                 $columnValueAccessor

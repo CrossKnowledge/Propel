@@ -27,6 +27,7 @@ class PropelTypes
     const DECIMAL = "DECIMAL";
     const TINYINT = "TINYINT";
     const SMALLINT = "SMALLINT";
+    const MEDIUMINT = "MEDIUMINT";
     const INTEGER = "INTEGER";
     const BIGINT = "BIGINT";
     const REAL = "REAL";
@@ -37,6 +38,7 @@ class PropelTypes
     const LONGVARBINARY = "LONGVARBINARY";
     const BLOB = "BLOB";
     const DATE = "DATE";
+    const DATETIME = "DATETIME";
     const TIME = "TIME";
     const TIMESTAMP = "TIMESTAMP";
     const BU_DATE = "BU_DATE";
@@ -56,11 +58,11 @@ class PropelTypes
     );
 
     private static $TEMPORAL_TYPES = array(
-        self::DATE, self::TIME, self::TIMESTAMP, self::BU_DATE, self::BU_TIMESTAMP
+        self::DATE, self::TIME, self::DATETIME, self::TIMESTAMP, self::BU_DATE, self::BU_TIMESTAMP
     );
 
     private static $NUMERIC_TYPES = array(
-        self::SMALLINT, self::TINYINT, self::INTEGER, self::BIGINT, self::FLOAT, self::DOUBLE, self::NUMERIC, self::DECIMAL, self::REAL
+        self::SMALLINT, self::TINYINT, self::MEDIUMINT, self::INTEGER, self::BIGINT, self::FLOAT, self::DOUBLE, self::NUMERIC, self::DECIMAL, self::REAL
     );
 
     private static $BOOLEAN_TYPES = array(
@@ -76,6 +78,7 @@ class PropelTypes
     const DECIMAL_NATIVE_TYPE = "string";
     const TINYINT_NATIVE_TYPE = "int";
     const SMALLINT_NATIVE_TYPE = "int";
+    const MEDIUMINT_NATIVE_TYPE = "int";
     const INTEGER_NATIVE_TYPE = "int";
     const BIGINT_NATIVE_TYPE = "string";
     const REAL_NATIVE_TYPE = "double";
@@ -111,6 +114,7 @@ class PropelTypes
             self::DECIMAL => self::DECIMAL_NATIVE_TYPE,
             self::TINYINT => self::TINYINT_NATIVE_TYPE,
             self::SMALLINT => self::SMALLINT_NATIVE_TYPE,
+            self::MEDIUMINT=> self::MEDIUMINT_NATIVE_TYPE,
             self::INTEGER => self::INTEGER_NATIVE_TYPE,
             self::BIGINT => self::BIGINT_NATIVE_TYPE,
             self::REAL => self::REAL_NATIVE_TYPE,
@@ -123,6 +127,7 @@ class PropelTypes
             self::DATE => self::DATE_NATIVE_TYPE,
             self::BU_DATE => self::BU_DATE_NATIVE_TYPE,
             self::TIME => self::TIME_NATIVE_TYPE,
+            self::DATETIME => self::TIMESTAMP_NATIVE_TYPE,
             self::TIMESTAMP => self::TIMESTAMP_NATIVE_TYPE,
             self::BU_TIMESTAMP => self::BU_TIMESTAMP_NATIVE_TYPE,
             self::BOOLEAN => self::BOOLEAN_NATIVE_TYPE,
@@ -147,6 +152,7 @@ class PropelTypes
             self::DECIMAL => self::DECIMAL,
             self::TINYINT => self::TINYINT,
             self::SMALLINT => self::SMALLINT,
+            self::MEDIUMINT => self::MEDIUMINT,
             self::INTEGER => self::INTEGER,
             self::BIGINT => self::BIGINT,
             self::REAL => self::REAL,
@@ -159,6 +165,7 @@ class PropelTypes
             self::DATE => self::DATE,
             self::TIME => self::TIME,
             self::TIMESTAMP => self::TIMESTAMP,
+            self::DATETIME => self::DATETIME,
             self::BOOLEAN => self::BOOLEAN,
             self::BOOLEAN_EMU => self::BOOLEAN_EMU,
             self::OBJECT => self::OBJECT,
@@ -186,6 +193,7 @@ class PropelTypes
             self::NUMERIC => PDO::PARAM_INT,
             self::DECIMAL => PDO::PARAM_STR,
             self::TINYINT => PDO::PARAM_INT,
+            self::MEDIUMINT => PDO::PARAM_INT,
             self::SMALLINT => PDO::PARAM_INT,
             self::INTEGER => PDO::PARAM_INT,
             self::BIGINT => PDO::PARAM_STR,
@@ -197,6 +205,7 @@ class PropelTypes
             self::LONGVARBINARY => PDO::PARAM_LOB,
             self::BLOB => PDO::PARAM_LOB,
             self::DATE => PDO::PARAM_STR,
+            self::DATETIME => PDO::PARAM_STR,
             self::TIME => PDO::PARAM_STR,
             self::TIMESTAMP => PDO::PARAM_STR,
             self::BOOLEAN => PDO::PARAM_BOOL,

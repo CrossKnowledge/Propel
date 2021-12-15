@@ -84,7 +84,9 @@ abstract class XMLElement
      */
     protected function booleanValue($val)
     {
-        if (is_numeric($val)) {
+        if (is_bool($val)) {
+            return $val;
+        } elseif (is_numeric($val)) {
             return (bool) $val;
         } else {
             return (in_array(strtolower($val), array('true', 't', 'y', 'yes'), true) ? true : false);

@@ -131,6 +131,9 @@ abstract class ".$this->getClassname()." {
         $npath_len = 0;
         $npath_sep = '';
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isNodeKey()) {
                 $npath_colname = $table->getName() . '.' . $col->getName();
                 $npath_phpname = $col->getPhpName();

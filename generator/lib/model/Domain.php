@@ -42,6 +42,11 @@ class Domain extends XMLElement
     private $scale;
 
     /**
+     * @var        bool Unsigned
+     */
+    private $unsigned;
+
+    /**
      * @var        int Propel type from schema
      */
     private $propelType;
@@ -70,12 +75,13 @@ class Domain extends XMLElement
      * @param string $size
      * @param string $scale
      */
-    public function __construct($type = null, $sqlType = null, $size = null, $scale = null)
+    public function __construct($type = null, $sqlType = null, $size = null, $scale = null, $unsigned = null)
     {
-        $this->propelType = $type;
         $this->sqlType = ($sqlType !== null) ? $sqlType : $type;
         $this->size = $size;
         $this->scale = $scale;
+        $this->unsigned = $unsigned;
+        $this->replaceType($type);
     }
 
     /**
@@ -91,6 +97,7 @@ class Domain extends XMLElement
         $this->size = $domain->getSize();
         $this->sqlType = $domain->getSqlType();
         $this->propelType = $domain->getType();
+        $this->unsigned = $domain->getUnsigned();
     }
 
     /**
@@ -116,6 +123,7 @@ class Domain extends XMLElement
         $this->size = $this->getAttribute("size");
         $this->scale = $this->getAttribute("scale");
         $this->description = $this->getAttribute("description");
+        $this->unsigned = $this->booleanValue($this->getAttribute("unsigned"));
     }
 
     /**
@@ -150,6 +158,36 @@ class Domain extends XMLElement
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+    /**
+     * Returns true if unsigned
+     * @return bool
+     */
+    public function getUnsigned()
+    {
+        return $this->unsigned;
+    }
+
+    /**
+     * Set the unsigned information of the column
+     * @param bool $newUnsigned
+     */
+    public function setUnsigned($newUnsigned)
+    {
+        $this->unsigned = $newUnsigned;
+    }
+
+    /**
+     * Replaces the unsigned if the new value is not null.
+     *
+     * @param bool $value The unsigned to set.
+     */
+    public function replaceUnsigned($value)
+    {
+        if ($value !== null) {
+            $this->unsigned = $this->booleanValue($value);
+        }
     }
 
     /**

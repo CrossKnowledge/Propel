@@ -70,6 +70,9 @@ class PropelColumnComparator
         if ($fromColumn->isNotNull() != $toColumn->isNotNull()) {
             $changedProperties['notNull'] = array($fromColumn->isNotNull(), $toColumn->isNotNull());
         }
+        if ($fromDomain->getUnsigned() != $toDomain->getUnsigned()) {
+            $changedProperties['unsigned'] = array($fromDomain->getUnsigned(), $toDomain->getUnsigned());
+        }
 
         // compare column default value
         $fromDefaultValue = $fromColumn->getDefaultValue();

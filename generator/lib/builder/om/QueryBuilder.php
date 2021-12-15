@@ -95,6 +95,9 @@ class QueryBuilder extends OMBuilder
 
         // magic orderBy() methods, for IDE completion
         foreach ($this->getTable()->getColumns() as $column) {
+            if ($column->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "
  * @method $queryClass orderBy" . $column->getPhpName() . "(\$order = Criteria::ASC) Order by the " . $column->getName() . " column";
         }
@@ -103,6 +106,9 @@ class QueryBuilder extends OMBuilder
 
         // magic groupBy() methods, for IDE completion
         foreach ($this->getTable()->getColumns() as $column) {
+            if ($column->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "
  * @method $queryClass groupBy" . $column->getPhpName() . "() Group by the " . $column->getName() . " column";
         }
@@ -143,6 +149,9 @@ class QueryBuilder extends OMBuilder
 
         // magic findBy() methods, for IDE completion
         foreach ($this->getTable()->getColumns() as $column) {
+            if ($column->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             // skip "findPk" alias method
             if (!$this->getTable()->hasCompositePrimaryKey() && $column->isPrimaryKey()) {
                 continue;
@@ -154,6 +163,9 @@ class QueryBuilder extends OMBuilder
         $script .= "
  *";
         foreach ($this->getTable()->getColumns() as $column) {
+            if ($column->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "
  * @method array findBy" . $column->getPhpName() . "(" . $column->getPhpType() . " \$" . $column->getName() . ") Return $modelClass objects filtered by the " . $column->getName() . " column";
         }
@@ -197,6 +209,9 @@ abstract class ".$this->getClassname()." extends " . $parentClass . "
         $this->addFilterByPrimaryKey($script);
         $this->addFilterByPrimaryKeys($script);
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $this->addFilterByCol($script, $col);
             if ($col->getType() === PropelTypes::PHP_ARRAY && $col->isNamePlural()) {
                 $this->addFilterByArrayCol($script, $col);
@@ -485,6 +500,9 @@ abstract class ".$this->getClassname()." extends " . $parentClass . "
         $this->declareClasses('PDO', 'PropelException', 'PropelObjectCollection');
         $selectColumns = array();
         foreach ($table->getColumns() as $column) {
+            if ($column->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if (!$column->isLazyLoad()) {
                 $selectColumns []= $platform->quoteIdentifier($column->getName());
             }

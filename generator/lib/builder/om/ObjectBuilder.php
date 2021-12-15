@@ -55,9 +55,12 @@ abstract class ObjectBuilder extends OMBuilder
         $table = $this->getTable();
 
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
 
             // if they're not using the DateTime class than we will generate "compatibility" accessor method
-            if ($col->getType() === PropelTypes::DATE || $col->getType() === PropelTypes::TIME || $col->getType() === PropelTypes::TIMESTAMP) {
+            if (PropelTypes::isTemporalType($col->getType())) {
                 $this->addTemporalAccessor($script, $col);
             } elseif ($col->getType() === PropelTypes::OBJECT) {
                 $this->addObjectAccessor($script, $col);
@@ -87,6 +90,9 @@ abstract class ObjectBuilder extends OMBuilder
     protected function addColumnMutatorMethods(&$script)
     {
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isLobType()) {
                 $this->addLobMutator($script, $col);
             } elseif ($col->getType() === PropelTypes::DATE || $col->getType() === PropelTypes::TIME || $col->getType() === PropelTypes::TIMESTAMP) {
@@ -176,7 +182,26 @@ abstract class ObjectBuilder extends OMBuilder
     protected function hasDefaultValues()
     {
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if($col->getDefaultValue() !== null) return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool return true if at least one column has default value that is not an expression
+     */
+    protected function hasDefaultValuesNotExpression()
+    {
+        foreach ($this->getTable()->getColumns() as $col) {
+            /* @var Column $col */
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
+            if($col->getDefaultValue() !== null && !$col->getDefaultValue()->isExpression()) return true;
         }
 
         return false;

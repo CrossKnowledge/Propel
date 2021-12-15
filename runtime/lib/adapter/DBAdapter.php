@@ -284,6 +284,7 @@ abstract class DBAdapter
                 $type = $type->getType();
             }
             switch ($type) {
+                case PropelColumnTypes::DATE:
                 case PropelColumnTypes::TIMESTAMP:
                 case PropelColumnTypes::BU_TIMESTAMP:
                     $value = $dt->format($this->getTimestampFormatter());

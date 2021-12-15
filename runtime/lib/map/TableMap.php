@@ -282,11 +282,12 @@ class TableMap
      * @param  string    $defaultValue The default value for this column.
      * @return ColumnMap The newly created column.
      */
-    public function addColumn($name, $phpName, $type, $isNotNull = false, $size = null, $defaultValue = null, $pk = false, $fkTable = null, $fkColumn = null)
+    public function addColumn($name, $phpName, $type, $isNotNull = false, $size = null, $unsigned = null, $defaultValue = null, $pk = false, $fkTable = null, $fkColumn = null)
     {
         $col = new ColumnMap($name, $this);
         $col->setType($type);
         $col->setSize($size);
+        $col->setUnsigned($unsigned);
         $col->setPhpName($phpName);
         $col->setNotNull($isNotNull);
         $col->setDefaultValue($defaultValue);
@@ -421,9 +422,9 @@ class TableMap
      * @param            $size       An int specifying the size.
      * @return ColumnMap Newly added PrimaryKey column.
      */
-    public function addPrimaryKey($columnName, $phpName, $type, $isNotNull = false, $size = null, $defaultValue = null)
+    public function addPrimaryKey($columnName, $phpName, $type, $isNotNull = false, $size = null, $unsigned = null, $defaultValue = null)
     {
-        return $this->addColumn($columnName, $phpName, $type, $isNotNull, $size, $defaultValue, true, null, null);
+        return $this->addColumn($columnName, $phpName, $type, $isNotNull, $size, $unsigned, $defaultValue, true, null, null);
     }
 
     /**
@@ -438,9 +439,9 @@ class TableMap
      * @param  string    $defaultValue The default value for this column.
      * @return ColumnMap Newly added ForeignKey column.
      */
-    public function addForeignKey($columnName, $phpName, $type, $fkTable, $fkColumn, $isNotNull = false, $size = 0, $defaultValue = null)
+    public function addForeignKey($columnName, $phpName, $type, $fkTable, $fkColumn, $isNotNull = false, $size = 0, $unsigned = null, $defaultValue = null)
     {
-        return $this->addColumn($columnName, $phpName, $type, $isNotNull, $size, $defaultValue, false, $fkTable, $fkColumn);
+        return $this->addColumn($columnName, $phpName, $type, $isNotNull, $size, $unsigned, $defaultValue, false, $fkTable, $fkColumn);
     }
 
     /**
@@ -455,9 +456,9 @@ class TableMap
      * @param  string    $defaultValue The default value for this column.
      * @return ColumnMap Newly created foreign pkey column.
      */
-    public function addForeignPrimaryKey($columnName, $phpName, $type, $fkTable, $fkColumn, $isNotNull = false, $size = 0, $defaultValue = null)
+    public function addForeignPrimaryKey($columnName, $phpName, $type, $fkTable, $fkColumn, $isNotNull = false, $size = 0, $unsigned = null, $defaultValue = null)
     {
-        return $this->addColumn($columnName, $phpName, $type, $isNotNull, $size, $defaultValue, true, $fkTable, $fkColumn);
+        return $this->addColumn($columnName, $phpName, $type, $isNotNull, $size, $unsigned, $defaultValue, true, $fkTable, $fkColumn);
     }
 
     /**

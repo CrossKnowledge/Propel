@@ -118,14 +118,21 @@ class PropelTableComparator
 
         // check for new columns in $toTable
         foreach ($toTableColumns as $column) {
-            if (!$this->getFromTable()->hasColumn($column->getName(), $caseInsensitive)) {
-                $this->tableDiff->addAddedColumn($column->getName(), $column);
-                $columnDifferences++;
+            if (empty($this->getFromTable()->getSkippedSqlNamePatternColumns($column->getName()))) {
+                if (!$this->getToTable()->hasColumn($column->getName(), $caseInsensitive)) {
+                    $this->tableDiff->addAddedColumn($column->getName(), $column);
+                    $columnDifferences++;
+                }
             }
         }
 
         // check for removed columns in $toTable
         foreach ($fromTableColumns as $column) {
+            $columns = $this->getToTable()->getSkippedSqlNamePatternColumns($column->getName(), $caseInsensitive);
+            if (!empty($columns)) {
+                // we can ignore this column
+                continue;
+            }
             if (!$this->getToTable()->hasColumn($column->getName(), $caseInsensitive)) {
                 $this->tableDiff->addRemovedColumn($column->getName(), $column);
                 $columnDifferences++;
@@ -134,6 +141,11 @@ class PropelTableComparator
 
         // check for column differences
         foreach ($fromTableColumns as $fromColumn) {
+            $columns = $this->getToTable()->getSkippedSqlNamePatternColumns($fromColumn->getName(), $caseInsensitive);
+            if (!empty($columns)) {
+                // we can ignore this column
+                continue;
+            }
             if ($this->getToTable()->hasColumn($fromColumn->getName(), $caseInsensitive)) {
                 $toColumn = $this->getToTable()->getColumn($fromColumn->getName(), $caseInsensitive);
                 $columnDiff = PropelColumnComparator::computeDiff($fromColumn, $toColumn, $caseInsensitive);
@@ -146,6 +158,11 @@ class PropelTableComparator
 
         // check for column renamings
         foreach ($this->tableDiff->getAddedColumns() as $addedColumnName => $addedColumn) {
+            $columns = $this->getToTable()->getSkippedSqlNamePatternColumns($addedColumnName, $caseInsensitive);
+            if (!empty($columns)) {
+                // we can ignore this column
+                continue;
+            }
             foreach ($this->tableDiff->getRemovedColumns() as $removedColumnName => $removedColumn) {
                 if (!PropelColumnComparator::computeDiff($addedColumn, $removedColumn, $caseInsensitive)) {
                     // no difference except the name, that's probably a renaming

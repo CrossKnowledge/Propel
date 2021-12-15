@@ -36,6 +36,7 @@ class Column extends XMLElement
     public static $valid_visibilities = array('public', 'protected', 'private');
 
     private $name;
+    private $skipSqlNamePattern;
     private $description;
     private $phpName = null;
     private $phpNamingMethod;
@@ -159,6 +160,7 @@ class Column extends XMLElement
             }
 
             $this->name = $this->getAttribute("name");
+            $this->skipSqlNamePattern = $this->getAttribute('skipSqlNamePattern');
             $this->phpName = $this->getAttribute("phpName");
             $this->phpType = $this->getAttribute("phpType");
 
@@ -221,8 +223,13 @@ class Column extends XMLElement
             } else {
                 $size = $this->getAttribute("size");
             }
-            $this->getDomain()->replaceSize($size);
+
+            if ($this->getPlatform() === null || $this->getPlatform()->hasSize($this->getDomain()->getType())) {
+                $this->getDomain()->replaceSize($size);
+            }
+            
             $this->getDomain()->replaceScale($this->getAttribute("scale"));
+            $this->getDomain()->replaceUnsigned($this->getAttribute("unsigned"));
 
             $defval = $this->getAttribute("defaultValue", $this->getAttribute("default"));
             if ($defval !== null && strtolower($defval) !== 'null') {
@@ -287,6 +294,39 @@ class Column extends XMLElement
     }
 
     /**
+     * @return mixed
+     */
+    public function getSkipSqlNamePattern()
+    {
+        return $this->skipSqlNamePattern;
+    }
+
+    /**
+     * @param mixed $namePattern
+     * @return Column
+     */
+    public function setSkipSqlNamePattern($skipSqlNamePattern)
+    {
+        $this->skipSqlNamePattern = $namePattern;
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return bool true if name matches the column name pattern
+     */
+    public function isMatchingSkipSqlNamePattern($name, $caseInsensitive = false) {
+        if ($this->skipSqlNamePattern === null) {
+            return true;
+        }
+        $pattern = "/{$this->skipSqlNamePattern}/";
+        if ($caseInsensitive) {
+            $pattern .= 'i';
+        }
+        return preg_match($pattern, $name) === 1;
+    }
+
+    /**
      * Returns table.column
      */
     public function getFullyQualifiedName()
@@ -332,6 +372,30 @@ class Column extends XMLElement
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return string the description and some additional information
+     * floowing the type of the column
+     */
+    public function getEnhancedDescription() {
+        $comments = [];
+        if ($this->getDescription()) {
+            $comments[] = $this->getDescription();
+        }
+        if ($this->isEnumType()) {
+            // This column is an ENUM. Possible values are : ALL (0), GROUPS (1), PUBLISHER (2)'
+            if ($this->getValueSet() === null) {
+                $comments[] = 'This column is an ENUM. without values set defined';
+            } else {
+                $comment = 'This column is an ENUM. Possible values are :';
+                foreach ($this->getValueSet() as $key => $value) {
+                    $comment .= " $value ($key),";
+                }
+                $comments[] = rtrim($comment, ',');
+            }
+        }
+        return join(' - ', $comments);
     }
 
     /**
@@ -1000,9 +1064,17 @@ class Column extends XMLElement
             $colNode->setAttribute('phpName', $this->getPhpName());
         }
 
+        if ($this->skipSqlNamePattern !== null) {
+            $colNode->setAttribute('skipSqlNamePattern', $this->getSkipSqlNamePattern());
+        }
+
         $colNode->setAttribute('type', $this->getType());
 
         $domain = $this->getDomain();
+        
+        if ($domain->getUnsigned()) {
+            $colNode->setAttribute('unsigned', 'true');
+        }
 
         if ($domain->getSize() !== null) {
             $colNode->setAttribute('size', $domain->getSize());
@@ -1078,6 +1150,24 @@ class Column extends XMLElement
     public function setSize($newSize)
     {
         $this->domain->setSize($newSize);
+    }
+
+    /**
+     * Returns true if unsigned
+     * @return string
+     */
+    public function getUnsigned()
+    {
+        return $this->domain ? $this->domain->getUnsigned() : false;
+    }
+
+    /**
+     * Set the size of the column
+     * @param string $newUnsigned
+     */
+    public function setUnsigned($newUnsigned)
+    {
+        $this->domain->setUnsigned($newUnsigned);
     }
 
     /**

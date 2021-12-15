@@ -896,6 +896,15 @@ class GeneratedObjectRelTest extends BookstoreEmptyTestBase
         $this->assertCount(1, $bookClubList->getFavoriteBookRelateds(), 'there should be one book in the bookClubList');
     }
 
+    protected function createMock($originalClassName)
+    {
+        return $this->getMockBuilder($originalClassName)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->getMock();
+    }
+
     public function testRefIsOnlySavedWhenRequired()
     {
         BookQuery::create()->deleteAll();

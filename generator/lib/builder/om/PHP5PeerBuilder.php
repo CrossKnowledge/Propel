@@ -256,6 +256,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
     protected function addColumnNameConstants(&$script)
     {
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "
     /** the column name for the " . $col->getName() ." field */
     const ".$this->getColumnName($col) ." = '" . $this->getTable()->getName() . ".".$col->getName()."';
@@ -270,6 +273,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
     protected function addEnumColumnConstants(&$script)
     {
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isEnumType() || $col->getValueSet()) {
                 $script .= "
     /** The enumerated values for the " . $col->getName() . " field */";
@@ -304,31 +310,49 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
     protected static \$fieldNames = array (
         BasePeer::TYPE_PHPNAME => array (";
         foreach ($tableColumns as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "'".$col->getPhpName()."', ";
         }
         $script .= "),
         BasePeer::TYPE_STUDLYPHPNAME => array (";
         foreach ($tableColumns as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "'".$col->getStudlyPhpName()."', ";
         }
         $script .= "),
         BasePeer::TYPE_COLNAME => array (";
         foreach ($tableColumns as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= $this->getColumnConstant($col, $this->getPeerClassname()).", ";
         }
         $script .= "),
         BasePeer::TYPE_RAW_COLNAME => array (";
         foreach ($tableColumns as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "'" . $col->getConstantColumnName() . "', ";
         }
         $script .= "),
         BasePeer::TYPE_FIELDNAME => array (";
         foreach ($tableColumns as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "'".$col->getName()."', ";
         }
         $script .= "),
         BasePeer::TYPE_NUM => array (";
         foreach ($tableColumns as $num => $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "$num, ";
         }
         $script .= ")
@@ -352,31 +376,49 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
     protected static \$fieldKeys = array (
         BasePeer::TYPE_PHPNAME => array (";
         foreach ($tableColumns as $num => $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "'".$col->getPhpName()."' => $num, ";
         }
         $script .= "),
         BasePeer::TYPE_STUDLYPHPNAME => array (";
         foreach ($tableColumns as $num => $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "'".$col->getStudlyPhpName()."' => $num, ";
         }
         $script .= "),
         BasePeer::TYPE_COLNAME => array (";
         foreach ($tableColumns as $num => $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= $this->getColumnConstant($col, $this->getPeerClassname())." => $num, ";
         }
         $script .= "),
         BasePeer::TYPE_RAW_COLNAME => array (";
         foreach ($tableColumns as $num => $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "'" . $col->getConstantColumnName() . "' => $num, ";
         }
         $script .= "),
         BasePeer::TYPE_FIELDNAME => array (";
         foreach ($tableColumns as $num => $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "'".$col->getName()."' => $num, ";
         }
         $script .= "),
         BasePeer::TYPE_NUM => array (";
         foreach ($tableColumns as $num => $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $script .= "$num, ";
         }
         $script .= ")
@@ -394,6 +436,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
     /** The enumerated values for this table */
     protected static \$enumValueSets = array(";
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isEnumType() || $col->getValueSet()) {
                 $script .= "
         ".$this->getPeerClassname()."::" . $this->getColumnName($col) ." => array(
@@ -542,6 +587,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
     protected function addEnumMethods(&$script)
     {
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
           /* @var $col Column */
             if ($col->isEnumType()) {
                 $script .= "
@@ -673,6 +721,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
     {
         if (null === \$alias) {";
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if (!$col->isLazyLoad()) {
                 $script .= "
             \$criteria->addSelectColumn(".$this->getPeerClassname()."::".$this->getColumnName($col).");";
@@ -681,6 +732,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
         $script .= "
         } else {";
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if (!$col->isLazyLoad()) {
                 $script .= "
             \$criteria->addSelectColumn(\$alias . '." . $col->getName()."');";
@@ -1105,6 +1159,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
         $pk = array();
         $cond = array();
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if (!$col->isLazyLoad()) {
                 if ($col->isPrimaryKey()) {
                     $part = $n ? "\$row[\$startcol + $n]" : "\$row[\$startcol]";
@@ -1151,6 +1208,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
             $n = 0;
             $pks = array();
             foreach ($table->getColumns() as $col) {
+                if ($col->getSkipSqlNamePattern() !== null) {
+                    continue;
+                }
                 if (!$col->isLazyLoad()) {
                     if ($col->isPrimaryKey()) {
                         $pk = '(' . $col->getPhpType() . ') ' . ($n ? "\$row[\$startcol + $n]" : "\$row[\$startcol]");
@@ -1425,6 +1485,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
 ";
 
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $cfc = $col->getPhpName();
             if ($col->isPrimaryKey() && $col->isAutoIncrement() && $table->getIdMethod() != "none" && !$table->isAllowPkInsert()) {
                 $script .= "
@@ -1497,6 +1560,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
             \$criteria = clone \$values; // rename for clarity
 ";
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isPrimaryKey()) {
                 $script .= "
             \$comparison = \$criteria->getComparison(".$this->getColumnConstant($col).");
@@ -2156,6 +2222,9 @@ abstract class ".$this->getClassname(). $extendingPeerClass . "
         $offsets = array();
         $idx = 0;
         foreach ($tbl->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isPrimaryKey()) {
                 $offsets[] = $idx;
             }

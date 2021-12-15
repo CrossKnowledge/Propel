@@ -987,6 +987,9 @@ abstract class ".$this->getClassname()." extends ".$this->getObjectBuilder()->ge
         $table = $this->getTable();
 
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isNestedSetLeftKey()) {
                 $left_col_getter_name = 'get'.$col->getPhpName();
                 break;
@@ -1011,6 +1014,9 @@ abstract class ".$this->getClassname()." extends ".$this->getObjectBuilder()->ge
         $table = $this->getTable();
 
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isNestedSetRightKey()) {
                 $right_col_getter_name = 'get'.$col->getPhpName();
                 break;
@@ -1036,6 +1042,9 @@ abstract class ".$this->getClassname()." extends ".$this->getObjectBuilder()->ge
 
         $scope_col_getter_name = null;
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isTreeScopeKey()) {
                 $scope_col_getter_name = 'get'.$col->getPhpName();
                 break;
@@ -1070,6 +1079,9 @@ abstract class ".$this->getClassname()." extends ".$this->getObjectBuilder()->ge
         $table = $this->getTable();
 
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isNestedSetLeftKey()) {
                 $left_col_setter_name = 'set'.$col->getPhpName();
                 break;
@@ -1098,6 +1110,9 @@ abstract class ".$this->getClassname()." extends ".$this->getObjectBuilder()->ge
         $table = $this->getTable();
 
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isNestedSetRightKey()) {
                 $right_col_setter_name = 'set'.$col->getPhpName();
                 break;
@@ -1127,6 +1142,9 @@ abstract class ".$this->getClassname()." extends ".$this->getObjectBuilder()->ge
 
         $scope_col_setter_name = null;
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isTreeScopeKey()) {
                 $scope_col_setter_name = 'set'.$col->getPhpName();
                 break;

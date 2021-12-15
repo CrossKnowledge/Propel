@@ -183,6 +183,9 @@ abstract class ".$this->getClassname()." extends ".$this->getPeerBuilder()->getC
         $colname = array();
 
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isNestedSetLeftKey()) {
                 $colname['left'] = $tableName . '.' . $col->getName();
             }
@@ -1547,6 +1550,9 @@ abstract class ".$this->getClassname()." extends ".$this->getPeerBuilder()->getC
                     if (null !== (\$object = $peerClassname::getInstanceFromPool(\$key))) {";
             $n = 0;
             foreach ($table->getColumns() as $col) {
+                if ($col->getSkipSqlNamePattern() !== null) {
+                    continue;
+                }
                 if ($col->isNestedSetLeftKey()) {
                     $script .= "
                         \$object->setLeftValue(\$row[$n]);";

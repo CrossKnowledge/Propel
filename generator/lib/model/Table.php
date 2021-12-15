@@ -1628,6 +1628,33 @@ class Table extends ScopedElement implements IDMethod
     }
 
     /**
+     * get columns that are matching the given name
+     * @param Column|string $col             the column object or name (e.g. 'my_column')
+     * @param boolean       $caseInsensitive Whether the check is case insensitive. False by default.
+     *
+     * @return array of columns
+     */
+    public function getSkippedSqlNamePatternColumns($col, $caseInsensitive = false)
+    {
+        if ($col instanceof Column) {
+            $col = $col->getName();
+        }
+        $column = $this->getColumn($col);
+        if ($column !== null) {
+            // column matching directly by name, no need to see if pattern matching
+            return [];
+        }
+        $matchingColumns = [];
+        /* @var Column $column */
+        foreach ($this->columnList as $column) {
+            if ($column->getSkipSqlNamePattern() !== null && $column->isMatchingSkipSqlNamePattern($col, $caseInsensitive)) {
+                $matchingColumns[] = $column;
+            }
+        }
+        return $matchingColumns;
+    }
+
+    /**
      * Return the column with the specified name.
      * @param string  $name            The name of the column (e.g. 'my_column')
      * @param boolean $caseInsensitive Whether the check is case insensitive. False by default.

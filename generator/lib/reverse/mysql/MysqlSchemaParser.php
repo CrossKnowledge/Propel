@@ -32,7 +32,7 @@ class MysqlSchemaParser extends BaseSchemaParser
     private static $mysqlTypeMap = array(
         'tinyint' => PropelTypes::TINYINT,
         'smallint' => PropelTypes::SMALLINT,
-        'mediumint' => PropelTypes::SMALLINT,
+        'mediumint' => PropelTypes::MEDIUMINT,
         'int' => PropelTypes::INTEGER,
         'integer' => PropelTypes::INTEGER,
         'bigint' => PropelTypes::BIGINT,
@@ -153,7 +153,7 @@ class MysqlSchemaParser extends BaseSchemaParser
      */
     protected function addColumns(Table $table)
     {
-        $stmt = $this->dbh->query("SHOW COLUMNS FROM `" . $table->getName() . "`");
+        $stmt = $this->dbh->query("SHOW FULL COLUMNS FROM `" . $table->getName() . "`");
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $column = $this->getColumnFromRow($row, $table);
@@ -178,6 +178,7 @@ class MysqlSchemaParser extends BaseSchemaParser
         $size = null;
         $precision = null;
         $scale = null;
+        $unsigned = null;
         $sqlType = false;
 
         $regexp = '/^
@@ -190,18 +191,30 @@ class MysqlSchemaParser extends BaseSchemaParser
         $/x';
         if (preg_match($regexp, $row['Type'], $matches)) {
             $nativeType = $matches[1];
+            // problem here ENUM and BOOLEAN propel types are tinyint,
+            // and will be detected as TINYINT propel type instead
+            // PropelDatabaseDiff should take care of this case
+            $propelType = $this->getMappedPropelType($nativeType);
+            if (!$propelType) {
+                $propelType = Column::DEFAULT_TYPE;
+            }
+            $propelTypeHasSize = $this->getPlatform()->hasSize($propelType);
             if ($matches[2]) {
                 if (($cpos = strpos($matches[2], ',')) !== false) {
-                    $size = (int) substr($matches[2], 0, $cpos);
+                    $size = (int)substr($matches[2], 0, $cpos);
                     $precision = $size;
-                    $scale = (int) substr($matches[2], $cpos + 1);
+                    $scale = (int)substr($matches[2], $cpos + 1);
                 } else {
-                    $size = (int) $matches[2];
+                    if ($propelTypeHasSize) {
+                        $size = (int)$matches[2];
+                    }
                 }
             }
-            if ($matches[3]) {
-                $sqlType = $row['Type'];
+
+            if (strpos($matches[3], 'unsigned') !== FALSE) {
+                $unsigned = true;
             }
+
             foreach (self::$defaultTypeSizes as $type => $defaultSize) {
                 if ($nativeType == $type && $size == $defaultSize) {
                     $size = null;
@@ -240,6 +253,7 @@ class MysqlSchemaParser extends BaseSchemaParser
         }
         $column->getDomain()->replaceSize($size);
         $column->getDomain()->replaceScale($scale);
+        $column->getDomain()->replaceUnsigned($unsigned);
         if ($default !== null) {
             if ($propelType == PropelTypes::BOOLEAN) {
                 if ($default == '1') $default = 'true';
@@ -259,6 +273,8 @@ class MysqlSchemaParser extends BaseSchemaParser
             $vi = $this->getNewVendorInfoObject($row);
             $column->addVendorInfo($vi);
         }
+
+        $column->setDescription($row['Comment']);
 
         return $column;
     }

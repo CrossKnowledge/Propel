@@ -200,6 +200,9 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
         $script .= "
         \$criteria = new Criteria(".$this->getPeerClassname()."::DATABASE_NAME);";
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $clo = strtolower($col->getName());
             if ($col->isPrimaryKey()) {
                 $script .= "
@@ -272,6 +275,9 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
         \$criteria = new Criteria(".$this->getPeerClassname()."::DATABASE_NAME);
 ";
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $clo = strtolower($col->getName());
             $script .= "
         if (\$this->isColumnModified(".$this->getColumnConstant($col).")) \$criteria->add(".$this->getColumnConstant($col).", \$this->$clo);";
@@ -392,6 +398,9 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
 
         // support for lazy load columns
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isLazyLoad()) {
                 $clo = strtolower($col->getName());
                 $script .= "

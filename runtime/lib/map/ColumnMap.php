@@ -32,6 +32,9 @@ class ColumnMap
   // Size of the column
   protected $size = 0;
 
+  // is unsigned type
+  protected $unsigned = null;
+
   // Is it a primary key?
   protected $pk = false;
 
@@ -158,6 +161,23 @@ class ColumnMap
     return $this->type;
   }
 
+
+  /**
+   * @return null|bool
+   */
+  public function getUnsigned()
+  {
+    return $this->unsigned;
+  }
+
+  /**
+   * @param null|bool $unsigned
+   */
+  public function setUnsigned($unsigned)
+  {
+    $this->unsigned = $unsigned;
+  }
+
   /**
    * Get the PDO type of this column.
    *
@@ -185,7 +205,7 @@ class ColumnMap
    */
   public function isTemporal()
   {
-    return ($this->type == PropelColumnTypes::TIMESTAMP || $this->type == PropelColumnTypes::DATE || $this->type == PropelColumnTypes::TIME || $this->type == PropelColumnTypes::BU_DATE  || $this->type == PropelColumnTypes::BU_TIMESTAMP);
+    return ($this->type == PropelColumnTypes::TIMESTAMP || $this->type == PropelColumnTypes::DATETIME || $this->type == PropelColumnTypes::DATE || $this->type == PropelColumnTypes::TIME || $this->type == PropelColumnTypes::BU_DATE  || $this->type == PropelColumnTypes::BU_TIMESTAMP);
   }
 
   /**
@@ -199,7 +219,7 @@ class ColumnMap
    */
   public function isEpochTemporal()
   {
-    return ($this->type == PropelColumnTypes::TIMESTAMP || $this->type == PropelColumnTypes::DATE || $this->type == PropelColumnTypes::TIME);
+    return ($this->type == PropelColumnTypes::TIMESTAMP || $this->type == PropelColumnTypes::DATETIME || $this->type == PropelColumnTypes::DATE || $this->type == PropelColumnTypes::TIME);
   }
 
   /**
@@ -208,7 +228,7 @@ class ColumnMap
    */
   public function isNumeric()
   {
-    return ($this->type == PropelColumnTypes::NUMERIC || $this->type == PropelColumnTypes::DECIMAL || $this->type == PropelColumnTypes::TINYINT || $this->type == PropelColumnTypes::SMALLINT || $this->type == PropelColumnTypes::INTEGER || $this->type == PropelColumnTypes::BIGINT || $this->type == PropelColumnTypes::REAL || $this->type == PropelColumnTypes::FLOAT || $this->type == PropelColumnTypes::DOUBLE);
+    return ($this->type == PropelColumnTypes::NUMERIC || $this->type == PropelColumnTypes::DECIMAL || $this->type == PropelColumnTypes::TINYINT || $this->type == PropelColumnTypes::MEDIUMINT || $this->type == PropelColumnTypes::SMALLINT || $this->type == PropelColumnTypes::INTEGER || $this->type == PropelColumnTypes::BIGINT || $this->type == PropelColumnTypes::REAL || $this->type == PropelColumnTypes::FLOAT || $this->type == PropelColumnTypes::DOUBLE);
   }
 
   /**

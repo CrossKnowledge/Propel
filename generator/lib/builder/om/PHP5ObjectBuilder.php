@@ -83,6 +83,9 @@ class PHP5ObjectBuilder extends ObjectBuilder
         $fkPhpNames = array();
 
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $colPhpNames[] = $col->getPhpName();
         }
 
@@ -277,7 +280,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
             $this->addScheduledForDeletionAttribute($script, $fkName);
         }
 
-        if ($this->hasDefaultValues()) {
+        if ($this->hasDefaultValuesNotExpression()) {
             $this->addApplyDefaultValues($script);
             $this->addConstructor($script);
         }
@@ -669,11 +672,15 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
      */
     protected function addApplyDefaultValues(&$script)
     {
-        $this->addApplyDefaultValuesComment($script);
-        $this->addApplyDefaultValuesOpen($script);
-        $this->addApplyDefaultValuesBody($script);
-        $this->addApplyDefaultValuesClose($script);
+        $this->addApplyDefaultValuesBody($bodyScript);
+        if (!empty($bodyScript)) {
+            $this->addApplyDefaultValuesComment($script);
+            $this->addApplyDefaultValuesOpen($script);
+            $script .= $bodyScript;
+            $this->addApplyDefaultValuesClose($script);
+        }
     }
+
 
     /**
      * Adds the comment for the applyDefaults method
@@ -716,6 +723,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
 
         $colsWithDefaults = array();
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $def = $col->getDefaultValue();
             if ($def !== null && !$def->isExpression()) {
                 $colsWithDefaults[] = $col;
@@ -724,6 +734,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
 
         $colconsts = array();
         foreach ($colsWithDefaults as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $clo = strtolower($col->getName());
             $defaultValue = $this->getDefaultValueString($col);
             $script .= "
@@ -796,7 +809,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         $script .= "
     /**
      * Get the [optionally formatted] temporal [$clo] column value.
-     * ".$col->getDescription();
+     * ".$col->getEnhancedDescription();
         if (!$useDateTime) {
             $script .= "
      * This accessor only only work with unix epoch dates.  Consider enabling the propel.useDateTimeClass
@@ -1076,7 +1089,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         $script .= "
     /**
      * Get the [$clo] column value.
-     * ".$col->getDescription();
+     * ".$col->getEnhancedDescription();
         if ($col->isLazyLoad()) {
             $script .= "
      * @param PropelPDO \$con An optional PropelPDO connection to use for fetching this lazy-loaded column.";
@@ -1132,7 +1145,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
     /**
      * Test the presence of a value in the [$clo] array column value.
      * @param mixed \$value
-     * ".$col->getDescription();
+     * ".$col->getEnhancedDescription();
         if ($col->isLazyLoad()) {
             $script .= "
      * @param PropelPDO \$con An optional PropelPDO connection to use for fetching this lazy-loaded column.";
@@ -1178,7 +1191,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         $script .= "
     /**
      * Get the [$clo] column value.
-     * ".$col->getDescription();
+     * ".$col->getEnhancedDescription();
         if ($col->isLazyLoad()) {
             $script .= "
      * @param PropelPDO \$con An optional PropelPDO connection to use for fetching this lazy-loaded column.";
@@ -1394,7 +1407,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         $script .= "
     /**
      * Set the value of [$clo] column.
-     * ".$col->getDescription()."
+     * ".$col->getEnhancedDescription()."
      * @param ".$col->getPhpType()." \$v new value
      * @return ".$this->getObjectClassname()." The current object (for fluent API support)
      */";
@@ -1620,7 +1633,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         $script .= "
     /**
      * Sets the value of [$clo] column to a normalized version of the date/time value specified.
-     * ".$col->getDescription()."
+     * ".$col->getEnhancedDescription()."
      * @param mixed \$v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
      * @return ".$this->getObjectClassname()." The current object (for fluent API support)
@@ -1686,7 +1699,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
     /**
      * Adds a value to the [$clo] array column value.
      * @param mixed \$value
-     * ".$col->getDescription();
+     * ".$col->getEnhancedDescription();
         if ($col->isLazyLoad()) {
             $script .= "
      * @param PropelPDO \$con An optional PropelPDO connection to use for fetching this lazy-loaded column.";
@@ -1724,7 +1737,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
     /**
      * Removes a value from the [$clo] array column value.
      * @param mixed \$value
-     * ".$col->getDescription();
+     * ".$col->getEnhancedDescription();
         if ($col->isLazyLoad()) {
             $script .= "
      * @param PropelPDO \$con An optional PropelPDO connection to use for fetching this lazy-loaded column.";
@@ -1765,7 +1778,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         $script .= "
     /**
      * Set the value of [$clo] column.
-     * ".$col->getDescription()."
+     * ".$col->getEnhancedDescription()."
      * @param ".$col->getPhpType()." \$v new value
      * @return ".$this->getObjectClassname()." The current object (for fluent API support)
      * @throws PropelException - if the value is not accepted by this enum.
@@ -1835,7 +1848,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * ".$col->getDescription()."
+     * ".$col->getEnhancedDescription()."
      * @param boolean|integer|string \$v The new value
      * @return ".$this->getObjectClassname()." The current object (for fluent API support)
      */";
@@ -1924,6 +1937,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         $table = $this->getTable();
         $colsWithDefaults = array();
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $def = $col->getDefaultValue();
             if ($def !== null && !$def->isExpression()) {
                 $colsWithDefaults[] = $col;
@@ -2020,6 +2036,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
 ";
         $n = 0;
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if (!$col->isLazyLoad()) {
                 $clo = strtolower($col->getName());
                 if ($col->getType() === PropelTypes::CLOB_EMU && $this->getPlatform() instanceof OraclePlatform) {
@@ -2215,6 +2234,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         \$criteria = new Criteria(".$this->getPeerClassname()."::DATABASE_NAME);
 ";
         foreach ($this->getTable()->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $clo = strtolower($col->getName());
             $script .= "
         if (\$this->isColumnModified(".$this->getColumnConstant($col).")) \$criteria->add(".$this->getColumnConstant($col).", \$this->$clo);";
@@ -2276,6 +2298,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         \$keys = ".$this->getPeerClassname()."::getFieldNames(\$keyType);
         \$result = array(";
         foreach ($this->getTable()->getColumns() as $num => $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isLazyLoad()) {
                 $script .= "
             \$keys[$num] => (\$includeLazyLoadColumns) ? \$this->get".$col->getPhpName()."() : null,";
@@ -2443,6 +2468,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         switch (\$pos) {";
         $i = 0;
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $cfc = $col->getPhpName();
             $script .= "
             case $i:
@@ -2511,6 +2539,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         switch (\$pos) {";
         $i = 0;
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $cfc = $col->getPhpName();
             $cptype = $col->getPhpType();
 
@@ -2569,6 +2600,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         \$keys = ".$this->getPeerClassname()."::getFieldNames(\$keyType);
 ";
         foreach ($table->getColumns() as $num => $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $cfc = $col->getPhpName();
             //TODO: remove. not used
             $cptype = $col->getPhpType();
@@ -2738,6 +2772,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
 
         // support for lazy load columns
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($col->isLazyLoad()) {
                 $clo = strtolower($col->getName());
                 $script .= "
@@ -4545,6 +4582,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
 
         // We need to rewind any LOB columns
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $clo = strtolower($col->getName());
             if ($col->isLobType()) {
                 $script .= "
@@ -4779,6 +4819,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
 
          // check the columns in natural order for more readable SQL queries";
         foreach ($table->getColumns() as $column) {
+            if ($column->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $constantName = $this->getColumnConstant($column);
             $identifier = var_export($platform->quoteIdentifier($column->getName()), true);
             $script .= "
@@ -4800,6 +4843,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
             foreach (\$modifiedColumns as \$identifier => \$columnName) {
                 switch (\$columnName) {";
         foreach ($table->getColumns() as $column) {
+            if ($column->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $columnNameCase = var_export($platform->quoteIdentifier($column->getName()), true);
             $script .= "
                     case $columnNameCase:";
@@ -5262,7 +5308,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
     {
 ";
         foreach ($table->getColumns() as $col) {
-
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $clo=strtolower($col->getName());
 
             if ($col->isForeignKey()) {
@@ -5349,6 +5397,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         if ($table->hasCompositePrimaryKey()) {
             foreach ($table->getColumns() as $col) {
                 /* @var        $col Column */
+                if ($col->getSkipSqlNamePattern() !== null) {
+                    continue;
+                }
                 if ($col->isAutoIncrement()) {
                     $autoIncCols[] = $col;
                 }
@@ -5358,6 +5409,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         }
 
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if (!in_array($col, $autoIncCols, true)) {
                 $script .= "
         \$copyObj->set".$col->getPhpName()."(\$this->get".$col->getPhpName()."());";
@@ -5455,6 +5509,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
     public function clear()
     {";
         foreach ($table->getColumns() as $col) {
+            if ($col->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             $clo = strtolower($col->getName());
             $script .= "
         \$this->".$clo." = null;";
@@ -5475,7 +5532,7 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
         \$this->alreadyInClearAllReferencesDeep = false;
         \$this->clearAllReferences();";
 
-        if ($this->hasDefaultValues()) {
+        if ($this->hasDefaultValuesNotExpression()) {
             $script .= "
         \$this->applyDefaultValues();";
         }
@@ -5583,6 +5640,9 @@ abstract class ".$this->getClassname()." extends ".$parentClass." ";
     protected function addPrimaryString(&$script)
     {
         foreach ($this->getTable()->getColumns() as $column) {
+            if ($column->getSkipSqlNamePattern() !== null) {
+                continue;
+            }
             if ($column->isPrimaryString()) {
                 $script .= "
     /**

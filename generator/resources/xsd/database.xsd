@@ -21,6 +21,7 @@
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="BIT"/>
 			<xs:enumeration value="TINYINT"/>
+			<xs:enumeration value="MEDIUMINT"/>
 			<xs:enumeration value="SMALLINT"/>
 			<xs:enumeration value="INTEGER"/>
 			<xs:enumeration value="BIGINT"/>
@@ -323,6 +324,13 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="skipSqlNamePattern" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					skip SQL for columns that are matching this regexp
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="phpName" type="php_name" use="optional">
 			<xs:annotation>
 				<xs:documentation xml:lang="en">
@@ -366,6 +374,13 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="unsigned" type="xs:boolean" default="false" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					Set to true to enable unsigned on numeric type
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="type" type="datatype" default="VARCHAR">
 			<xs:annotation>
 				<xs:documentation xml:lang="en">
@@ -390,7 +405,7 @@
 		<xs:attribute name="size" type="xs:nonNegativeInteger" use="optional">
 			<xs:annotation>
 				<xs:documentation xml:lang="en">
-					Numeric length of the column.
+					Numeric display length of the column. see the display property in mysql [https://dev.mysql.com/doc/refman/5.5/en/numeric-type-attributes.html]
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
