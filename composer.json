@@ -19,7 +19,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "1.6-dev"
+      "dev-feature/CKLS-13333": "1.6-dev"
     }
   },
   "bin": ["generator/bin/propel-gen", "generator/bin/propel-gen.bat"]
