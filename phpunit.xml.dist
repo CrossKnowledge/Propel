@@ -12,6 +12,10 @@
     bootstrap="test/bootstrap.php"
     >
 
+    <php>
+	    <ini name="error_reporting" value="E_ALL"/>
+	</php>
+
     <testsuites>
         <testsuite name="Propel Test Suite">
             <directory>./test/testsuite/</directory>
