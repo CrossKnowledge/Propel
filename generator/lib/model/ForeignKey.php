@@ -35,6 +35,8 @@ class ForeignKey extends XMLElement
     protected $localColumns = array();
     protected $foreignColumns = array();
 
+    public $isParentChild;
+
     /**
      * Whether to skip generation of SQL for this foreign key.
      *
