@@ -361,7 +361,7 @@ class PropelPDO extends PDO
      * @param  integer $attribute The attribute to get (e.g. PropelPDO::PROPEL_ATTR_CACHE_PREPARES).
      * @return mixed
      */
-    public function getAttribute($attribute): mixed
+    public function getAttribute($attribute)
     {
         switch ($attribute) {
             case self::PROPEL_ATTR_CACHE_PREPARES:
