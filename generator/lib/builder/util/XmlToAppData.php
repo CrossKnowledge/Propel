@@ -45,6 +45,7 @@ class XmlToAppData
     private $defaultPackage;
 
     private $encoding;
+    private $firstPass;
 
     /** two-dimensional array,
         first dimension is for schemas(key is the path to the schema file),

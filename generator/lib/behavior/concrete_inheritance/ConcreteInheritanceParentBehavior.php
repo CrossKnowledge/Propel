@@ -19,6 +19,8 @@
  */
 class ConcreteInheritanceParentBehavior extends Behavior
 {
+    protected $builder;
+
     // default parameters value
     protected $parameters = array(
         'descendant_column' => 'descendant_class'
