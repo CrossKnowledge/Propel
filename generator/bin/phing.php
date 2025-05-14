@@ -7,35 +7,12 @@
  * line entry point of phing located in phing.Phing
  * @version $Revision: 552 $
  */
+require_once __DIR__ . '/../../../../autoload.php';
+
+use Phing\Phing;
 
 // Set any INI options for PHP
 // ---------------------------
-
-$dirname = dirname(__FILE__);
-$autolaoded = false;
-foreach (array($dirname . '/../../', $dirname . '/../../../../../') as $dir) {
-    if (file_exists($file = realpath($dir) . '/vendor/autoload.php')) {
-        set_include_path($dir . '/vendor/phing/phing/src' . PATH_SEPARATOR . get_include_path() );
-        include_once $file;
-
-        $autoloaded = true;
-        break;
-    }
-}
-
-/* set classpath */
-if (getenv('PHP_CLASSPATH')) {
-    if (!defined('PHP_CLASSPATH')) {
-        define('PHP_CLASSPATH',  getenv('PHP_CLASSPATH') . PATH_SEPARATOR . get_include_path());
-    }
-    ini_set('include_path', PHP_CLASSPATH);
-} else {
-    if (!defined('PHP_CLASSPATH')) {
-        define('PHP_CLASSPATH',  get_include_path());
-    }
-}
-
-require_once 'Phing/Phing.php';
 
 try {
     /* Setup Phing environment */
