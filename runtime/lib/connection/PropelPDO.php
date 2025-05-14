@@ -361,6 +361,7 @@ class PropelPDO extends PDO
      * @param  integer $attribute The attribute to get (e.g. PropelPDO::PROPEL_ATTR_CACHE_PREPARES).
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function getAttribute($attribute)
     {
         switch ($attribute) {
@@ -388,6 +389,7 @@ class PropelPDO extends PDO
      *
      * @return PDOStatement
      */
+    #[\ReturnTypeWillChange]
     public function prepare($sql, $driver_options = array())
     {
         if ($this->useDebug) {
@@ -419,6 +421,7 @@ class PropelPDO extends PDO
      * @param  string  $sql
      * @return integer
      */
+    #[\ReturnTypeWillChange]
     public function exec($sql)
     {
         if ($this->useDebug) {

@@ -84,6 +84,7 @@ class DebugPDOStatement extends PDOStatement
      * @param  string  $input_parameters
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function execute($input_parameters = null)
     {
         $debug	= $this->pdo->getDebugSnapshot();
@@ -107,6 +108,7 @@ class DebugPDOStatement extends PDOStatement
      *
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function bindValue($pos, $value, $type = PDO::PARAM_STR)
     {
         $debug    = $this->pdo->getDebugSnapshot();
@@ -136,6 +138,7 @@ class DebugPDOStatement extends PDOStatement
      *
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function bindParam($pos, &$value, $type = PDO::PARAM_STR, $length = 0, $driver_options = null)
     {
         $debug    = $this->pdo->getDebugSnapshot();
