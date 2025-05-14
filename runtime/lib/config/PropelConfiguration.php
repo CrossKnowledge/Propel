@@ -16,7 +16,7 @@
  * configuration can also be retrieved as a nested arrays, flat array or as a
  * PropelConfiguration instance.
  *
- * @author     Veikko Mäkinen <veikko@veikko.fi>
+ * @author     Veikko Mï¿½kinen <veikko@veikko.fi>
  * @version    $Revision$
  * @package    propel.runtime.config
  */
@@ -46,6 +46,7 @@ class PropelConfiguration implements ArrayAccess
      * @param  integer $offset
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->parameters);
@@ -57,6 +58,7 @@ class PropelConfiguration implements ArrayAccess
      * @param integer $offset
      * @param mixed   $value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->parameters[$offset] = $value;
@@ -69,6 +71,7 @@ class PropelConfiguration implements ArrayAccess
      * @param  integer $offset
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->parameters[$offset];
@@ -79,6 +82,7 @@ class PropelConfiguration implements ArrayAccess
      *
      * @param integer $offset
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->parameters[$offset]);
