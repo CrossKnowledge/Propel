@@ -15,7 +15,7 @@ $dirname = dirname(__FILE__);
 $autolaoded = false;
 foreach (array($dirname . '/../../', $dirname . '/../../../../../') as $dir) {
     if (file_exists($file = realpath($dir) . '/vendor/autoload.php')) {
-        set_include_path($dir . '/vendor/phing/phing/classes' . PATH_SEPARATOR . get_include_path() );
+        set_include_path($dir . '/vendor/phing/phing/src' . PATH_SEPARATOR . get_include_path() );
         include_once $file;
 
         $autoloaded = true;
@@ -35,7 +35,7 @@ if (getenv('PHP_CLASSPATH')) {
     }
 }
 
-require_once 'phing/Phing.php';
+require_once 'Phing/Phing.php';
 
 try {
     /* Setup Phing environment */
