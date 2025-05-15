@@ -261,6 +261,7 @@ class Criteria implements IteratorAggregate
      * Implementing SPL IteratorAggregate interface.  This allows
      * you to foreach () over a Criteria object.
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new CriterionIterator($this);

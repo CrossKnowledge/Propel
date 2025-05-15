@@ -2545,9 +2545,9 @@ class TestableModelCriteria extends ModelCriteria
 
 class ModelCriteriaForUseQuery extends ModelCriteria
 {
-    public function __construct($dbName = 'bookstore', $modelName = 'Author', $modelAlias = null)
+    public function __construct($modelName = 'Author', $dbName = 'bookstore', $modelAlias = null)
     {
-        parent::__construct($dbName, $modelName, $modelAlias);
+        parent::__construct($modelName, $dbName, $modelAlias);
     }
 
     public function withNoName()
