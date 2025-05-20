@@ -455,14 +455,11 @@ class PropelPDO extends PDO
             $debug = $this->getDebugSnapshot();
         }
 
-        $args = func_get_args();
-
-        $return = parent::query(...$args);
+        $return = parent::query($query, $fetchMode, ...$fetchModeArgs);
 
         if ($this->useDebug) {
-            $sql = $args[0];
-            $this->log($sql, null, __METHOD__, $debug);
-            $this->setLastExecutedQuery($sql);
+            $this->log($query, null, __METHOD__, $debug);
+            $this->setLastExecutedQuery($query);
             $this->incrementQueryCount();
         }
 
