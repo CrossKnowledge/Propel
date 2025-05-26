@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Map;
+
 
 /**
  * ValidatorMap is used to model a column validator.

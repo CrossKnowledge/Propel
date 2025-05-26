@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Parser;
+
 
 /**
  * XML parser. Converts data between associative array and XML formats

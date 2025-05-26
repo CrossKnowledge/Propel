@@ -8,6 +8,8 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Model;
+
 /**
  * A class for holding a column default value.
  *

@@ -8,7 +8,10 @@
  * @license     MIT License
  */
 
-require_once dirname(__FILE__) . '/../Index.php';
+namespace CK\Generator\Lib\Model\Diff;
+use CK\Generator\Lib\Model\Index;
+
+//require_once dirname(__FILE__) . '/../Index.php';
 
 /**
  * Service class for comparing Index objects

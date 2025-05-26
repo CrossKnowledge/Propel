@@ -7,8 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace CK\Runtime\Lib\Parser\YAML;
 
-require_once(dirname(__FILE__).'/sfYamlInline.php');
+//require_once(dirname(__FILE__).'/sfYamlInline.php');
 
 /**
  * sfYamlDumper dumps PHP variables to YAML strings.

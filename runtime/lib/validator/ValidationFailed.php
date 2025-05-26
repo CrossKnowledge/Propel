@@ -7,11 +7,13 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Validator;
+
 
 /**
  * Simple class that serves as a container for any information about a failed validation.
  *
- * Currently this class stores the qualified column name (e.g. tablename.COLUMN_NAME) and
+ * Currently, this class stores the qualified column name (e.g. tablename.COLUMN_NAME) and
  * the message that should be displayed to the user.
  *
  * An array of these objects will be returned by BasePeer::doValidate() if validation
@@ -25,22 +27,22 @@
 class ValidationFailed
 {
     /** Column name in tablename.COLUMN_NAME format */
-    private $colname;
+    private string $colname;
 
     /** Message to display to user. */
-    private $message;
+    private string $message;
 
     /** Validator object that caused this to fail. */
-    private $validator;
+    private ?object $validator;
 
     /**
      * Construct a new ValidationFailed object.
      *
      * @param string $colname   Column name.
      * @param string $message   Message to display to user.
-     * @param object $validator The Validator that caused this column to fail.
+     * @param object|null $validator The Validator that caused this column to fail.
      */
-    public function __construct($colname, $message, $validator = null)
+    public function __construct(string $colname, string $message, ?object $validator = null)
     {
         $this->colname = $colname;
         $this->message = $message;
@@ -52,7 +54,7 @@ class ValidationFailed
      *
      * @param string $v
      */
-    public function setColumn($v)
+    public function setColumn(string $v): void
     {
         $this->colname = $v;
     }
@@ -62,7 +64,7 @@ class ValidationFailed
      *
      * @return string Qualified column name (tablename.COLUMN_NAME)
      */
-    public function getColumn()
+    public function getColumn(): string
     {
         return $this->colname;
     }
@@ -72,7 +74,7 @@ class ValidationFailed
      *
      * @param string $v
      */
-    public function setMessage($v)
+    public function setMessage(string $v): void
     {
         $this->message = $v;
     }
@@ -82,7 +84,7 @@ class ValidationFailed
      *
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -92,7 +94,7 @@ class ValidationFailed
      *
      * @param object $v
      */
-    public function setValidator($v)
+    public function setValidator(object $v): void
     {
         $this->validator = $v;
     }
@@ -100,9 +102,9 @@ class ValidationFailed
     /**
      * Gets the validator object that caused this to fail.
      *
-     * @return object
+     * @return object|null
      */
-    public function getValidator()
+    public function getValidator(): ?object
     {
         return $this->validator;
     }
@@ -110,7 +112,7 @@ class ValidationFailed
     /**
      * "magic" method to get string representation of object.
      * Maybe someday PHP5 will support the invoking this method automatically
-     * on (string) cast.  Until then it's pretty useless.
+     * on (string) cast.  Until then, it's pretty useless.
      *
      * @return string
      */

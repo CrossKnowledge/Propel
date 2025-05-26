@@ -7,7 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Validator;
 
+use CK\Runtime\Lib\Map\ValidatorMap;
 /**
  * A validator for minimum values.
  *
@@ -29,17 +31,18 @@
 class MinValueValidator implements BasicValidator
 {
     /**
-     * @see       BasicValidator::isValid()
-     *
      * @param ValidatorMap $map
-     * @param mixed        $value
+     * @param string        $str
      *
      * @return boolean
+     * @see       BasicValidator::isValid()
+     *
      */
-    public function isValid(ValidatorMap $map, $value)
+    public function isValid(ValidatorMap $map, string $str): bool
     {
-        if (is_null($value) == false && is_numeric($value)) {
-            return intval($value) >= intval($map->getValue());
+        //if (is_null($str) == false && is_numeric($str)) { //Again with the complexity?
+        if (is_numeric($str)) {
+            return intval($str) >= intval($map->getValue());
         }
 
         return false;

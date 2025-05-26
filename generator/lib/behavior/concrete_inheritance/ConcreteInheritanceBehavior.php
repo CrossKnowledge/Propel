@@ -8,7 +8,12 @@
  * @license    MIT License
  */
 
-require_once 'ConcreteInheritanceParentBehavior.php';
+namespace CK\Generator\Lib\Behavior\Concrete_Inheritance;
+
+use CK\Generator\Lib\Model\Behavior;
+use CK\Generator\Lib\Model\ForeignKey;
+
+//require_once 'ConcreteInheritanceParentBehavior.php';
 
 /**
  * Makes a model inherit another one. The model with this behavior gets a copy

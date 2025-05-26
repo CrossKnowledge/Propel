@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\OM;
+
 
 /**
  * This interface defines methods that must be implemented by all

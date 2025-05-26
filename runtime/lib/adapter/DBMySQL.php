@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Adapter;
+
 
 /**
  * This is used in order to connect to a MySQL database.

@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Query;
+
 
 /**
  * A ModelJoin is a Join object tied to a RelationMap object

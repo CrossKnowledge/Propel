@@ -7,7 +7,12 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Util;
 
+use DateTime;
+use DateTimeZone;
+use CK\Runtime\Lib\Exception\PropelException;
+use Exception;
 /**
  * DateTime subclass which supports serialization.
  *

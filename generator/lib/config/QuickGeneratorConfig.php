@@ -8,10 +8,17 @@
  * @license         MIT License
  */
 
-require_once dirname(__FILE__) . '/GeneratorConfig.php';
-require_once dirname(__FILE__) . '/GeneratorConfigInterface.php';
-require_once dirname(__FILE__) . '/../platform/PropelPlatformInterface.php';
-require_once dirname(__FILE__) . '/../platform/SqlitePlatform.php';
+namespace CK\Generator\Lib\Config;
+
+use CK\Generator\Platform\PropelPlatformInterface;
+use CK\Generator\Platform\SqlitePlatform;
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Builder\DataModelBuilder;
+
+//require_once dirname(__FILE__) . '/GeneratorConfig.php';
+//require_once dirname(__FILE__) . '/GeneratorConfigInterface.php';
+//require_once dirname(__FILE__) . '/../platform/PropelPlatformInterface.php';
+//require_once dirname(__FILE__) . '/../platform/SqlitePlatform.php';
 
 /**
  * @package propel.generator.config
@@ -62,7 +69,7 @@ class QuickGeneratorConfig implements GeneratorConfigInterface
         }
         foreach ($lines as $line) {
             $line = trim($line);
-            if ($line == "" || $line{0} == '#' || $line{0} == ';') {
+            if ($line == "" || $line[0] == '#' || $line[0] == ';') {
                 continue;
             }
             $pos = strpos($line, '=');

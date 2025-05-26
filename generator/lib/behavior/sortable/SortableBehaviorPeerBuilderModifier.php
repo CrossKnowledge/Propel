@@ -7,6 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Behavior\Sortable;
+
+use CK\Generator\Lib\Model\Table;
 
 /**
  * Behavior to add sortable peer methods

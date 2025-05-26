@@ -7,7 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Validator;
 
+use CK\Runtime\Lib\Map\ValidatorMap;
 /**
  * A validator for regular expressions.
  *
@@ -43,30 +45,28 @@ class NotMatchValidator implements BasicValidator
      *
      * @param string $exp
      *
-     * @return string
+     * @return string|null
      */
-    private function prepareRegexp($exp)
+    private function prepareRegexp(string $exp): ?string
     {
         // remove surrounding '/' marks so that they don't get escaped in next step
-        if ($exp{0} !== '/' || $exp{strlen($exp) - 1} !== '/') {
+        if ($exp[0] !== '/' || $exp[strlen($exp) - 1] !== '/') {
             $exp = '/' . $exp . '/';
         }
 
         // if they did not escape / chars; we do that for them
-        $exp = preg_replace('/([^\\\])\/([^$])/', '$1\/$2', $exp);
-
-        return $exp;
+        return preg_replace('/([^\\\])\/([^$])/', '$1\/$2', $exp);
     }
 
     /**
-     * @see       BasicValidator::isValid()
-     *
      * @param ValidatorMap $map
      * @param string       $str
      *
      * @return boolean
+     * @see       BasicValidator::isValid()
+     *
      */
-    public function isValid(ValidatorMap $map, $str)
+    public function isValid(ValidatorMap $map, string $str): bool
     {
         return (preg_match($this->prepareRegexp($map->getValue()), $str) == 0);
     }

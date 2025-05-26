@@ -8,8 +8,11 @@
  * @license     MIT License
  */
 
-require_once dirname(__FILE__) . '/../Table.php';
-require_once dirname(__FILE__) . '/PropelColumnDiff.php';
+namespace CK\Generator\Lib\Model\Diff;
+use CK\Generator\Lib\Model\Table;
+
+//require_once dirname(__FILE__) . '/../Table.php';
+//require_once dirname(__FILE__) . '/PropelColumnDiff.php';
 
 /**
  * Value object for storing Table object diffs

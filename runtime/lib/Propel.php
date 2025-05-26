@@ -8,6 +8,8 @@
  * @license    MIT License
  */
 
+namespace CK\Runtime;
+
 /**
  * Propel's main resource pool and initialization & configuration class.
  *
@@ -22,6 +24,7 @@
  * @author     Martin Poeschl <mpoeschl@marmot.at> (Torque)
  * @author     Henning P. Schmiedehausen <hps@intermeta.de> (Torque)
  * @author     Kurt Schrader <kschrader@karmalab.org> (Torque)
+ * @author     Abou-Bakr Seddik Ouahabi <aboubakr.ouahabi@innowise.com>
  * @package    propel.runtime
  */
 class Propel
@@ -74,7 +77,7 @@ class Propel
     /**
      * A constant defining 'Debug-level messages' logging level
      */
-    const LOG_DEBUG = 7;
+    const int LOG_DEBUG = 7;
 
     /**
      * The class name for a PDO object.

@@ -7,6 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace CK\Runtime\Lib\Parser\YAML;
+
 
 /**
  * sfYaml offers convenience methods to load and dump YAML.

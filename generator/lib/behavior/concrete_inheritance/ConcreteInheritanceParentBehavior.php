@@ -8,6 +8,9 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior\Concrete_Inheritance;
+
+use CK\Generator\Lib\Model\Behavior;
 /**
  * Symmetrical behavior of the concrete_inheritance. When model A extends model B,
  * model A gets the concrete_inheritance behavior, and model B gets the

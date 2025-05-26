@@ -7,10 +7,15 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Parser;
 
-if (!class_exists('sfYaml')) {
+if (!class_exists('CK\Runtime\Lib\Parser\YAML\SfYaml')) {
     require_once dirname(__FILE__) . '/yaml/sfYaml.php';
 }
+
+//if (!class_exists('sfYaml')) {
+    //require_once dirname(__FILE__) . '/yaml/sfYaml.php';
+//}
 
 /**
  * YAML parser. Converts data between associative array and YAML formats

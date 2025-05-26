@@ -8,7 +8,10 @@
  * @license     MIT License
  */
 
-require_once dirname(__FILE__) . '/../Column.php';
+namespace CK\Generator\Lib\Model\Diff;
+use CK\Generator\Lib\Model\Column;
+
+//require_once dirname(__FILE__) . '/../Column.php';
 
 /**
  * Value object for storing Column object diffs.

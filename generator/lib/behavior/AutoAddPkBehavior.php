@@ -8,6 +8,9 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior;
+
+use CK\Generator\Lib\Model\Behavior;
 /**
  * Adds a primary key to models defined without one
  *

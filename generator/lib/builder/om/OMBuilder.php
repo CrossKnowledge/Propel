@@ -8,7 +8,12 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/../DataModelBuilder.php';
+namespace CK\Generator\Lib\Builder\OM;
+
+use CK\Generator\Lib\Builder\DataModelBuilder;
+use CK\Generator\Lib\Model\Column;
+
+//require_once dirname(__FILE__) . '/../DataModelBuilder.php';
 
 /**
  * Baseclass for OM-building classes.

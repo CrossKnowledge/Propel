@@ -8,7 +8,9 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/NameGenerator.php';
+namespace CK\Generator\Lib\Model;
+
+//require_once dirname(__FILE__) . '/NameGenerator.php';
 
 /**
  * A <code>NameGenerator</code> implementation for PHP-esque names.
@@ -46,7 +48,7 @@ class PhpNameGenerator implements NameGenerator
      *
      * @see        NameGenerator
      */
-    public function generateName($inputs)
+    public function generateName($inputs): string
     {
         $schemaName = $inputs[0];
         $method = $inputs[1];

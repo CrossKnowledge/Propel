@@ -7,7 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Validator;
 
+use CK\Runtime\Lib\Map\ValidatorMap;
 /**
  * A validator for maximum string length.
  *
@@ -33,11 +35,11 @@ class MaxLengthValidator implements BasicValidator
 {
     /**
      * @param ValidatorMap $map
-     * @param string       $str
+     * @param string $str
      *
      * @return boolean
      */
-    public function isValid(ValidatorMap $map, $str)
+    public function isValid(ValidatorMap $map, string $str): bool
     {
         $len = function_exists('mb_strlen') ? mb_strlen($str) : strlen($str);
 

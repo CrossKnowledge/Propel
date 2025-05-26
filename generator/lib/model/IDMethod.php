@@ -17,6 +17,7 @@
  * @version    $Revision$
  * @package    propel.generator.model
  */
+namespace CK\Generator\Lib\Model;
 interface IDMethod
 {
 

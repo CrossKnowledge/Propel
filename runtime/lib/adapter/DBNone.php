@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Adapter;
+
 
 /**
  * This adapter  is used when you do not have a database installed.

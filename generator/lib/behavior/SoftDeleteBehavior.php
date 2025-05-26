@@ -8,6 +8,10 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior;
+
+use CK\Generator\Lib\Model\Behavior;
+
 /**
  * Gives a model class the ability to remain in database even when the user deletes object
  * Uses an additional column storing the deletion date

@@ -7,6 +7,13 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Util;
+
+use CK\Runtime\Lib\Query\Criteria;
+use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Propel;
+use Exception;
 
 /**
  * This is a utility class for all generated Peer classes in the system.
@@ -31,40 +38,40 @@ class BasePeer
 {
 
     /** Array (hash) that contains the cached mapBuilders. */
-    private static $mapBuilders = array();
+    private static array $mapBuilders = array();
 
     /** Array (hash) that contains cached validators */
-    private static $validatorMap = array();
+    private static array $validatorMap = array();
 
     /**
      * phpname type
      * e.g. 'AuthorId'
      */
-    const TYPE_PHPNAME = 'phpName';
+    const string TYPE_PHPNAME = 'phpName';
 
     /**
      * studlyphpname type
      * e.g. 'authorId'
      */
-    const TYPE_STUDLYPHPNAME = 'studlyPhpName';
+    const string TYPE_STUDLYPHPNAME = 'studlyPhpName';
 
     /**
      * column (peer) name type
      * e.g. 'book.AUTHOR_ID'
      */
-    const TYPE_COLNAME = 'colName';
+    const string TYPE_COLNAME = 'colName';
 
     /**
      * column part of the column peer name
      * e.g. 'AUTHOR_ID'
      */
-    const TYPE_RAW_COLNAME = 'rawColName';
+    const string TYPE_RAW_COLNAME = 'rawColName';
 
     /**
      * column fieldname type
      * e.g. 'author_id'
      */
-    const TYPE_FIELDNAME = 'fieldName';
+    const string TYPE_FIELDNAME = 'fieldName';
 
     /**
      * num type
@@ -107,7 +114,7 @@ class BasePeer
      *                   is returned (supported) by the PDO driver.
      * @throws PropelException
      */
-    public static function doDelete(Criteria $criteria, PropelPDO $con)
+    public static function doDelete(Criteria $criteria, PropelPDO $con): int
     {
         $db = Propel::getDB($criteria->getDbName());
         $dbMap = Propel::getDatabaseMap($criteria->getDbName());
@@ -166,16 +173,16 @@ class BasePeer
      * }
      * </code>
      *
-     * @param string    $tableName    The name of the table to empty.
+     * @param string $tableName    The name of the table to empty.
      * @param PropelPDO $con          A PropelPDO connection object.
-     * @param string    $databaseName the name of the database.
+     * @param string|null $databaseName the name of the database.
      *
      * @return int The number of rows affected by the statement.  Note
      *                   that the return value does require that this information
      *                   is returned (supported) by the Propel db driver.
      * @throws PropelException - wrapping SQLException caught from statement execution.
      */
-    public static function doDeleteAll($tableName, PropelPDO $con, $databaseName = null)
+    public static function doDeleteAll(string $tableName, PropelPDO $con, string $databaseName = null): int
     {
         try {
             $db = Propel::getDB($databaseName);
@@ -397,10 +404,10 @@ class BasePeer
                                 $rawcvt = '';
                                 // parse the $params['raw'] for ? chars
                                 for ($r = 0, $len = strlen($raw); $r < $len; $r++) {
-                                    if ($raw{$r} == '?') {
+                                    if ($raw[$r] == '?') {
                                         $rawcvt .= ':p' . $p++;
                                     } else {
-                                        $rawcvt .= $raw{$r};
+                                        $rawcvt .= $raw[$r];
                                     }
                                 }
                                 $sql .= $rawcvt . ', ';

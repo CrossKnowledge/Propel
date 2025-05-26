@@ -8,6 +8,10 @@
  * @license         MIT License
  */
 
+namespace CK\Generator\Lib\Config;
+
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Builder\DataModelBuilder;
 /**
  * @package      propel.generator.config
  */

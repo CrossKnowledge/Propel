@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Connection;
+
 
 /**
  * PDOStatement that provides some enhanced functionality needed by Propel.

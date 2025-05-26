@@ -7,6 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Query;
+
+use CK\Runtime\Lib\Exception\PropelException;
 
 /**
  * This is a utility class for holding criteria information for a query.

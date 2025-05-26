@@ -7,8 +7,10 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Platform;
 
-require_once dirname(__FILE__) . '/MssqlPlatform.php';
+
+//require_once dirname(__FILE__) . '/MssqlPlatform.php';
 
 /**
  * MS SQL Server using pdo_sqlsrv implementation.
@@ -22,7 +24,7 @@ class SqlsrvPlatform extends MssqlPlatform
     /**
      * @see        Platform#getMaxColumnNameLength()
      */
-    public function getMaxColumnNameLength()
+    public function getMaxColumnNameLength(): int
     {
         return 128;
     }

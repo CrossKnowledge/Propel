@@ -8,7 +8,9 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/XMLElement.php';
+namespace CK\Generator\Lib\Model;
+
+//require_once dirname(__FILE__) . '/XMLElement.php';
 
 /**
  * Data about an element with a name and optional namespace/schema/package attributes

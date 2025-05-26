@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Map;
+
 
 /**
  * DatabaseMap is used to model a database.

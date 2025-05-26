@@ -8,6 +8,10 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior\Sortable;
+
+use CK\Generator\Lib\Model\Behavior;
+
 /**
  * Moves objects to the end of null scope of related table
  *

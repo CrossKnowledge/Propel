@@ -8,10 +8,12 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Model;
+
 require_once dirname(__FILE__) . '/../exception/EngineException.php';
-require_once dirname(__FILE__) . '/NameGenerator.php';
-require_once dirname(__FILE__) . '/PhpNameGenerator.php';
-require_once dirname(__FILE__) . '/ConstraintNameGenerator.php';
+//require_once dirname(__FILE__) . '/NameGenerator.php';
+//require_once dirname(__FILE__) . '/PhpNameGenerator.php';
+//require_once dirname(__FILE__) . '/ConstraintNameGenerator.php';
 
 /**
  * A name generation factory.

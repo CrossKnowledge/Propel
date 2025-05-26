@@ -7,6 +7,10 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Collection;
+
+
+use ArrayIterator;
 
 /**
  * Class for iterating over a list of Propel elements
@@ -395,7 +399,7 @@ class PropelCollection extends ArrayObject implements Serializable
      *
      * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         $this->iterator = new ArrayIterator($this);
 

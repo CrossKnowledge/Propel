@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Adapter;
+
 
 /**
  * Oracle adapter.

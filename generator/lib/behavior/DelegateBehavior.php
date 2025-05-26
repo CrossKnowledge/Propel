@@ -8,6 +8,10 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior;
+
+use CK\Generator\Lib\Model\Behavior;
+use CK\Generator\Lib\Model\ForeignKey;
 /**
  * Gives a model class the ability to delegate methods to a relationship.
  *

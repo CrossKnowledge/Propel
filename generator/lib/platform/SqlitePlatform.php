@@ -8,7 +8,14 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/DefaultPlatform.php';
+namespace CK\Generator\Platform;
+
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\Domain;
+use CK\Generator\Lib\Model\ForeignKey;
+use CK\Generator\Lib\Model\PropelTypes;
+
+//require_once dirname(__FILE__) . '/DefaultPlatform.php';
 
 /**
  * SQLite PropelPlatformInterface implementation.
@@ -23,7 +30,7 @@ class SqlitePlatform extends DefaultPlatform
     /**
      * Initializes db specific domain mapping.
      */
-    protected function initialize()
+    protected function initialize(): void
     {
         parent::initialize();
         $this->setSchemaDomainMapping(new Domain(PropelTypes::NUMERIC, "DECIMAL"));
@@ -42,17 +49,17 @@ class SqlitePlatform extends DefaultPlatform
     /**
      * @link       http://www.sqlite.org/autoinc.html
      */
-    public function getAutoIncrement()
+    public function getAutoIncrement(): string
     {
         return "PRIMARY KEY";
     }
 
-    public function getMaxColumnNameLength()
+    public function getMaxColumnNameLength(): int
     {
         return 1024;
     }
 
-    public function getAddTableDDL(Table $table)
+    public function getAddTableDDL(Table $table): string
     {
         $tableDescription = $table->hasDescription() ? $this->getCommentLineDDL($table->getDescription()) : '';
 
@@ -90,13 +97,13 @@ class SqlitePlatform extends DefaultPlatform
         );
     }
 
-    public function getDropPrimaryKeyDDL(Table $table)
+    public function getDropPrimaryKeyDDL(Table $table): string
     {
         // FIXME: not supported by SQLite
         return '';
     }
 
-    public function getAddPrimaryKeyDDL(Table $table)
+    public function getAddPrimaryKeyDDL(Table $table): string
     {
         // FIXME: not supported by SQLite
         return '';
@@ -113,14 +120,14 @@ class SqlitePlatform extends DefaultPlatform
         return '';
     }
 
-    public function getDropTableDDL(Table $table)
+    public function getDropTableDDL(Table $table): string
     {
         return "
 DROP TABLE IF EXISTS " . $this->quoteIdentifier($table->getName()) . ";
 ";
     }
 
-    public function getForeignKeyDDL(ForeignKey $fk)
+    public function getForeignKeyDDL(ForeignKey $fk): string
     {
         $pattern = "
 -- SQLite does not support foreign keys; this is just for reference
@@ -146,7 +153,7 @@ DROP TABLE IF EXISTS " . $this->quoteIdentifier($table->getName()) . ";
      *
      * @return string
      */
-    public function disconnectedEscapeText($text)
+    public function disconnectedEscapeText($text): string
     {
         if (function_exists('sqlite_escape_string')) {
             return sqlite_escape_string($text);
@@ -155,7 +162,7 @@ DROP TABLE IF EXISTS " . $this->quoteIdentifier($table->getName()) . ";
         }
     }
 
-    public function quoteIdentifier($text)
+    public function quoteIdentifier($text): string
     {
         return $this->isIdentifierQuotingEnabled ? '[' . $text . ']' : $text;
     }
@@ -163,7 +170,7 @@ DROP TABLE IF EXISTS " . $this->quoteIdentifier($table->getName()) . ";
     /**
      * @see        Platform::supportsMigrations()
      */
-    public function supportsMigrations()
+    public function supportsMigrations(): false
     {
         return false;
     }

@@ -8,6 +8,8 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Model;
+
 /**
  * A class that maps PropelTypes to PHP native types, PDO types (and Creole types).
  *
@@ -18,90 +20,90 @@
 class PropelTypes
 {
 
-    const CHAR = "CHAR";
-    const VARCHAR = "VARCHAR";
-    const LONGVARCHAR = "LONGVARCHAR";
-    const CLOB = "CLOB";
-    const CLOB_EMU = "CLOB_EMU";
-    const NUMERIC = "NUMERIC";
-    const DECIMAL = "DECIMAL";
-    const TINYINT = "TINYINT";
-    const SMALLINT = "SMALLINT";
-    const INTEGER = "INTEGER";
-    const BIGINT = "BIGINT";
-    const REAL = "REAL";
-    const FLOAT = "FLOAT";
-    const DOUBLE = "DOUBLE";
-    const BINARY = "BINARY";
-    const VARBINARY = "VARBINARY";
-    const LONGVARBINARY = "LONGVARBINARY";
-    const BLOB = "BLOB";
-    const DATE = "DATE";
-    const TIME = "TIME";
-    const TIMESTAMP = "TIMESTAMP";
-    const BU_DATE = "BU_DATE";
-    const BU_TIMESTAMP = "BU_TIMESTAMP";
-    const BOOLEAN = "BOOLEAN";
-    const BOOLEAN_EMU = "BOOLEAN_EMU";
-    const OBJECT = "OBJECT";
-    const PHP_ARRAY = "ARRAY";
-    const ENUM = "ENUM";
+    const string CHAR = "CHAR";
+    const string VARCHAR = "VARCHAR";
+    const string LONGVARCHAR = "LONGVARCHAR";
+    const string CLOB = "CLOB";
+    const string CLOB_EMU = "CLOB_EMU";
+    const string NUMERIC = "NUMERIC";
+    const string DECIMAL = "DECIMAL";
+    const string TINYINT = "TINYINT";
+    const string SMALLINT = "SMALLINT";
+    const string INTEGER = "INTEGER";
+    const string BIGINT = "BIGINT";
+    const string REAL = "REAL";
+    const string FLOAT = "FLOAT";
+    const string DOUBLE = "DOUBLE";
+    const string BINARY = "BINARY";
+    const string VARBINARY = "VARBINARY";
+    const string LONGVARBINARY = "LONGVARBINARY";
+    const string BLOB = "BLOB";
+    const string DATE = "DATE";
+    const string TIME = "TIME";
+    const string TIMESTAMP = "TIMESTAMP";
+    const string BU_DATE = "BU_DATE";
+    const string BU_TIMESTAMP = "BU_TIMESTAMP";
+    const string BOOLEAN = "BOOLEAN";
+    const string BOOLEAN_EMU = "BOOLEAN_EMU";
+    const string OBJECT = "OBJECT";
+    const string PHP_ARRAY = "ARRAY";
+    const string ENUM = "ENUM";
 
-    private static $TEXT_TYPES = array(
+    private static array $TEXT_TYPES = array(
         self::CHAR, self::VARCHAR, self::LONGVARCHAR, self::CLOB, self::DATE, self::TIME, self::TIMESTAMP, self::BU_DATE, self::BU_TIMESTAMP
     );
 
-    private static $LOB_TYPES = array(
+    private static array $LOB_TYPES = array(
         self::VARBINARY, self::LONGVARBINARY, self::BLOB
     );
 
-    private static $TEMPORAL_TYPES = array(
+    private static array $TEMPORAL_TYPES = array(
         self::DATE, self::TIME, self::TIMESTAMP, self::BU_DATE, self::BU_TIMESTAMP
     );
 
-    private static $NUMERIC_TYPES = array(
+    private static array $NUMERIC_TYPES = array(
         self::SMALLINT, self::TINYINT, self::INTEGER, self::BIGINT, self::FLOAT, self::DOUBLE, self::NUMERIC, self::DECIMAL, self::REAL
     );
 
-    private static $BOOLEAN_TYPES = array(
+    private static array $BOOLEAN_TYPES = array(
         self::BOOLEAN, self::BOOLEAN_EMU
     );
 
-    const CHAR_NATIVE_TYPE = "string";
-    const VARCHAR_NATIVE_TYPE = "string";
-    const LONGVARCHAR_NATIVE_TYPE = "string";
-    const CLOB_NATIVE_TYPE = "string";
-    const CLOB_EMU_NATIVE_TYPE = "resource";
-    const NUMERIC_NATIVE_TYPE = "string";
-    const DECIMAL_NATIVE_TYPE = "string";
-    const TINYINT_NATIVE_TYPE = "int";
-    const SMALLINT_NATIVE_TYPE = "int";
-    const INTEGER_NATIVE_TYPE = "int";
-    const BIGINT_NATIVE_TYPE = "string";
-    const REAL_NATIVE_TYPE = "double";
-    const FLOAT_NATIVE_TYPE = "double";
-    const DOUBLE_NATIVE_TYPE = "double";
-    const BINARY_NATIVE_TYPE = "string";
-    const VARBINARY_NATIVE_TYPE = "string";
-    const LONGVARBINARY_NATIVE_TYPE = "string";
-    const BLOB_NATIVE_TYPE = "resource";
-    const BU_DATE_NATIVE_TYPE = "string";
-    const DATE_NATIVE_TYPE = "string";
-    const TIME_NATIVE_TYPE = "string";
-    const TIMESTAMP_NATIVE_TYPE = "string";
-    const BU_TIMESTAMP_NATIVE_TYPE = "string";
-    const BOOLEAN_NATIVE_TYPE = "boolean";
-    const BOOLEAN_EMU_NATIVE_TYPE = "boolean";
-    const OBJECT_NATIVE_TYPE = "";
-    const PHP_ARRAY_NATIVE_TYPE = "array";
-    const ENUM_NATIVE_TYPE = "int";
+    const string CHAR_NATIVE_TYPE = "string";
+    const string VARCHAR_NATIVE_TYPE = "string";
+    const string LONGVARCHAR_NATIVE_TYPE = "string";
+    const string CLOB_NATIVE_TYPE = "string";
+    const string CLOB_EMU_NATIVE_TYPE = "resource";
+    const string NUMERIC_NATIVE_TYPE = "string";
+    const string DECIMAL_NATIVE_TYPE = "string";
+    const string TINYINT_NATIVE_TYPE = "int";
+    const string SMALLINT_NATIVE_TYPE = "int";
+    const string INTEGER_NATIVE_TYPE = "int";
+    const string BIGINT_NATIVE_TYPE = "string";
+    const string REAL_NATIVE_TYPE = "double";
+    const string FLOAT_NATIVE_TYPE = "double";
+    const string DOUBLE_NATIVE_TYPE = "double";
+    const string BINARY_NATIVE_TYPE = "string";
+    const string VARBINARY_NATIVE_TYPE = "string";
+    const string LONGVARBINARY_NATIVE_TYPE = "string";
+    const string BLOB_NATIVE_TYPE = "resource";
+    const string BU_DATE_NATIVE_TYPE = "string";
+    const string DATE_NATIVE_TYPE = "string";
+    const string TIME_NATIVE_TYPE = "string";
+    const string TIMESTAMP_NATIVE_TYPE = "string";
+    const string BU_TIMESTAMP_NATIVE_TYPE = "string";
+    const string BOOLEAN_NATIVE_TYPE = "boolean";
+    const string BOOLEAN_EMU_NATIVE_TYPE = "boolean";
+    const string OBJECT_NATIVE_TYPE = "";
+    const string PHP_ARRAY_NATIVE_TYPE = "array";
+    const string ENUM_NATIVE_TYPE = "int";
 
     /**
      * Mapping between Propel types and PHP native types.
      *
      * @var        array
      */
-    private static $propelToPHPNativeMap = array(
+    private static array $propelToPHPNativeMap = array(
             self::CHAR => self::CHAR_NATIVE_TYPE,
             self::VARCHAR => self::VARCHAR_NATIVE_TYPE,
             self::LONGVARCHAR => self::LONGVARCHAR_NATIVE_TYPE,
@@ -137,7 +139,7 @@ class PropelTypes
      *
      * @var        array
      */
-    private static $propelTypeToCreoleTypeMap = array(
+    private static array $propelTypeToCreoleTypeMap = array(
 
             self::CHAR => self::CHAR,
             self::VARCHAR => self::VARCHAR,
@@ -177,7 +179,7 @@ class PropelTypes
      *
      * @var        array
      */
-    private static $propelTypeToPDOTypeMap = array(
+    private static array $propelTypeToPDOTypeMap = array(
             self::CHAR => PDO::PARAM_STR,
             self::VARCHAR => PDO::PARAM_STR,
             self::LONGVARCHAR => PDO::PARAM_STR,
@@ -212,7 +214,7 @@ class PropelTypes
             self::BU_TIMESTAMP => PDO::PARAM_STR,
     );
 
-    private static $pdoTypeNames = array(
+    private static array $pdoTypeNames = array(
         PDO::PARAM_BOOL => 'PDO::PARAM_BOOL',
         PDO::PARAM_NULL => 'PDO::PARAM_NULL',
         PDO::PARAM_INT  => 'PDO::PARAM_INT',
@@ -224,10 +226,10 @@ class PropelTypes
      * Return native PHP type which corresponds to the
      * Creole type provided. Use in the base object class generation.
      *
-     * @param  string $propelType The Propel type name.
+     * @param string $propelType The Propel type name.
      * @return string Name of the native PHP type
      */
-    public static function getPhpNative($propelType)
+    public static function getPhpNative(string $propelType): string
     {
         return self::$propelToPHPNativeMap[$propelType];
     }
@@ -239,7 +241,7 @@ class PropelTypes
      *
      * @return string Name of the the correct Creole type (e.g. "VARCHAR").
      */
-    public static function getCreoleType($type)
+    public static function getCreoleType(string $type): string
     {
         return self::$propelTypeToCreoleTypeMap[$type];
     }
@@ -247,9 +249,10 @@ class PropelTypes
     /**
      * Returns the PDO type (PDO::PARAM_* constant) value.
      *
+     * @param $type
      * @return int
      */
-    public static function getPDOType($type)
+    public static function getPDOType($type): int
     {
         return self::$propelTypeToPDOTypeMap[$type];
     }
@@ -259,7 +262,7 @@ class PropelTypes
      *
      * @return string
      */
-    public static function getPdoTypeString($type)
+    public static function getPdoTypeString($type): string
     {
         return self::$pdoTypeNames[self::$propelTypeToPDOTypeMap[$type]];
     }
@@ -268,15 +271,19 @@ class PropelTypes
      * Returns Propel type constant corresponding to Creole type code.
      * Used but Propel Creole task.
      *
+     * This shows as it is not used anywhere on the base code, we still need to define its Return Type, and capture the
+     * case when the condition isn't met by returning a NULL;
+     *
      * @param int $sqlType The Creole SQL type constant.
      *
-     * @return string The Propel type to use or NULL if none found.
+     * @return string|null The Propel type to use or NULL if no mapping was found.
      */
-    public static function getPropelType($sqlType)
+    public static function getPropelType(int $sqlType): ?string
     {
         if (isset(self::$creoleToPropelTypeMap[$sqlType])) {
             return self::$creoleToPropelTypeMap[$sqlType];
         }
+        return null;
     }
 
     /**
@@ -296,7 +303,7 @@ class PropelTypes
      *
      * @return boolean
      */
-    public static function isTemporalType($type)
+    public static function isTemporalType(string $type): bool
     {
         return in_array($type, self::$TEMPORAL_TYPES);
     }
@@ -308,7 +315,7 @@ class PropelTypes
      *
      * @return boolean True if values for the type need to be quoted.
      */
-    public static function isTextType($type)
+    public static function isTextType(string $type): bool
     {
         return in_array($type, self::$TEXT_TYPES);
     }
@@ -320,7 +327,7 @@ class PropelTypes
      *
      * @return boolean True if values for the type need to be quoted.
      */
-    public static function isNumericType($type)
+    public static function isNumericType(string $type): bool
     {
         return in_array($type, self::$NUMERIC_TYPES);
     }
@@ -344,7 +351,7 @@ class PropelTypes
      *
      * @return boolean
      */
-    public static function isLobType($type)
+    public static function isLobType(string $type): bool
     {
         return in_array($type, self::$LOB_TYPES);
     }
@@ -356,7 +363,7 @@ class PropelTypes
      *
      * @return boolean Whether the PHP type is a primitive (string, int, boolean, float)
      */
-    public static function isPhpPrimitiveType($phpType)
+    public static function isPhpPrimitiveType(string $phpType): bool
     {
         return in_array($phpType, array("boolean", "int", "double", "float", "string"));
     }
@@ -368,7 +375,7 @@ class PropelTypes
      *
      * @return boolean Whether the PHP type is a primitive (string, int, boolean, float)
      */
-    public static function isPhpPrimitiveNumericType($phpType)
+    public static function isPhpPrimitiveNumericType(string $phpType): bool
     {
         return in_array($phpType, array("boolean", "int", "double", "float"));
     }
@@ -380,7 +387,7 @@ class PropelTypes
      *
      * @return boolean
      */
-    public static function isPhpObjectType($phpType)
+    public static function isPhpObjectType(string $phpType): bool
     {
         return (!self::isPhpPrimitiveType($phpType) && !in_array($phpType, array("resource", "array")));
     }
@@ -392,7 +399,7 @@ class PropelTypes
      *
      * @return boolean
      */
-    public static function isPhpArrayType($phpType)
+    public static function isPhpArrayType(string $phpType): bool
     {
         return strtoupper($phpType) === self::PHP_ARRAY;
     }

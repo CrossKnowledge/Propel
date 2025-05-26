@@ -8,6 +8,12 @@
  * @license    MIT License
  */
 
+namespace CK\Runtime\Lib\Connection;
+
+use CK\Runtime\Propel;
+
+use PDO;
+
 /**
  * PDO connection subclass that provides the basic fixes to PDO that are required by Propel.
  *
@@ -41,90 +47,90 @@ class PropelPDO extends PDO
     const PROPEL_ATTR_CONNECTION_NAME = -2;
 
     const DEFAULT_SLOW_THRESHOLD = 0.1;
-    const DEFAULT_ONLYSLOW_ENABLED = false;
+    const bool DEFAULT_ONLYSLOW_ENABLED = false;
 
     /**
      * The current transaction depth.
      *
      * @var       integer
      */
-    protected $nestedTransactionCount = 0;
+    protected int $nestedTransactionCount = 0;
 
     /**
      * Cache of prepared statements (PDOStatement) keyed by md5 of SQL.
      *
      * @var       array  [md5(sql) => PDOStatement]
      */
-    protected $preparedStatements = array();
+    protected array $preparedStatements = array();
 
     /**
      * Whether to cache prepared statements.
      *
      * @var       boolean
      */
-    protected $cachePreparedStatements = false;
+    protected bool $cachePreparedStatements = false;
 
     /**
      * Whether the final commit is possible
      * Is false if a nested transaction is rolled back
      */
-    protected $isUncommitable = false;
+    protected bool $isUncommitable = false;
 
     /**
      * Count of queries performed.
      *
      * @var       integer
      */
-    protected $queryCount = 0;
+    protected int $queryCount = 0;
 
     /**
      * SQL code of the latest performed query.
      *
      * @var       string
      */
-    protected $lastExecutedQuery;
+    protected string $lastExecutedQuery;
 
     /**
-     * Whether or not the debug is enabled
+     * Whether the debug is enabled or not
      *
      * @var       boolean
      */
-    public $useDebug = false;
+    public bool $useDebug = false;
 
     /**
      * Configured BasicLogger (or compatible) logger.
      *
      * @var       BasicLogger
      */
-    protected $logger;
+    protected BasicLogger $logger;
 
     /**
      * The log level to use for logging.
      *
      * @var       integer
      */
-    private $logLevel = Propel::LOG_DEBUG;
+    private int $logLevel = Propel::LOG_DEBUG;
 
     /**
      * The runtime configuration
      *
      * @var       PropelConfiguration
      */
-    protected $configuration;
+    protected PropelConfiguration $configuration;
 
     /**
      * The connection name
      *
      * @var string
      */
-    protected $connectionName;
+    protected string $connectionName;
 
     /**
      * The default value for runtime config item "debugpdo.logging.methods".
      *
      * @var       array
      */
-    protected static $defaultLogMethods = array(
+    protected static array $defaultLogMethods = array(
         'PropelPDO::exec',
         'PropelPDO::query',
         'DebugPDOStatement::execute',
@@ -137,15 +143,18 @@ class PropelPDO extends PDO
      * to the log with the state of this object just after its initialization.
      * Add PropelPDO::__construct to $defaultLogMethods to see this message
      *
-     * @param string $dsn            Connection DSN.
-     * @param string $username       The user name for the DSN string.
-     * @param string $password       The password for the DSN string.
-     * @param array  $driver_options A key=>value array of driver-specific connection options.
+     * @param string $dsn Connection DSN.
+     * @param string $username The user name for the DSN string.
+     * @param string $password The password for the DSN string.
+     * @param array $driver_options A key=>value array of driver-specific connection options.
      *
      * @throws PDOException if there is an error during connection initialization.
+     * @throws PropelException
      */
-    public function __construct($dsn, $username = null, $password = null, $driver_options = array())
+    public function __construct(string $dsn, $username = null, $password = null, $driver_options = array())
     {
+        $debug = null;  //Better for IDE syntax parser
+
         if ($this->useDebug) {
             $debug = $this->getDebugSnapshot();
         }
@@ -163,7 +172,7 @@ class PropelPDO extends PDO
      *
      * @param PropelConfiguration $configuration
      */
-    public function setConfiguration($configuration)
+    public function setConfiguration(PropelConfiguration $configuration): void
     {
         $this->configuration = $configuration;
     }
@@ -173,7 +182,7 @@ class PropelPDO extends PDO
      *
      * @return PropelConfiguration
      */
-    public function getConfiguration()
+    public function getConfiguration(): PropelConfiguration|array
     {
         if (null === $this->configuration) {
             $this->configuration = Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT);
@@ -187,7 +196,7 @@ class PropelPDO extends PDO
      *
      * @return integer
      */
-    public function getNestedTransactionCount()
+    public function getNestedTransactionCount(): int
     {
         return $this->nestedTransactionCount;
     }
@@ -197,7 +206,7 @@ class PropelPDO extends PDO
      *
      * @param int $v The new depth.
      */
-    protected function setNestedTransactionCount($v)
+    protected function setNestedTransactionCount(int $v): void
     {
         $this->nestedTransactionCount = $v;
     }
@@ -208,7 +217,7 @@ class PropelPDO extends PDO
      *
      * @return boolean
      */
-    public function isInTransaction()
+    public function isInTransaction(): bool
     {
         return ($this->getNestedTransactionCount() > 0);
     }
@@ -219,7 +228,7 @@ class PropelPDO extends PDO
      *
      * @return boolean True if the connection is in a committable transaction
      */
-    public function isCommitable()
+    public function isCommitable(): bool
     {
         return $this->isInTransaction() && !$this->isUncommitable;
     }
@@ -228,8 +237,9 @@ class PropelPDO extends PDO
      * Overrides PDO::beginTransaction() to prevent errors due to already-in-progress transaction.
      *
      * @return boolean
+     * @throws PropelException
      */
-    public function beginTransaction()
+    #[ReturnTypeWillChange] public function beginTransaction(): bool
     {
         $return = true;
         if (!$this->nestedTransactionCount) {
@@ -252,7 +262,7 @@ class PropelPDO extends PDO
      *
      * @throws PropelException
      */
-    public function commit()
+    #[ReturnTypeWillChange] public function commit(): bool
     {
         $return = true;
         $opcount = $this->nestedTransactionCount;
@@ -280,8 +290,9 @@ class PropelPDO extends PDO
      * transaction nesting level
      *
      * @return boolean Whether operation was successful.
+     * @throws PropelException
      */
-    public function rollBack()
+    #[ReturnTypeWillChange] public function rollBack(): bool
     {
         $return = true;
         $opcount = $this->nestedTransactionCount;
@@ -307,8 +318,9 @@ class PropelPDO extends PDO
      * and reset the nested transaction count to 0.
      *
      * @return boolean Whether operation was successful.
+     * @throws PropelException
      */
-    public function forceRollBack()
+    public function forceRollBack(): bool
     {
         $return = true;
 
@@ -339,7 +351,7 @@ class PropelPDO extends PDO
      *
      * @return void
      */
-    public function setAttribute($attribute, $value)
+    #[ReturnTypeWillChange] public function setAttribute(int $attribute, mixed $value): void
     {
         switch ($attribute) {
             case self::PROPEL_ATTR_CACHE_PREPARES:
@@ -362,15 +374,15 @@ class PropelPDO extends PDO
      *
      * @return mixed
      */
-    public function getAttribute($attribute)
+    #[ReturnTypeWillChange] public function getAttribute(int $attribute): mixed
     {
         switch ($attribute) {
             case self::PROPEL_ATTR_CACHE_PREPARES:
                 return $this->cachePreparedStatements;
-                break;
+                //break;    //This is unreachable anyway, a "Return" takes prevalence over the break anyway.
             case self::PROPEL_ATTR_CONNECTION_NAME:
                 return $this->connectionName;
-                break;
+                //break;    //Unreachable as well.
             default:
                 return parent::getAttribute($attribute);
         }
@@ -383,14 +395,17 @@ class PropelPDO extends PDO
      *  - Add logging and query counting if logging is true.
      *  - Add query caching support if the PropelPDO::PROPEL_ATTR_CACHE_PREPARES was set to true.
      *
-     * @param string $sql            This must be a valid SQL statement for the target database server.
-     * @param array  $driver_options One $array or more key => value pairs to set attribute values
+     * @param string $sql This must be a valid SQL statement for the target database server.
+     * @param array $driver_options One $array or more key => value pairs to set attribute values
      *                                      for the PDOStatement object that this method returns.
      *
      * @return PDOStatement
+     * @throws PropelException
      */
-    public function prepare($sql, $driver_options = array())
+    #[ReturnTypeWillChange] public function prepare(string $sql, array $driver_options = array()): PDOStatement
     {
+        $debug = null;  //Cleaner for IDE syntax parser
+
         if ($this->useDebug) {
             $debug = $this->getDebugSnapshot();
         }
@@ -420,8 +435,9 @@ class PropelPDO extends PDO
      * @param string $sql
      *
      * @return integer
+     * @throws PropelException
      */
-    public function exec($sql)
+    #[ReturnTypeWillChange] public function exec($sql): int
     {
         if ($this->useDebug) {
             $debug = $this->getDebugSnapshot();
@@ -446,25 +462,24 @@ class PropelPDO extends PDO
      *
      * @see       http://php.net/manual/en/pdo.query.php for a description of the possible parameters.
      *
-     * @return PDOStatement
+     * @param string $query
+     * @param int|null $fetchMode
+     * @param mixed ...$fetchModeArgs
+     * @return PDOStatement|false
+     * @throws PropelException
      */
-    public function query()
+    public function query(string $query, ?int $fetchMode = null, ...$fetchModeArgs): PDOStatement|false
     {
+        $debug = null;  //To reduce IDE detected warnings of a probably undefined variable.
         if ($this->useDebug) {
             $debug = $this->getDebugSnapshot();
         }
 
-        $args = func_get_args();
-        if (version_compare(PHP_VERSION, '5.3', '<')) {
-            $return = call_user_func_array(array($this, 'parent::query'), $args);
-        } else {
-            $return = call_user_func_array('parent::query', $args);
-        }
+        $return = parent::query($query, $fetchMode, ...$fetchModeArgs);
 
         if ($this->useDebug) {
-            $sql = $args[0];
-            $this->log($sql, null, __METHOD__, $debug);
-            $this->setLastExecutedQuery($sql);
+            $this->log($query, null, __METHOD__, $debug);
+            $this->setLastExecutedQuery($query);
             $this->incrementQueryCount();
         }
 
@@ -474,7 +489,7 @@ class PropelPDO extends PDO
     /**
      * Clears any stored prepared statements for this connection.
      */
-    public function clearStatementCache()
+    public function clearStatementCache(): void
     {
         $this->preparedStatements = array();
     }
@@ -482,12 +497,12 @@ class PropelPDO extends PDO
     /**
      * Configures the PDOStatement class for this connection.
      *
-     * @param string  $class
+     * @param string $class
      * @param boolean $suppressError Whether to suppress an exception if the statement class cannot be set.
      *
      * @throws PropelException if the statement class cannot be set (and $suppressError is false).
      */
-    protected function configureStatementClass($class = 'PDOStatement', $suppressError = true)
+    protected function configureStatementClass(string $class = 'PDOStatement', bool $suppressError = true): void
     {
         // extending PDOStatement is only supported with non-persistent connections
         if (!$this->getAttribute(PDO::ATTR_PERSISTENT)) {
@@ -506,7 +521,7 @@ class PropelPDO extends PDO
      * @throws PropelException if persistent connection is used (since unable to override PDOStatement in that case).
      * @return integer
      */
-    public function getQueryCount()
+    public function getQueryCount(): int
     {
         // extending PDOStatement is not supported with persistent connections
         if ($this->getAttribute(PDO::ATTR_PERSISTENT)) {
@@ -521,9 +536,9 @@ class PropelPDO extends PDO
      *
      * Returns the original number of queries (ie the value of $this->queryCount before calling this method).
      *
-     * @return integer
+     * @return void
      */
-    public function incrementQueryCount()
+    public function incrementQueryCount(): void
     {
         $this->queryCount++;
     }
@@ -533,7 +548,7 @@ class PropelPDO extends PDO
      *
      * @return string Executable SQL code
      */
-    public function getLastExecutedQuery()
+    public function getLastExecutedQuery(): string
     {
         return $this->lastExecutedQuery;
     }
@@ -543,7 +558,7 @@ class PropelPDO extends PDO
      *
      * @param string $query Executable SQL code
      */
-    public function setLastExecutedQuery($query)
+    public function setLastExecutedQuery(string $query): void
     {
         $this->lastExecutedQuery = $query;
     }
@@ -552,8 +567,9 @@ class PropelPDO extends PDO
      * Enable or disable the query debug features
      *
      * @param boolean $value True to enable debug (default), false to disable it
+     * @throws PropelException
      */
-    public function useDebug($value = true)
+    public function useDebug(bool $value = true): void
     {
         if ($value) {
             $this->configureStatementClass('DebugPDOStatement', true);
@@ -572,7 +588,7 @@ class PropelPDO extends PDO
      *
      * @param integer $level Value of one of the Propel::LOG_* class constants.
      */
-    public function setLogLevel($level)
+    public function setLogLevel(int $level): void
     {
         $this->logLevel = $level;
     }
@@ -584,7 +600,7 @@ class PropelPDO extends PDO
      *
      * @param BasicLogger $logger A Logger with an API compatible with BasicLogger (or PEAR Log).
      */
-    public function setLogger($logger)
+    public function setLogger(BasicLogger $logger): void
     {
         $this->logger = $logger;
     }
@@ -594,7 +610,7 @@ class PropelPDO extends PDO
      *
      * @return BasicLogger A Logger with an API compatible with BasicLogger (or PEAR Log).
      */
-    public function getLogger()
+    public function getLogger(): BasicLogger
     {
         return $this->logger;
     }
@@ -602,15 +618,15 @@ class PropelPDO extends PDO
     /**
      * Logs the method call or SQL using the Propel::log() method or a registered logger class.
      *
+     * @param string $msg Message to log.
+     * @param integer|null $level Log level to use; will use self::setLogLevel() specified level by default.
+     * @param string|null $methodName Name of the method whose execution is being logged.
+     * @param array|null $debugSnapshot Previous return value from self::getDebugSnapshot().
+     * @throws PropelException
      * @uses      self::getLogPrefix()
      * @see       self::setLogger()
-     *
-     * @param string  $msg           Message to log.
-     * @param integer $level         Log level to use; will use self::setLogLevel() specified level by default.
-     * @param string  $methodName    Name of the method whose execution is being logged.
-     * @param array   $debugSnapshot Previous return value from self::getDebugSnapshot().
      */
-    public function log($msg, $level = null, $methodName = null, array $debugSnapshot = null)
+    public function log(string $msg, int $level = null, string $methodName = null, array $debugSnapshot = null): void
     {
         // If logging has been specifically disabled, this method won't do anything
         if (!$this->getLoggingConfig('enabled', true)) {
@@ -660,7 +676,7 @@ class PropelPDO extends PDO
      *
      * @throws PropelException
      */
-    public function getDebugSnapshot()
+    public function getDebugSnapshot(): array
     {
         if ($this->useDebug) {
             return array(
@@ -683,7 +699,7 @@ class PropelPDO extends PDO
      *
      * @return mixed
      */
-    protected function getLoggingConfig($key, $defaultValue)
+    protected function getLoggingConfig(string $key, mixed $defaultValue): mixed
     {
         return $this->getConfiguration()->getParameter("debugpdo.logging.$key", $defaultValue);
     }
@@ -695,14 +711,15 @@ class PropelPDO extends PDO
      * Uses a given $debugSnapshot to calculate how much time has passed since the call to self::getDebugSnapshot(),
      * how much the memory consumption by PHP has changed etc.
      *
-     * @see       self::getDebugSnapshot()
-     *
-     * @param string $methodName    Name of the method whose execution is being logged.
-     * @param array  $debugSnapshot A previous return value from self::getDebugSnapshot().
+     * @param string $methodName Name of the method whose execution is being logged.
+     * @param array $debugSnapshot A previous return value from self::getDebugSnapshot().
      *
      * @return string
+     * @throws PropelException
+     * @see       self::getDebugSnapshot()
+     *
      */
-    protected function getLogPrefix($methodName, $debugSnapshot)
+    protected function getLogPrefix(string $methodName, array $debugSnapshot): string
     {
         $config = $this->getConfiguration()->getParameters();
         if (!isset($config['debugpdo']['logging']['details'])) {
@@ -779,7 +796,7 @@ class PropelPDO extends PDO
      *
      * @return string
      */
-    protected function getReadableBytes($bytes, $precision)
+    protected function getReadableBytes(int $bytes, int $precision): string
     {
         $suffix = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
         $total = count($suffix);
@@ -795,6 +812,7 @@ class PropelPDO extends PDO
      * If so configured, makes an entry to the log of the state of this object just prior to its destruction.
      * Add PropelPDO::__destruct to $defaultLogMethods to see this message
      *
+     * @throws PropelException
      * @see       self::log()
      */
     public function __destruct()

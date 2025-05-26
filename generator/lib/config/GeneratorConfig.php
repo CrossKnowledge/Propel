@@ -7,8 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Config;
 
-require_once dirname(__FILE__) . '/GeneratorConfigInterface.php';
+//require_once dirname(__FILE__) . '/GeneratorConfigInterface.php';
 // Phing dependencies
 require_once 'phing/Phing.php';
 
@@ -121,7 +122,7 @@ class GeneratorConfig implements GeneratorConfigInterface
         // Basically, we want to turn ?.?.?.sqliteDataSQLBuilder into ?.?.?.SqliteDataSQLBuilder
         $lastdotpos = strrpos($classpath, '.');
         if ($lastdotpos !== false) {
-            $classpath{$lastdotpos + 1} = strtoupper($classpath{$lastdotpos + 1});
+            $classpath[$lastdotpos + 1] = strtoupper($classpath[$lastdotpos + 1]);
         } else {
             // Allows to configure full classname instead of a dot-path notation
             if (class_exists($classpath)) {

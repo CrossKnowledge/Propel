@@ -8,7 +8,12 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/OMBuilder.php';
+namespace CK\Generator\Lib\Builder\OM;
+
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\PropelTypes;
+
+//require_once dirname(__FILE__) . '/OMBuilder.php';
 
 /**
  * Base class for Peer-building classes.
@@ -51,7 +56,7 @@ abstract class ObjectBuilder extends OMBuilder
      *
      * @param string &$script The script will be modified in this method.
      */
-    protected function addColumnAccessorMethods(&$script)
+    protected function addColumnAccessorMethods(string &$script): void
     {
         $table = $this->getTable();
 

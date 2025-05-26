@@ -8,7 +8,9 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/DefaultPlatform.php';
+namespace CK\Generator\Platform;
+use CK\Generator\Lib\Model\Table;
+//require_once dirname(__FILE__) . '/DefaultPlatform.php';
 
 /**
  * Oracle PropelPlatformInterface implementation.

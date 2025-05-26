@@ -8,6 +8,8 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior\Versionable;
+
 /**
  * Behavior to add versionable columns and abilities
  *

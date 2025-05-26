@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Query;
+
 
 /**
  * Data object to describe a join between two tables, for example

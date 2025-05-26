@@ -7,7 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Util;
 
+use Exception;
 /**
  * Simple autoloader for Propel generated model classes.
  * This class implements the singleton pattern.

@@ -7,7 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Validator;
 
+use CK\Runtime\Lib\Map\ValidatorMap;
 /**
  * A validator for regular expressions.
  *
@@ -24,7 +26,7 @@
  * <code>
  *   <column name="email" type="VARCHAR" size="128" required="true" />
  *   <validator column="username">
- *     <!-- allow strings that match the email adress pattern -->
+ *     <!-- allow strings that match the email address pattern -->
  *     <rule
  *       name="match"
  *       value="/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9])+(\.[a-zA-Z0-9_-]+)+$/"
@@ -47,28 +49,26 @@ class MatchValidator implements BasicValidator
      *
      * @return string Prepared regular expression.
      */
-    private function prepareRegexp($exp)
+    private function prepareRegexp(string $exp): string
     {
         // remove surrounding '/' marks so that they don't get escaped in next step
-        if ($exp{0} !== '/' || $exp{strlen($exp) - 1} !== '/') {
+        if ($exp[0] !== '/' || $exp[strlen($exp) - 1] !== '/') {
             $exp = '/' . $exp . '/';
         }
 
         // if they did not escape / chars; we do that for them
-        $exp = preg_replace('/([^\\\])\/([^$])/', '$1\/$2', $exp);
-
-        return $exp;
+        return preg_replace('/([^\\\])\/([^$])/', '$1\/$2', $exp);
     }
 
     /**
      * Whether the passed string matches regular expression.
      *
      * @param ValidatorMap $map
-     * @param string       $str
+     * @param string $str
      *
      * @return boolean
      */
-    public function isValid(ValidatorMap $map, $str)
+    public function isValid(ValidatorMap $map, string $str): bool
     {
         return (preg_match($this->prepareRegexp($map->getValue()), $str) != 0);
     }

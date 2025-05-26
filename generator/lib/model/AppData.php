@@ -8,8 +8,10 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Model;
+
 require_once dirname(__FILE__) . '/../exception/EngineException.php';
-require_once dirname(__FILE__) . '/Database.php';
+//require_once dirname(__FILE__) . '/Database.php';
 
 /**
  * A class for holding application data structures.

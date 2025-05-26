@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Logger;
+
 
 /**
  * This is a minimalistic interface that any logging class must implement for Propel.

@@ -7,8 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace CK\Runtime\Lib\Parser\YAML;
 
-require_once(dirname(__FILE__).'/sfYamlInline.php');
+
+//require_once(dirname(__FILE__).'/sfYamlInline.php');
 
 if (!defined('PREG_BAD_UTF8_OFFSET_ERROR')) {
   define('PREG_BAD_UTF8_OFFSET_ERROR', 5);

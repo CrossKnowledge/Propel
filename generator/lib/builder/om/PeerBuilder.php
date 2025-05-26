@@ -8,7 +8,11 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/OMBuilder.php';
+namespace CK\Generator\Lib\Builder\OM;
+
+use CK\Generator\Lib\Model\Table;
+
+//require_once dirname(__FILE__) . '/OMBuilder.php';
 
 /**
  * Base class for Peer-building classes.

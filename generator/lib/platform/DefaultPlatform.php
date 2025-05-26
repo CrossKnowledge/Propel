@@ -8,11 +8,18 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Platform;
+
+use CK\Generator\Lib\Model\Column;
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\Domain;
+use CK\Generator\Lib\Model\PropelTypes;
+
 require_once dirname(__FILE__) . '/PropelPlatformInterface.php';
-require_once dirname(__FILE__) . '/../model/Column.php';
-require_once dirname(__FILE__) . '/../model/Table.php';
-require_once dirname(__FILE__) . '/../model/Domain.php';
-require_once dirname(__FILE__) . '/../model/PropelTypes.php';
+//require_once dirname(__FILE__) . '/../model/Column.php';
+//require_once dirname(__FILE__) . '/../model/Table.php';
+//require_once dirname(__FILE__) . '/../model/Domain.php';
+//require_once dirname(__FILE__) . '/../model/PropelTypes.php';
 
 /**
  * Default implementation for the Platform interface.
@@ -1182,7 +1189,7 @@ ALTER TABLE %s ADD
             $values[] = trim($v);
         }
 
-        $value = implode($values, ' | ');
+        $value = implode(' | ', $values);
         if (empty($value) || ' | ' === $value) {
             return null;
         }

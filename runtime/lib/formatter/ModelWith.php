@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Formatter;
+
 
 /**
  * Data object to describe a joined hydration in a Model Query

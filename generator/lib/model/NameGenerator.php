@@ -8,6 +8,8 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Model;
+
 /**
  * The generic interface to a name generation algorithm.
  *

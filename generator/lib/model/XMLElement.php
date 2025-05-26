@@ -7,8 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Model;
 
-require_once dirname(__FILE__) . '/VendorInfo.php';
+//require_once dirname(__FILE__) . '/VendorInfo.php';
 
 /**
  * An abstract class for elements represented by XML tags (e.g. Column, Table).

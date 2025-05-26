@@ -8,6 +8,17 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Builder;
+
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Config\GeneratorConfig;
+use CK\Generator\Lib\Config\GeneratorConfigInterface;
+use CK\Generator\Lib\Builder\OM\PeerBuilder;
+use CK\Generator\Lib\Builder\OM\ObjectBuilder;
+use CK\Propel\Generator\Lib\Builder\Util\Pluralizer;
+use CK\Generator\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Model\Database;
+
 /**
  * This is the base class for any builder class that is using the data model.
  *

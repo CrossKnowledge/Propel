@@ -8,7 +8,11 @@
  * @license    MIT License
  */
 
-require_once 'AggregateColumnRelationBehavior.php';
+namespace CK\Generator\Lib\Behavior;
+
+use CK\Generator\Lib\Model\Behavior;
+
+//require_once 'AggregateColumnRelationBehavior.php';
 
 /**
  * Keeps an aggregate column updated with related table

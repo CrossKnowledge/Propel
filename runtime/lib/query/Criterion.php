@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Query;
+
 
 /**
  * This is an "inner" class that describes an object in the criteria.
@@ -225,7 +227,7 @@ class Criterion
      *
      * @return array
      */
-    private function getClauses()
+    protected function getClauses()
     {
         return $this->clauses;
     }

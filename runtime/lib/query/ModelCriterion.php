@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Query;
+
 
 /**
  * This is an "inner" class that describes an object in the criteria.

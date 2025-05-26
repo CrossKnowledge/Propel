@@ -7,6 +7,7 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Adapter\MSSQL;
 
 /**
  * dblib doesn't support transactions so we need to add a workaround for transactions, last insert ID, and quoting

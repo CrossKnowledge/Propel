@@ -8,9 +8,15 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/I18nBehaviorObjectBuilderModifier.php';
-require_once dirname(__FILE__) . '/I18nBehaviorQueryBuilderModifier.php';
-require_once dirname(__FILE__) . '/I18nBehaviorPeerBuilderModifier.php';
+namespace CK\Generator\Lib\Behavior\I18nBehavior;
+
+use CK\Generator\Lib\Model\Behavior;
+use CK\Generator\Lib\Model\ForeignKey;
+use CK\Generator\Lib\Model\PropelTypes;
+
+//require_once dirname(__FILE__) . '/I18nBehaviorObjectBuilderModifier.php';
+//require_once dirname(__FILE__) . '/I18nBehaviorQueryBuilderModifier.php';
+//require_once dirname(__FILE__) . '/I18nBehaviorPeerBuilderModifier.php';
 
 /**
  * Allows translation of text columns through transparent one-to-many relationship

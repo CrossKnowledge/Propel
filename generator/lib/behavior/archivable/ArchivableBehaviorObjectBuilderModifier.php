@@ -8,7 +8,10 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior\Archivable;
+
 /**
+ *
  * Keeps tracks of an ActiveRecord object, even after deletion
  *
  * @author     François Zaninotto

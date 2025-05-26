@@ -8,12 +8,16 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/XMLElement.php';
+namespace CK\Generator\Lib\Model;
+
+//require_once dirname(__FILE__) . '/XMLElement.php';
+use CK\Generator\Platform\PropelPlatformInterface;
+
 require_once dirname(__FILE__) . '/../exception/EngineException.php';
-require_once dirname(__FILE__) . '/PropelTypes.php';
-require_once dirname(__FILE__) . '/Inheritance.php';
-require_once dirname(__FILE__) . '/Domain.php';
-require_once dirname(__FILE__) . '/ColumnDefaultValue.php';
+//require_once dirname(__FILE__) . '/PropelTypes.php';
+//require_once dirname(__FILE__) . '/Inheritance.php';
+//require_once dirname(__FILE__) . '/Domain.php';
+//require_once dirname(__FILE__) . '/ColumnDefaultValue.php';
 
 /**
  * A Class for holding data about a column used in an Application.
@@ -31,12 +35,12 @@ require_once dirname(__FILE__) . '/ColumnDefaultValue.php';
 class Column extends XMLElement
 {
 
-    const DEFAULT_TYPE = "VARCHAR";
-    const DEFAULT_VISIBILITY = 'public';
-    public static $valid_visibilities = array('public', 'protected', 'private');
+    const string DEFAULT_TYPE = "VARCHAR";
+    const string DEFAULT_VISIBILITY = 'public';
+    public static array $valid_visibilities = array('public', 'protected', 'private');
 
-    private $name;
-    private $description;
+    private ?string $name;
+    private ?string $description;
     private $phpName = null;
     private $phpNamingMethod;
     private $isNotNull = false;
@@ -114,15 +118,15 @@ class Column extends XMLElement
     }
 
     /**
-     * Return a comma delimited string listing the specified columns.
+     * Return a comma-delimited string listing the specified columns.
      *
      * @param Column[]|string[] $columns Either a list of <code>Column</code> objects, or a list of <code>string</code> with column names.
      *
-     * @deprecated Use the Platform::getColumnListDDL() method instead
-     *
      * @return string
+     *@deprecated Use the Platform::getColumnListDDL() method instead
+     *
      */
-    public static function makeList($columns, PropelPlatformInterface $platform)
+    public static function makeList(array $columns, PropelPlatformInterface $platform): string
     {
         $list = array();
         foreach ($columns as $col) {
@@ -140,7 +144,7 @@ class Column extends XMLElement
      *
      * @see         parent::loadFromXML()
      */
-    protected function setupObject()
+    protected function setupObject(): void
     {
         try {
             $dom = $this->getAttribute("domain");
@@ -1350,9 +1354,9 @@ class Column extends XMLElement
     /**
      * Get the platform/adapter impl.
      *
-     * @return PropelPlatformInterface
+     * @return \CK\Generator\Lib\Model\PropelPlatformInterface
      */
-    public function getPlatform()
+    public function getPlatform(): \CK\Generator\Lib\Model\PropelPlatformInterface
     {
         return $this->getTable()->getDatabase()->getPlatform();
     }

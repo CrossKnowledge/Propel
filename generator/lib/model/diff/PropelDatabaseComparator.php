@@ -8,9 +8,12 @@
  * @license     MIT License
  */
 
-require_once dirname(__FILE__) . '/../Database.php';
-require_once dirname(__FILE__) . '/PropelDatabaseDiff.php';
-require_once dirname(__FILE__) . '/PropelTableComparator.php';
+namespace CK\Generator\Lib\Model\Diff;
+use CK\Generator\Lib\Model\Database;
+
+//require_once dirname(__FILE__) . '/../Database.php';
+//require_once dirname(__FILE__) . '/PropelDatabaseDiff.php';
+//require_once dirname(__FILE__) . '/PropelTableComparator.php';
 
 /**
  * Service class for comparing Database objects

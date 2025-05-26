@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Connection;
+
 
 /**
  * PDO connection subclass that provides some basic support for query counting and logging.
@@ -110,5 +112,5 @@ class DebugPDO extends PropelPDO
     /**
      * @var       boolean
      */
-    public $useDebug = true;
+    public bool $useDebug = true;
 }

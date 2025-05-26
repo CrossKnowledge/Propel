@@ -7,7 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Validator;
 
+use CK\Runtime\Lib\Map\ValidatorMap;
 /**
  * A validator for required fields.
  *
@@ -28,15 +30,15 @@
 class RequiredValidator implements BasicValidator
 {
     /**
-     * @see       BasicValidator::isValid()
-     *
      * @param ValidatorMap $map
      * @param string       $str
      *
      * @return boolean
+     * @see       BasicValidator::isValid()
+     *
      */
-    public function isValid(ValidatorMap $map, $str)
+    public function isValid(ValidatorMap $map, string $str): bool
     {
-        return ($str !== null && $str !== "");
+        return ($str !== null && $str !== ""); //This is already evaluated, so it should be just ($str !== "")
     }
 }

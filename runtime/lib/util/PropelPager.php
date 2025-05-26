@@ -7,6 +7,12 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Util;
+
+use Countable;
+use Iterator;
+use CK\Runtime\Lib\Query\Criteria;
+use ReturnTypeWillChange;
 
 /**
  *  PropelPager
@@ -614,12 +620,12 @@ class PropelPager implements Countable, Iterator
      *
      * @return boolean
      */
-    public function valid()
+    #[ReturnTypeWillChange] public function valid(): bool
     {
         if (!isset($this->rs)) {
             $this->doRs();
         }
 
-        return in_array($this->currentKey, array_keys($this->rs));
+        return in_array($this->currentKey, array_keys((array)$this->rs));
     }
 }

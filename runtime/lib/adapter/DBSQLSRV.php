@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Adapter;
+
 
 /**
  * This is used to connect to a MSSQL database using pdo_sqlsrv driver.

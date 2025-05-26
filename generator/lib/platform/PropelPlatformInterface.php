@@ -8,6 +8,8 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Platform;
+
 /**
  * Interface for RDBMS platform specific behaviour.
  *

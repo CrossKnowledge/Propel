@@ -8,6 +8,11 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior\Query_Cache;
+
+use AllowDynamicProperties;
+use CK\Generator\Lib\Model\Behavior;
+
 /**
  * Speeds up queries on a model by caching the query
  *
@@ -15,7 +20,7 @@
  * @version    $Revision$
  * @package    propel.generator.behavior.cacheable
  */
-class QueryCacheBehavior extends Behavior
+#[AllowDynamicProperties] class QueryCacheBehavior extends Behavior
 {
     // default parameters value
     protected $parameters = array(

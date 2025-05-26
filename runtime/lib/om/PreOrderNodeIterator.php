@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\OM;
+
 
 /**
  * Pre-order node iterator for Node objects.

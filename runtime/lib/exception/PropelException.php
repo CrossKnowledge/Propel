@@ -7,6 +7,10 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Exception;
+
+
+use Exception;
 
 /**
  * The base class of all exceptions thrown by Propel.
@@ -27,12 +31,12 @@ class PropelException extends Exception
     /**
      * Emulates wrapped exceptions for PHP < 5.3
      *
-     * @param string    $message
+     * @param string|null $message
      * @param Exception $previous
      *
      * @return PropelException
      */
-    public function __construct($message = null, Exception $previous = null)
+    public function __construct(?string $message = null, Exception $previous = null)
     {
         if ($previous === null && $message instanceof Exception) {
             $previous = $message;
@@ -56,9 +60,9 @@ class PropelException extends Exception
      * Get the previous Exception
      * We can't override getPrevious() since it's final
      *
-     * @return Exception The previous exception
+     * @return Exception|\Throwable The previous exception
      */
-    public function getCause()
+    public function getCause(): Exception|\Throwable
     {
         if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
             return $this->getPrevious();

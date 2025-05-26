@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\OM;
+
 
 /**
  * This class contains attributes and methods that are used by all

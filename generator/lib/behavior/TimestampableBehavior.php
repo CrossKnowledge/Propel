@@ -8,6 +8,9 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior;
+
+use CK\Generator\Lib\Model\Behavior;
 /**
  * Gives a model class the ability to track creation and last modification dates
  * Uses two additional columns storing the creation and update date

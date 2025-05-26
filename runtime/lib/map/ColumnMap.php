@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Map;
+
 
 /**
  * ColumnMap is used to model a column of a table in a database.

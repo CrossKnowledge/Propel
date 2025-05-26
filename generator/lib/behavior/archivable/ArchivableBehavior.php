@@ -7,9 +7,15 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Behavior\Archivable;
 
-require_once dirname(__FILE__) . '/ArchivableBehaviorObjectBuilderModifier.php';
-require_once dirname(__FILE__) . '/ArchivableBehaviorQueryBuilderModifier.php';
+use CK\Generator\Lib\Model\Behavior;
+use CK\Generator\Lib\Model\Index;
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\Column;
+
+//require_once dirname(__FILE__) . '/ArchivableBehaviorObjectBuilderModifier.php';
+//require_once dirname(__FILE__) . '/ArchivableBehaviorQueryBuilderModifier.php';
 
 /**
  * Keeps tracks of an ActiveRecord object, even after deletion

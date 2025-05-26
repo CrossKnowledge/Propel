@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Parser;
+
 
 /**
  * CSV parser. Converts data between associative array and CSV formats.
@@ -283,7 +285,8 @@ class PropelCSVParser extends PropelParser
      */
     protected function isSerialized($input)
     {
-        return preg_match('/^\w\:\d+\:\{/', $input);
+        //return preg_match('/^\w\:\d+\:\{/', $input);  //It's redundant to escape the colon ":"
+        return preg_match('/^\w:\d+:\{/', $input);
     }
 
     /**

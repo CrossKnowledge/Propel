@@ -7,7 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Parser;
 
+use CK\Runtime\Lib\Exception\PropelException;
 /**
  * Base class for all parsers. A parser converts data from and to an associative array.
  *

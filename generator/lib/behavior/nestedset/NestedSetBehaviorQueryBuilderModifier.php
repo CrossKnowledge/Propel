@@ -8,6 +8,8 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\LibBehavior\NestedSet;
+
 /**
  * Behavior to adds nested set tree structure columns and abilities
  *

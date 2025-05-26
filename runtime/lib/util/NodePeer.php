@@ -7,6 +7,11 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Util;
+
+use CK\Runtime\Lib\OM\NodeObject;
+use CK\Runtime\Lib\Connection\PropelPDO;
+use Exception;
 
 /**
  * This is a utility interface for all generated NodePeer classes in the system.

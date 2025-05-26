@@ -8,7 +8,9 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/XMLElement.php';
+namespace CK\Generator\Lib\Model;
+
+//require_once dirname(__FILE__) . '/XMLElement.php';
 
 /**
  * A Class for information about foreign keys of a table.
@@ -109,7 +111,7 @@ class ForeignKey extends XMLElement
     /**
      * normalizes the input of onDelete, onUpdate attributes
      */
-    public function normalizeFKey($attrib)
+    public function normalizeFKey($attrib): string
     {
         if ($attrib === null || strtoupper($attrib) == "NONE") {
             $attrib = self::NONE;
@@ -125,7 +127,7 @@ class ForeignKey extends XMLElement
     /**
      * returns whether or not the onUpdate attribute is set
      */
-    public function hasOnUpdate()
+    public function hasOnUpdate(): bool
     {
         $database = $this->getTable()->getDatabase();
         if($database instanceof Database &&

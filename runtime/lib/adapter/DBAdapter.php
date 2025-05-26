@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Adapter;
+
 
 /**
  * DBAdapter</code> defines the interface for a Propel database adapter.

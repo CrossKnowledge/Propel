@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Formatter;
+
 
 /**
  * statement formatter for Propel query

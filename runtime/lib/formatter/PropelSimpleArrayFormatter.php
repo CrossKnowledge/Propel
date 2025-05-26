@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Formatter;
+
 
 /**
  * Array formatter for Propel select query

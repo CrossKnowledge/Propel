@@ -7,7 +7,10 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Validator;
 
+use CK\Runtime\Lib\Map\ValidatorMap;
+use CK\Runtime\Lib\Query\Criteria;
 /**
  * A validator for unique column names.
  *
@@ -26,14 +29,14 @@
 class UniqueValidator implements BasicValidator
 {
     /**
-     * @see       BasicValidator::isValid()
-     *
      * @param ValidatorMap $map
      * @param string       $str
      *
      * @return boolean
+     * @see       BasicValidator::isValid()
+     *
      */
-    public function isValid(ValidatorMap $map, $str)
+    public function isValid(ValidatorMap $map, string $str): bool
     {
         $column = $map->getColumn();
 
@@ -45,8 +48,6 @@ class UniqueValidator implements BasicValidator
         $clazz = $table . 'Peer';
         $count = call_user_func(array($clazz, 'doCount'), $c);
 
-        $isValid = ($count === 0);
-
-        return $isValid;
+        return ($count === 0);
     }
 }

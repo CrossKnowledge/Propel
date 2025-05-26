@@ -8,9 +8,15 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/VersionableBehaviorObjectBuilderModifier.php';
-require_once dirname(__FILE__) . '/VersionableBehaviorQueryBuilderModifier.php';
-require_once dirname(__FILE__) . '/VersionableBehaviorPeerBuilderModifier.php';
+namespace CK\Generator\Lib\Behavior\Versionable;
+
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\Behavior;
+use CK\Generator\Lib\Model\ForeignKey;
+
+//require_once dirname(__FILE__) . '/VersionableBehaviorObjectBuilderModifier.php';
+//require_once dirname(__FILE__) . '/VersionableBehaviorQueryBuilderModifier.php';
+//require_once dirname(__FILE__) . '/VersionableBehaviorPeerBuilderModifier.php';
 
 /**
  * Keeps tracks of all the modifications in an ActiveRecord object

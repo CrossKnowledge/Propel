@@ -8,29 +8,35 @@
     "name": "William Durand",
     "email": "william.durand1@gmail.com",
     "homepage": "http://www.willdurand.fr"
+  },{
+    "name": "Abou-Bakr Seddik Ouahabi",
+    "email": "aboubakr.ouahabi@innowise.com"
   }],
   "autoload": {
-      "classmap": ["runtime/lib", "generator/lib"]
+      "classmap": [
+        "runtime/lib",
+        "generator/lib"
+      ],
+    "psr-4": {
+      "CK\\Generator\\": "generator/",
+      "CK\\Runtime\\": "runtime/"
+    }
   },
   "include-path": ["runtime/lib", "generator/lib"],
   "require": {
-    "php": ">=5.2.4",
-    "phing/phing": "~2.4"
+    "php": "^8.3",
+    "phing/phing": "~2.4",
+    "ext-pdo": "*",
+    "ext-pdo_mysql": "*",
+    "ext-zip": "*"
   },
   "require-dev": {
-    "pear-pear.php.net/PEAR_PackageFileManager2": "@stable",
-    "phpunit/phpunit": "~4.2"
+    "phpunit/phpunit": "^9.6"
   },
   "extra": {
     "branch-alias": {
       "dev-master": "1.7-dev"
     }
   },
-  "repositories": [
-    {
-      "type": "pear",
-      "url": "https://pear.php.net"
-    }
-  ],
   "bin": ["generator/bin/propel-gen", "generator/bin/propel-gen.bat"]
 }

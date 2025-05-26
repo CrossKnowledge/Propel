@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Collection;
+
 
 /**
  * Class for iterating over a statement and returning one Propel object at a time

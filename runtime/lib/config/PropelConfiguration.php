@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Config;
+
 
 /**
  * PropelConfiguration is a container for all Propel's runtime configuration data.

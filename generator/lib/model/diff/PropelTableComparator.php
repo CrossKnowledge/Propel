@@ -8,12 +8,15 @@
  * @license     MIT License
  */
 
-require_once dirname(__FILE__) . '/../Table.php';
-require_once dirname(__FILE__) . '/PropelTableDiff.php';
-require_once dirname(__FILE__) . '/PropelColumnComparator.php';
-require_once dirname(__FILE__) . '/PropelColumnDiff.php';
-require_once dirname(__FILE__) . '/PropelIndexComparator.php';
-require_once dirname(__FILE__) . '/PropelForeignKeyComparator.php';
+namespace CK\Generator\Lib\Model\Diff;
+use CK\Generator\Lib\Model\Table;
+
+//require_once dirname(__FILE__) . '/../Table.php';
+//require_once dirname(__FILE__) . '/PropelTableDiff.php';
+//require_once dirname(__FILE__) . '/PropelColumnComparator.php';
+//require_once dirname(__FILE__) . '/PropelColumnDiff.php';
+//require_once dirname(__FILE__) . '/PropelIndexComparator.php';
+//require_once dirname(__FILE__) . '/PropelForeignKeyComparator.php';
 
 /**
  * Service class for comparing Table objects
@@ -24,7 +27,7 @@ require_once dirname(__FILE__) . '/PropelForeignKeyComparator.php';
  */
 class PropelTableComparator
 {
-    protected $tableDiff;
+    protected mixed $tableDiff;
 
     public function __construct($tableDiff = null)
     {

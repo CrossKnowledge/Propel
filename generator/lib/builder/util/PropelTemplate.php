@@ -8,6 +8,8 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Builder\Util;
+
 /**
  * Simple templating system to ease behavior writing
  *

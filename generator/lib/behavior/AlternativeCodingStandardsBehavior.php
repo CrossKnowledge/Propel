@@ -7,6 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Behavior;
+
+use CK\Generator\Lib\Model\Behavior;
 
 /**
  * Changes the coding standard of Propel generated Model classes

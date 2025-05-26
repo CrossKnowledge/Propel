@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Map;
+
 
 /**
  * TableMap is used to model a table in a database.

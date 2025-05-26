@@ -8,6 +8,9 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior\Versionable;
+
+use CK\Generator\Lib\Model\Table;
 /**
  * Behavior to add versionable columns and abilities
  *

@@ -8,6 +8,11 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior\I18nBehavior;
+
+use CK\Generator\Lib\Model\Column;
+use CK\Generator\Lib\Model\PropelTypes;
+
 /**
  * Allows translation of text columns through transparent one-to-many relationship.
  * Modifier for the object builder.

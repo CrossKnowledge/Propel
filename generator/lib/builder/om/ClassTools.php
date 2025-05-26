@@ -8,6 +8,9 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Builder\OM;
+
+use CK\Generator\Lib\Model\Table;
 /**
  * Tools to support class & package inclusion and referencing.
  *

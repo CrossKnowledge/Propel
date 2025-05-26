@@ -8,7 +8,15 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/PHP5ObjectBuilder.php';
+namespace CK\Generator\Lib\Builder\OM;
+
+use CK\Generator\Lib\Model\Column;
+use CK\Generator\Lib\Model\PropelTypes;
+use CK\Generator\Platform\OraclePlatform;
+use CK\Generator\Lib\Model\ForeignKey;
+use CK\Generator\Lib\Model\Table;
+
+//require_once dirname(__FILE__) . '/PHP5ObjectBuilder.php';
 
 /**
  * Generates a PHP5 base Object class for user object model (OM).

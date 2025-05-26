@@ -1,30 +1,29 @@
-FROM php:7.4-cli
+FROM php:8.3-cli
 
-RUN set -x -o errexit; \
-    apt-get update; \
-    apt-get install -y -q --no-install-recommends \
-        git \
-        unzip \
-        zip \
-    ; \
-    docker-php-ext-install pdo_mysql; \
-    # cleaning
-    apt-get autoremove -y; \
-    apt-get -y clean; \
-    rm -rf \
-        /var/lib/apt/lists/* \
-        /tmp/* \
-        /var/tmp/* \
-        /usr/share/doc/*
+# Install system packages and PHP extensions with cleanup
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git unzip zlib1g-dev libzip-dev \
+    && docker-php-ext-install zip pdo pdo_mysql \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG COMPOSER_VERSION=1.10.27
-RUN set -x -o errexit ;\
-    php -r "copy('https://raw.githubusercontent.com/composer/getcomposer.org/main/web/installer', 'composer-setup.php');" ;\
-    php composer-setup.php --version="${COMPOSER_VERSION}" ;\
-    rm -f composer-setup.php ;\
-    mv composer.phar /usr/bin/composer ;\
-    composer --version
+# Copy Composer binary from official Composer image
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-ENV PATH="$PATH:/root/.composer/vendor/bin"
-
+# Set working directory and copy app code
 WORKDIR /var/www
+COPY . .
+# Install PHP dependencies
+RUN if [ -f "composer.json" ]; then \
+        composer install --no-interaction --no-progress --prefer-dist; \
+    fi
+
+# Make sure propel-gen is executable
+RUN chmod +x generator/bin/propel-gen
+
+# Generate optimized autoload
+RUN composer dump-autoload -o 2>/dev/null || true
+
+# Create a simple test script
+RUN echo '<?php\nrequire_once "runtime/lib/Propel.php";\necho "Propel loaded successfully!\n";' > test.php
+
+CMD ["tail", "-f", "/dev/null"]

@@ -7,7 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Util;
 
+use CK\Runtime\Lib\Query\Criteria;
 /**
  * Proxy for conditional statements in a fluid interface.
  * This class replaces another class for wrong statements,

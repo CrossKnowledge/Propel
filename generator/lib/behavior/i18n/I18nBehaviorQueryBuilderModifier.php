@@ -8,6 +8,8 @@
  * @license    MIT License
  */
 
+namespace CK\Generator\Lib\Behavior\I18nBehavior;
+
 /**
  * Allows translation of text columns through transparent one-to-many relationship.
  * Modifier for the query builder.

@@ -7,6 +7,8 @@
  *
  * @license    MIT License
  */
+namespace CK\Runtime\Lib\Logger;
+
 
 /**
  * Mojavi logging adapter for propel

@@ -7,7 +7,7 @@
  *
  * @license    MIT License
  */
-
+namespace CK\Generator\Lib\Model;
 /**
  * A <code>NameGenerator</code> implementation for table-specific
  * constraints.  Conforms to the maximum column name length for the
