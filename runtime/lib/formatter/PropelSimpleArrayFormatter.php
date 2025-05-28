@@ -9,6 +9,9 @@
  */
 namespace CK\Runtime\Lib\Formatter;
 
+use CK\Runtime\Lib\Exception\PropelException;
+use PDOStatement;
+use PDO;
 
 /**
  * Array formatter for Propel select query
@@ -21,8 +24,11 @@ namespace CK\Runtime\Lib\Formatter;
  */
 class PropelSimpleArrayFormatter extends PropelFormatter
 {
-    protected $collectionName = 'PropelArrayCollection';
+    protected string $collectionName = 'PropelArrayCollection';
 
+    /**
+     * @throws PropelException
+     */
     public function format(PDOStatement $stmt)
     {
         $this->checkInit();
@@ -44,6 +50,9 @@ class PropelSimpleArrayFormatter extends PropelFormatter
         return $collection;
     }
 
+    /**
+     * @throws PropelException
+     */
     public function formatOne(PDOStatement $stmt)
     {
         $this->checkInit();
@@ -56,7 +65,7 @@ class PropelSimpleArrayFormatter extends PropelFormatter
         return $result;
     }
 
-    public function isObjectFormatter()
+    public function isObjectFormatter(): false
     {
         return false;
     }

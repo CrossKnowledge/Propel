@@ -9,7 +9,9 @@
  */
 namespace CK\Runtime\Lib\Map;
 
-
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Adapter\DBAdapter;
+use CK\Runtime\Lib\Propel;
 /**
  * DatabaseMap is used to model a database.
  *
@@ -29,20 +31,20 @@ namespace CK\Runtime\Lib\Map;
 class DatabaseMap
 {
     /** @var string Name of the database. */
-    protected $name;
+    protected string $name;
 
     /** @var array TableMap[] Tables in the database, using table name as key */
-    protected $tables = array();
+    protected array $tables = array();
 
     /** @var array TableMap[] Tables in the database, using table phpName as key */
-    protected $tablesByPhpName = array();
+    protected array $tablesByPhpName = array();
 
     /**
      * Constructor.
      *
      * @param string $name Name of the database.
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
@@ -52,7 +54,7 @@ class DatabaseMap
      *
      * @return string The name of the database.
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -64,7 +66,7 @@ class DatabaseMap
      *
      * @return TableMap The newly created TableMap.
      */
-    public function addTable($tableName)
+    public function addTable(string $tableName): TableMap
     {
         $this->tables[$tableName] = new TableMap($tableName, $this);
 
@@ -76,7 +78,7 @@ class DatabaseMap
      *
      * @param TableMap $table The table to add
      */
-    public function addTableObject(TableMap $table)
+    public function addTableObject(TableMap $table): void
     {
         $table->setDatabaseMap($this);
         $this->tables[$table->getName()] = $table;
@@ -89,8 +91,9 @@ class DatabaseMap
      * @param string $tableMapClass The name of the table map to add
      *
      * @return TableMap The TableMap object
+     * @throws PropelException
      */
-    public function addTableFromMapClass($tableMapClass)
+    public function addTableFromMapClass(string $tableMapClass): TableMap
     {
         $table = new $tableMapClass();
         if (!$this->hasTable($table->getName())) {
@@ -109,7 +112,7 @@ class DatabaseMap
      *
      * @return boolean True if the database contains the table.
      */
-    public function hasTable($name)
+    public function hasTable(string $name): bool
     {
         return array_key_exists($name, $this->tables);
     }
@@ -122,7 +125,7 @@ class DatabaseMap
      * @return TableMap        A TableMap
      * @throws PropelException if the table is undefined
      */
-    public function getTable($name)
+    public function getTable(string $name): TableMap
     {
         if (!isset($this->tables[$name])) {
             throw new PropelException("Cannot fetch TableMap for undefined table: " . $name);
@@ -136,7 +139,7 @@ class DatabaseMap
      *
      * @return array A TableMap[].
      */
-    public function getTables()
+    public function getTables(): array
     {
         return $this->tables;
     }
@@ -145,12 +148,12 @@ class DatabaseMap
      * Get a ColumnMap for the column by name.
      * Name must be fully qualified, e.g. book.AUTHOR_ID
      *
-     * @param   $qualifiedColumnName Name of the column.
+     * @param   $qualifiedColumnName: Name of the column.
      *
      * @return ColumnMap       A TableMap
      * @throws PropelException if the table is undefined, or if the table is undefined
      */
-    public function getColumn($qualifiedColumnName)
+    public function getColumn($qualifiedColumnName): ColumnMap
     {
         list($tableName, $columnName) = explode('.', $qualifiedColumnName);
 
@@ -162,17 +165,20 @@ class DatabaseMap
     /**
      * Does this database contain this specific table?
      *
-     * @deprecated Use hasTable() instead
-     *
      * @param string $name The String representation of the table.
-     *
+          *
      * @return boolean True if the database contains the table.
+     *@deprecated Use hasTable() instead
+     *
      */
-    public function containsTable($name)
+    public function containsTable(string $name): bool
     {
         return $this->hasTable($name);
     }
 
+    /**
+     * @throws PropelException
+     */
     public function getTableByPhpName($phpName)
     {
         if (array_key_exists($phpName, $this->tablesByPhpName)) {
@@ -193,9 +199,10 @@ class DatabaseMap
      * Convenience method to get the DBAdapter registered with Propel for this database.
      *
      * @return DBAdapter
+     * @throws PropelException
      * @see     Propel::getDB(string)
      */
-    public function getDBAdapter()
+    public function getDBAdapter(): DBAdapter
     {
         return Propel::getDB($this->name);
     }

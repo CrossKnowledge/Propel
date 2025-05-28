@@ -24,9 +24,9 @@ use CK\Generator\Lib\Model\Database;
  */
 class PropelDatabaseComparator
 {
-    protected $databaseDiff;
-    protected $fromDatabase;
-    protected $toDatabase;
+    protected mixed $databaseDiff;
+    protected Database $fromDatabase;
+    protected Database $toDatabase;
 
     public function __construct($databaseDiff = null)
     {
@@ -43,7 +43,7 @@ class PropelDatabaseComparator
      *
      * @param Database $fromDatabase
      */
-    public function setFromDatabase(Database $fromDatabase)
+    public function setFromDatabase(Database $fromDatabase): void
     {
         $this->fromDatabase = $fromDatabase;
     }
@@ -53,7 +53,7 @@ class PropelDatabaseComparator
      *
      * @return Database
      */
-    public function getFromDatabase()
+    public function getFromDatabase(): Database
     {
         return $this->fromDatabase;
     }
@@ -63,7 +63,7 @@ class PropelDatabaseComparator
      *
      * @param Database $toDatabase
      */
-    public function setToDatabase(Database $toDatabase)
+    public function setToDatabase(Database $toDatabase): void
     {
         $this->toDatabase = $toDatabase;
     }
@@ -73,7 +73,7 @@ class PropelDatabaseComparator
      *
      * @return Database
      */
-    public function getToDatabase()
+    public function getToDatabase(): Database
     {
         return $this->toDatabase;
     }
@@ -83,12 +83,12 @@ class PropelDatabaseComparator
      *
      * @param Database $fromDatabase
      * @param Database $toDatabase
-     * @param boolean  $caseInsensitive Whether the comparison is case insensitive.
+     * @param boolean $caseInsensitive Whether the comparison is case insensitive.
      *                                  False by default.
      *
      * @return PropelDatabaseDiff|boolean return false if the two databases are similar
      */
-    public static function computeDiff(Database $fromDatabase, Database $toDatabase, $caseInsensitive = false)
+    public static function computeDiff(Database $fromDatabase, Database $toDatabase, bool $caseInsensitive = false): PropelDatabaseDiff|bool
     {
         $dc = new self();
         $dc->setFromDatabase($fromDatabase);
@@ -109,7 +109,7 @@ class PropelDatabaseComparator
      *
      * @return integer The number of table differences
      */
-    public function compareTables($caseInsensitive = false)
+    public function compareTables(bool $caseInsensitive = false): int
     {
         $fromDatabaseTables = $this->fromDatabase->getTables();
         $toDatabaseTables = $this->toDatabase->getTables();

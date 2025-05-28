@@ -7,10 +7,17 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
+use BuildException;
+use PhingFile;
+use Project;
+use CK\Generator\Lib\Builder\OM\OMBuilder;
+/*
 require_once 'task/AbstractPropelDataModelTask.php';
 require_once 'builder/om/ClassTools.php';
 require_once 'builder/om/OMBuilder.php';
+*/
 
 /**
  * This Task creates the OM classes based on the XML schema file.

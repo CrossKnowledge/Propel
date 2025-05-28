@@ -12,7 +12,11 @@ namespace CK\Runtime\Lib\Util;
 use CK\Runtime\Lib\Query\Criteria;
 use CK\Runtime\Lib\Connection\PropelPDO;
 use CK\Runtime\Lib\Exception\PropelException;
-use CK\Runtime\Propel;
+use CK\Runtime\Lib\Propel;
+use PDOStatement;
+use CK\Runtime\Lib\Validator\ValidationFailed;
+use CK\Runtime\Lib\Map\ColumnMap;
+use CK\Generator\Lib\Model\Validator;
 use Exception;
 
 /**
@@ -326,8 +330,8 @@ class BasePeer
      * WHERE some_column = some value AND could_have_another_column =
      * another value AND so on.
      *
-     * @param           $selectCriteria A Criteria object containing values used in where clause.
-     * @param           $updateValues   A Criteria object containing values used in set clause.
+     * @param           $selectCriteria: A Criteria object containing values used in where clause.
+     * @param           $updateValues:   A Criteria object containing values used in set clause.
      * @param PropelPDO $con            The PropelPDO connection object to use.
      *
      * @return int The number of rows affected by last update statement.  For most
@@ -864,12 +868,12 @@ class BasePeer
      * Builds a params array, like the kind populated by Criterion::appendPsTo().
      * This is useful for building an array even when it is not using the appendPsTo() method.
      *
-     * @param array    $columns
+     * @param array $columns
      * @param Criteria $values
      *
      * @return array params array('column' => ..., 'table' => ..., 'value' => ...)
      */
-    private static function buildParams($columns, Criteria $values)
+    private static function buildParams(array $columns, Criteria $values): array
     {
         $params = array();
         foreach ($columns as $key) {

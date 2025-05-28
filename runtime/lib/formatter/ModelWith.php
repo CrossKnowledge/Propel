@@ -10,6 +10,9 @@
 namespace CK\Runtime\Lib\Formatter;
 
 
+use CK\Runtime\Lib\Query\ModelJoin;
+use CK\Runtime\Lib\Map\RelationMap;
+
 /**
  * Data object to describe a joined hydration in a Model Query
  * ModelWith objects are used by formatters to hydrate related objects
@@ -19,15 +22,15 @@ namespace CK\Runtime\Lib\Formatter;
  */
 class ModelWith
 {
-    protected $modelName = '';
-    protected $modelPeerName = '';
-    protected $isSingleTableInheritance = false;
-    protected $isAdd = false;
-    protected $isWithOneToMany = false;
-    protected $relationName = '';
-    protected $relationMethod = '';
-    protected $initMethod = '';
-    protected $resetPartialMethod = '';
+    protected string $modelName = '';
+    protected string $modelPeerName = '';
+    protected bool $isSingleTableInheritance = false;
+    protected bool $isAdd = false;
+    protected bool $isWithOneToMany = false;
+    protected string $relationName = '';
+    protected string $relationMethod = '';
+    protected string $initMethod = '';
+    protected string $resetPartialMethod = '';
     protected $leftPhpName;
     protected $rightPhpName;
 
@@ -125,42 +128,42 @@ class ModelWith
         $this->relationName = $relationName;
     }
 
-    public function getRelationName()
+    public function getRelationName(): string
     {
         return $this->relationName;
     }
 
-    public function setRelationMethod($relationMethod)
+    public function setRelationMethod($relationMethod): void
     {
         $this->relationMethod = $relationMethod;
     }
 
-    public function getRelationMethod()
+    public function getRelationMethod(): string
     {
         return $this->relationMethod;
     }
 
-    public function setInitMethod($initMethod)
+    public function setInitMethod($initMethod): void
     {
         $this->initMethod = $initMethod;
     }
 
-    public function getInitMethod()
+    public function getInitMethod(): string
     {
         return $this->initMethod;
     }
 
-    public function setResetPartialMethod($resetPartialMethod)
+    public function setResetPartialMethod($resetPartialMethod): void
     {
         $this->resetPartialMethod = $resetPartialMethod;
     }
 
-    public function getResetPartialMethod()
+    public function getResetPartialMethod(): string
     {
         return $this->resetPartialMethod;
     }
 
-    public function setLeftPhpName($leftPhpName)
+    public function setLeftPhpName($leftPhpName): void
     {
         $this->leftPhpName = $leftPhpName;
     }

@@ -9,6 +9,12 @@
  */
 namespace CK\Runtime\Lib\Adapter;
 
+use PDO;
+use CK\Runtime\Lib\Exception\PropelException;
+use PDOStatement;
+use CK\Runtime\Lib\Query\Criteria;
+use CK\Runtime\Lib\Map\DatabaseMap;
+use CK\Runtime\Lib\Map\ColumnMap;
 
 /**
  * This is used to connect to a MSSQL database using pdo_sqlsrv driver.
@@ -25,7 +31,7 @@ class DBSQLSRV extends DBMSSQL
      * @param PDO   $con
      * @param array $settings
      */
-    public function initConnection(PDO $con, array $settings)
+    public function initConnection(PDO $con, array $settings): void
     {
         $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $con->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
@@ -34,14 +40,14 @@ class DBSQLSRV extends DBMSSQL
     }
 
     /**
-     * @see       parent::setCharset()
-     *
      * @param PDO    $con
      * @param string $charset
      *
      * @throws PropelException
+     * @see       parent::setCharset()
+     *
      */
-    public function setCharset(PDO $con, $charset)
+    public function setCharset(PDO $con, string $charset): void
     {
         switch (strtolower($charset)) {
             case 'utf-8':
@@ -56,14 +62,14 @@ class DBSQLSRV extends DBMSSQL
     }
 
     /**
-     * @see       parent::cleanupSQL()
-     *
      * @param string      $sql
      * @param array       $params
      * @param Criteria    $values
      * @param DatabaseMap $dbMap
+     * @see       parent::cleanupSQL()
+     *
      */
-    public function cleanupSQL(&$sql, array &$params, Criteria $values, DatabaseMap $dbMap)
+    public function cleanupSQL(string &$sql, array &$params, Criteria $values, DatabaseMap $dbMap): void
     {
         $i = 1;
         foreach ($params as $param) {
@@ -84,17 +90,18 @@ class DBSQLSRV extends DBMSSQL
     }
 
     /**
-     * @see       DBAdapter::bindValue()
-     *
      * @param PDOStatement $stmt
-     * @param string       $parameter
-     * @param mixed        $value
-     * @param ColumnMap    $cMap
-     * @param null|integer $position
+     * @param string $parameter
+     * @param mixed $value
+     * @param ColumnMap $cMap
+     * @param integer|null $position
      *
      * @return boolean
+     * @throws PropelException
+     * @see       DBAdapter::bindValue()
+     *
      */
-    public function bindValue(PDOStatement $stmt, $parameter, $value, ColumnMap $cMap, $position = null)
+    public function bindValue(PDOStatement $stmt, string $parameter, mixed $value, ColumnMap $cMap, int $position = null): bool
     {
         if ($cMap->isTemporal()) {
             $value = $this->formatTemporalValue($value, $cMap);

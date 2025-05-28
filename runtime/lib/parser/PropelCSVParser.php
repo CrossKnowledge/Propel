@@ -20,49 +20,47 @@ namespace CK\Runtime\Lib\Parser;
  */
 class PropelCSVParser extends PropelParser
 {
-    const QUOTE_NONE = 0;
-    const QUOTE_ALL = 1;
-    const QUOTE_NONNUMERIC = 2;
-    const QUOTE_MINIMAL = 3;
+    const int QUOTE_NONE = 0;
+    const int QUOTE_ALL = 1;
+    const int QUOTE_NONNUMERIC = 2;
+    const int QUOTE_MINIMAL = 3;
 
     // these settings are predefined for Excel CSV format
 
-    public $delimiter = ',';
-    public $lineTerminator = "\r\n";
-    public $quotechar = '"';
-    public $escapechar = "\\";
-    public $quoting = self::QUOTE_MINIMAL;
+    public string $delimiter = ',';
+    public string $lineTerminator = "\r\n";
+    public string $quotechar = '"';
+    public string $escapechar = "\\";
+    public int $quoting = self::QUOTE_MINIMAL;
 
     /**
      * Converts data from an associative array to CSV.
      *
-     * @param array   $array          Source data to convert
-     * @param boolean $isList         Whether the input data contains more than one row
-     * @param boolean $includeHeading Whether the output should contain a heading line
+     * @param array $array          Source data to convert
      *
      * @return string Converted data, as a CSV string
      */
-    public function fromArray($array, $isList = false, $includeHeading = true)
+    public function fromArray(array $array): string
     {
         $rows = array();
         if ($isList) {
             if ($includeHeading) {
-                $rows[] = implode($this->formatRow(array_keys(reset($array))), $this->delimiter);
+                $rows[] = implode($this->delimiter, $this->formatRow(array_keys(reset($array))));
             }
             foreach ($array as $row) {
-                $rows[] = implode($this->formatRow($row), $this->delimiter);
+                $rows[] = implode($this->delimiter, $this->formatRow($row));
             }
         } else {
             if ($includeHeading) {
-                $rows[] = implode($this->formatRow(array_keys($array)), $this->delimiter);
+                $rows[] = implode($this->delimiter, $this->formatRow(array_keys($array)));
             }
-            $rows[] = implode($this->formatRow($array), $this->delimiter);
+            $rows[] = implode($this->delimiter, $this->formatRow($array));
         }
 
-        return implode($rows, $this->lineTerminator) . $this->lineTerminator;
+        return implode($this->lineTerminator, $rows) . $this->lineTerminator;
     }
 
-    public function listFromArray($array)
+    public function listFromArray($array): string
     {
         return $this->fromArray($array, true);
     }
@@ -74,7 +72,7 @@ class PropelCSVParser extends PropelParser
      *
      * @return array The formatted array
      */
-    protected function formatRow($row)
+    protected function formatRow(array $row): array
     {
         foreach ($row as &$column) {
             if (!is_scalar($column)) {
@@ -111,7 +109,7 @@ class PropelCSVParser extends PropelParser
      *
      * @return string Escaped input value
      */
-    protected function escape($input)
+    protected function escape(string $input): string
     {
         return str_replace(
             $this->quotechar,
@@ -127,7 +125,7 @@ class PropelCSVParser extends PropelParser
      *
      * @return string Quoted input value
      */
-    protected function quote($input)
+    protected function quote(string $input): string
     {
         return $this->quotechar . $input . $this->quotechar;
     }
@@ -139,7 +137,7 @@ class PropelCSVParser extends PropelParser
      *
      * @return boolean True if contains any special characters
      */
-    protected function containsSpecialChars($input)
+    protected function containsSpecialChars(string $input): bool
     {
         $special_chars = str_split($this->lineTerminator, 1);
         $special_chars[] = $this->quotechar;
@@ -160,7 +158,7 @@ class PropelCSVParser extends PropelParser
      *
      * @return string
      */
-    protected function serialize($input)
+    protected function serialize(mixed $input): string
     {
         return serialize($input);
     }
@@ -168,13 +166,13 @@ class PropelCSVParser extends PropelParser
     /**
      * Alias for PropelCSVParser::fromArray()
      *
-     * @param array   $array          Source data to convert
+     * @param array $array          Source data to convert
      * @param boolean $isList         Whether the input data contains more than one row
      * @param boolean $includeHeading Whether the output should contain a heading line
      *
      * @return string Converted data, as a CSV string
      */
-    public function toCSV($array, $isList = false, $includeHeading = true)
+    public function toCSV(array $array, bool $isList = false, bool $includeHeading = true): string
     {
         return $this->fromArray($array, $isList, $includeHeading);
     }
@@ -182,13 +180,11 @@ class PropelCSVParser extends PropelParser
     /**
      * Converts data from CSV to an associative array.
      *
-     * @param string  $data           Source data to convert, as a CSV string
-     * @param boolean $isList         Whether the input data contains more than one row
-     * @param boolean $includeHeading Whether the input contains a heading line
+     * @param mixed $data           Source data to convert, as a CSV string
      *
      * @return array Converted data
      */
-    public function toArray($data, $isList = false, $includeHeading = true)
+    public function toArray(mixed $data): array
     {
         $rows = explode($this->lineTerminator, $data);
         if ($includeHeading) {
@@ -221,12 +217,12 @@ class PropelCSVParser extends PropelParser
         return $array;
     }
 
-    public function listToArray($array)
+    public function listToArray($array): array
     {
         return $this->toArray($array, true);
     }
 
-    protected function getColumns($row)
+    protected function getColumns($row): array
     {
         $delim = preg_quote($this->delimiter, '/');
         preg_match_all('/(".+?"|[^' . $delim . ']+)(' . $delim . '|$)/', $row, $matches);
@@ -237,11 +233,11 @@ class PropelCSVParser extends PropelParser
     /**
      * Accepts a formatted row of data and returns it raw
      *
-     * @param array An array of data from a CSV output
+     * @param array $row An array of data from a CSV output
      *
      * @return array The cleaned up array
      */
-    protected function cleanupRow($row)
+    protected function cleanupRow(array $row): array
     {
         foreach ($row as $key => $column) {
             if ($this->isQuoted($column)) {

@@ -10,6 +10,13 @@
 
 namespace CK\Generator\Lib\Model;
 
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Exception\EngineException;
+use DOMException;
+use DOMNode;
+use DOMDocument;
+//use SebastianBergmann\Comparator\DOMNodeComparator;
+
 //require_once dirname(__FILE__) . '/ScopedElement.php';
 //require_once dirname(__FILE__) . '/IDMethod.php';
 //require_once dirname(__FILE__) . '/NameGenerator.php';
@@ -483,7 +490,7 @@ class Database extends ScopedElement
      *
      * @return Domain
      */
-    public function addDomain($data)
+    public function addDomain($data): Domain
     {
         if ($data instanceof Domain) {
             $domain = $data; // alias
@@ -557,9 +564,9 @@ class Database extends ScopedElement
     /**
      * Get the database behaviors
      *
-     * @return Array of Behavior objects
+     * @return array of Behavior objects
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
         return $this->behaviors;
     }
@@ -668,6 +675,7 @@ class Database extends ScopedElement
     }
 
     /**
+     * @throws DOMException
      * @see        XMLElement::appendXml(DOMNode)
      */
     public function appendXml(DOMNode $node)

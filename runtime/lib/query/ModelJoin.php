@@ -9,6 +9,8 @@
  */
 namespace CK\Runtime\Lib\Query;
 
+use CK\Runtime\Lib\Map\RelationMap;
+use CK\Runtime\Lib\Map\TableMap;
 
 /**
  * A ModelJoin is a Join object tied to a RelationMap object
@@ -21,19 +23,19 @@ class ModelJoin extends Join
     /**
      * @var RelationMap
      */
-    protected $relationMap;
+    protected RelationMap $relationMap;
 
     /**
      * @var TableMap
      */
-    protected $tableMap;
+    protected TableMap $tableMap;
 
     /**
      * @var ModelJoin
      */
-    protected $previousJoin;
+    protected ModelJoin $previousJoin;
 
-    public function setRelationMap(RelationMap $relationMap, $leftTableAlias = null, $relationAlias = null)
+    public function setRelationMap(RelationMap $relationMap, $leftTableAlias = null, $relationAlias = null): static
     {
         $leftCols = $relationMap->getLeftColumns();
         $rightCols = $relationMap->getRightColumns();
@@ -49,7 +51,7 @@ class ModelJoin extends Join
         return $this;
     }
 
-    public function getRelationMap()
+    public function getRelationMap(): RelationMap
     {
         return $this->relationMap;
     }
@@ -61,7 +63,7 @@ class ModelJoin extends Join
      *
      * @return ModelJoin The current join object, for fluid interface
      */
-    public function setTableMap(TableMap $tableMap)
+    public function setTableMap(TableMap $tableMap): static
     {
         $this->tableMap = $tableMap;
 
@@ -73,7 +75,7 @@ class ModelJoin extends Join
      *
      * @return TableMap The table map
      */
-    public function getTableMap()
+    public function getTableMap(): TableMap
     {
         if (null === $this->tableMap && null !== $this->relationMap) {
             $this->tableMap = $this->relationMap->getRightTable();
@@ -87,7 +89,7 @@ class ModelJoin extends Join
      *
      * @return ModelJoin
      */
-    public function setPreviousJoin(ModelJoin $join)
+    public function setPreviousJoin(ModelJoin $join): static
     {
         $this->previousJoin = $join;
 
@@ -105,7 +107,7 @@ class ModelJoin extends Join
     /**
      * @return bool
      */
-    public function isPrimary()
+    public function isPrimary(): bool
     {
         return null === $this->previousJoin;
     }

@@ -9,6 +9,11 @@
  */
 namespace CK\Runtime\Lib\Query;
 
+use CK\Runtime\Lib\Propel;
+use Exception;
+use CK\Runtime\Lib\Adapter\DBAdapter;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Adapter\DBPostgres;
 
 /**
  * This is an "inner" class that describes an object in the criteria.
@@ -22,26 +27,26 @@ namespace CK\Runtime\Lib\Query;
 class Criterion
 {
 
-    const UND = " AND ";
-    const ODER = " OR ";
+    const string UND = " AND ";
+    const string ODER = " OR ";
 
     /** Value of the CO. */
-    protected $value;
+    protected mixed $value;
 
     /** Comparison value.
      *
      * @var string
      */
-    protected $comparison;
+    protected string $comparison;
 
     /** Table name. */
-    protected $table;
+    protected ?string $table;
 
     /** Real table name */
     protected $realtable;
 
     /** Column name. */
-    protected $column;
+    protected string $column;
 
     /**
      * Binding type to be used for Criteria::RAW comparison
@@ -51,13 +56,13 @@ class Criterion
     protected $type;
 
     /** flag to ignore case in comparison */
-    protected $ignoreStringCase = false;
+    protected bool $ignoreStringCase = false;
 
     /**
      * The DBAdaptor which might be used to get db specific
      * variations of sql.
      */
-    protected $db;
+    protected DBAdapter $db;
 
     /**
      * other connected criteria and their conjunctions.
@@ -65,7 +70,7 @@ class Criterion
      * @var Criterion[]
      */
     protected $clauses = array();
-    protected $conjunctions = array();
+    protected array $conjunctions = array();
 
     /** "Parent" Criteria class */
     protected $parent;
@@ -74,12 +79,12 @@ class Criterion
      * Create a new instance.
      *
      * @param Criteria $outer      The outer class (this is an "inner" class).
-     * @param string   $column     TABLE.COLUMN format.
+     * @param string $column     TABLE.COLUMN format.
      * @param mixed    $value
-     * @param string   $comparison
-     * @param string   $type
+     * @param string|null $comparison
+     * @param string|null $type
      */
-    public function __construct(Criteria $outer, $column, $value, $comparison = null, $type = null)
+    public function __construct(Criteria $outer, string $column, mixed $value, string $comparison = null, string $type = null)
     {
         $this->value = $value;
         $dotPos = strrpos($column, '.');
@@ -101,13 +106,13 @@ class Criterion
      *
      * @param Criteria $criteria The outer class
      */
-    public function init(Criteria $criteria)
+    public function init(Criteria $criteria): void
     {
         // init $this->db
         try {
             $db = Propel::getDB($criteria->getDbName());
             $this->setDB($db);
-        } catch (Exception $e) {
+        } catch (Exception) { //Since $e isn't used, we omitted it.
             // we are only doing this to allow easier debugging, so
             // no need to throw up the exception, just make note of it.
             Propel::log("Could not get a DBAdapter, sql may be wrong", Propel::LOG_ERR);
@@ -115,7 +120,7 @@ class Criterion
 
         // init $this->realtable
         $realtable = $criteria->getTableForAlias($this->table);
-        $this->realtable = $realtable ? $realtable : $this->table;
+        $this->realtable = $realtable ?: $this->table;
     }
 
     /**
@@ -123,7 +128,7 @@ class Criterion
      *
      * @return string A String with the column name.
      */
-    public function getColumn()
+    public function getColumn(): string
     {
         return $this->column;
     }
@@ -135,7 +140,7 @@ class Criterion
      *
      * @return void
      */
-    public function setTable($name)
+    public function setTable($name): void
     {
         $this->table = $name;
     }
@@ -143,9 +148,9 @@ class Criterion
     /**
      * Get the table name.
      *
-     * @return string A String with the table name.
+     * @return ?string A String with the table name.
      */
-    public function getTable()
+    public function getTable(): ?string
     {
         return $this->table;
     }
@@ -155,7 +160,7 @@ class Criterion
      *
      * @return string A String with the comparison.
      */
-    public function getComparison()
+    public function getComparison(): string
     {
         return $this->comparison;
     }
@@ -165,7 +170,7 @@ class Criterion
      *
      * @return mixed An Object with the value.
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }
@@ -177,7 +182,7 @@ class Criterion
      *
      * @return DBAdapter value of db.
      */
-    public function getDB()
+    public function getDB(): DBAdapter
     {
         return $this->db;
     }
@@ -190,7 +195,7 @@ class Criterion
      *
      * @return void
      */
-    public function setDB(DBAdapter $v)
+    public function setDB(DBAdapter $v): void
     {
         $this->db = $v;
         foreach ($this->clauses as $clause) {
@@ -205,9 +210,9 @@ class Criterion
      *
      * @return Criterion A modified Criterion object.
      */
-    public function setIgnoreCase($b)
+    public function setIgnoreCase(bool $b): static
     {
-        $this->ignoreStringCase = (boolean) $b;
+        $this->ignoreStringCase = $b;
 
         return $this;
     }
@@ -217,7 +222,7 @@ class Criterion
      *
      * @return boolean True if case is ignored.
      */
-    public function isIgnoreCase()
+    public function isIgnoreCase(): bool
     {
         return $this->ignoreStringCase;
     }
@@ -227,7 +232,7 @@ class Criterion
      *
      * @return array
      */
-    protected function getClauses()
+    protected function getClauses(): array
     {
         return $this->clauses;
     }
@@ -237,7 +242,7 @@ class Criterion
      *
      * @return array
      */
-    public function getConjunctions()
+    public function getConjunctions(): array
     {
         return $this->conjunctions;
     }
@@ -245,7 +250,7 @@ class Criterion
     /**
      * Append an AND Criterion onto this Criterion's list.
      */
-    public function addAnd(Criterion $criterion)
+    public function addAnd(Criterion $criterion): static
     {
         $this->clauses[] = $criterion;
         $this->conjunctions[] = self::UND;
@@ -260,7 +265,7 @@ class Criterion
      *
      * @return Criterion
      */
-    public function addOr(Criterion $criterion)
+    public function addOr(Criterion $criterion): static
     {
         $this->clauses[] = $criterion;
         $this->conjunctions[] = self::ODER;
@@ -279,7 +284,7 @@ class Criterion
      * @throws PropelException - if the expression builder cannot figure out how to turn a specified
      *                           expression into proper SQL.
      */
-    public function appendPsTo(&$sb, array &$params)
+    public function appendPsTo(&$sb, array &$params): void
     {
         $sb .= str_repeat('(', count($this->clauses));
 
@@ -297,10 +302,11 @@ class Criterion
      * to build the prepared statement and parameters using to the Criterion comparison
      * and call it to append the prepared statement and the parameters of the current clause
      *
-     * @param string &$sb    The string that will receive the Prepared Statement
-     * @param array  $params A list to which Prepared Statement parameters will be appended
+     * @param string &$sb The string that will receive the Prepared Statement
+     * @param array $params A list to which Prepared Statement parameters will be appended
+     * @throws PropelException
      */
-    protected function dispatchPsHandling(&$sb, array &$params)
+    protected function dispatchPsHandling(string &$sb, array &$params): void
     {
         switch ($this->comparison) {
             case Criteria::CUSTOM:
@@ -336,7 +342,7 @@ class Criterion
      * @param string &$sb    The string that will receive the Prepared Statement
      * @param array  $params A list to which Prepared Statement parameters will be appended
      */
-    protected function appendCustomToPs(&$sb, array &$params)
+    protected function appendCustomToPs(string &$sb, array &$params): void
     {
         if ($this->value !== "") {
             $sb .= (string) $this->value;
@@ -352,7 +358,7 @@ class Criterion
      *
      * @throws PropelException
      */
-    protected function appendRawToPs(&$sb, array &$params)
+    protected function appendRawToPs(string &$sb, array &$params): void
     {
         if (substr_count($this->column, '?') != 1) {
             throw new PropelException(sprintf('Could not build SQL for expression "%s" because Criteria::RAW works only with a clause containing a single question mark placeholder', $this->column));
@@ -368,7 +374,7 @@ class Criterion
      * @param string &$sb    The string that will receive the Prepared Statement
      * @param array  $params A list to which Prepared Statement parameters will be appended
      */
-    protected function appendInToPs(&$sb, array &$params)
+    protected function appendInToPs(string &$sb, array &$params): void
     {
         if ($this->value !== "") {
             $bindParams = array();
@@ -394,7 +400,7 @@ class Criterion
      * @param string &$sb    The string that will receive the Prepared Statement
      * @param array  $params A list to which Prepared Statement parameters will be appended
      */
-    protected function appendLikeToPs(&$sb, array &$params)
+    protected function appendLikeToPs(&$sb, array &$params): void
     {
         $field = ($this->table === null) ? $this->column : $this->table . '.' . $this->column;
         $db = $this->getDb();
@@ -434,7 +440,7 @@ class Criterion
      *
      * @throws PropelException
      */
-    protected function appendBasicToPs(&$sb, array &$params)
+    protected function appendBasicToPs(string &$sb, array &$params): void
     {
         $field = ($this->table === null) ? $this->column : $this->table . '.' . $this->column;
         // NULL VALUES need special treatment because the SQL syntax is different
@@ -477,9 +483,9 @@ class Criterion
      *
      * @param Criterion|null $obj
      *
-     * @return boolean
+     * @return bool|int|string
      */
-    public function equals($obj)
+    public function equals(?Criterion $obj): bool|int|string
     {
         // TODO: optimize me with early outs
         if ($this === $obj) {
@@ -518,8 +524,9 @@ class Criterion
 
     /**
      * Returns a hash code value for the object.
+     * @throws PropelException
      */
-    public function hashCode()
+    public function hashCode(): int|string
     {
         $h = crc32(serialize($this->value)) ^ crc32($this->comparison);
 
@@ -551,7 +558,7 @@ class Criterion
      *
      * @return array
      */
-    public function getAllTables()
+    public function getAllTables(): array
     {
         $tables = array();
         $this->addCriterionTable($this, $tables);
@@ -568,7 +575,7 @@ class Criterion
      *
      * @return void
      */
-    private function addCriterionTable(Criterion $c, array &$s)
+    private function addCriterionTable(Criterion $c, array &$s): void
     {
         $s[] = $c->getTable();
         foreach ($c->getClauses() as $clause) {
@@ -586,7 +593,7 @@ class Criterion
     {
         $criterions = array($this);
         foreach ($this->getClauses() as $criterion) {
-            /* @var $criterion Criterion */
+            /* @ var $criterion Criterion */
             $criterions = array_merge($criterions, $criterion->getAttachedCriterion());
         }
 

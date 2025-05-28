@@ -9,6 +9,8 @@
  */
 namespace CK\Runtime\Lib\Query;
 
+use Iterator;
+use ReturnTypeWillChange;
 
 /**
  * Class that implements SPL Iterator interface.  This allows foreach () to
@@ -22,10 +24,10 @@ namespace CK\Runtime\Lib\Query;
 class CriterionIterator implements Iterator
 {
 
-    private $idx = 0;
-    private $criteria;
-    private $criteriaKeys;
-    private $criteriaSize;
+    private int $idx = 0;
+    private Criteria $criteria;
+    private array $criteriaKeys;
+    private int $criteriaSize;
 
     public function __construct(Criteria $criteria)
     {
@@ -34,27 +36,27 @@ class CriterionIterator implements Iterator
         $this->criteriaSize = count($this->criteriaKeys);
     }
 
-    public function rewind()
+    #[ReturnTypeWillChange] public function rewind(): void
     {
         $this->idx = 0;
     }
 
-    public function valid()
+    #[ReturnTypeWillChange] public function valid(): bool
     {
         return $this->idx < $this->criteriaSize;
     }
 
-    public function key()
+    #[ReturnTypeWillChange] public function key()
     {
         return $this->criteriaKeys[$this->idx];
     }
 
-    public function current()
+    #[ReturnTypeWillChange] public function current()
     {
         return $this->criteria->getCriterion($this->criteriaKeys[$this->idx]);
     }
 
-    public function next()
+    #[ReturnTypeWillChange] public function next(): void
     {
         $this->idx++;
     }

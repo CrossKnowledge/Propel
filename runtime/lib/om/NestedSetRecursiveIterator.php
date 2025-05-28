@@ -9,7 +9,7 @@
  */
 namespace CK\Runtime\Lib\OM;
 
-
+use RecursiveIterator;
 /**
  * Pre-order node iterator for Node objects.
  *

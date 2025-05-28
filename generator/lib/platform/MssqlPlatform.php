@@ -8,7 +8,7 @@
  * @license    MIT License
  */
 
-namespace CK\Generator\Platform;
+namespace CK\Generator\Lib\Platform;
 
 use CK\Generator\Lib\Model\Domain;
 use CK\Generator\Lib\Model\Table;

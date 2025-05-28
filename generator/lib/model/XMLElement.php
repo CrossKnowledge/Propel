@@ -9,6 +9,11 @@
  */
 namespace CK\Generator\Lib\Model;
 
+//use CK\Generator\Lib\Config\GeneratorConfig;
+use DOMNode;
+use DOMDocument;
+use InvalidArgumentException;
+
 //require_once dirname(__FILE__) . '/VendorInfo.php';
 
 /**
@@ -26,14 +31,14 @@ abstract class XMLElement
      *
      * @var array
      */
-    protected $attributes = array();
+    protected array $attributes = array();
 
     /**
      * Any associated vendor-specific information objects.
      *
      * @var VendorInfo[]
      */
-    protected $vendorInfos = array();
+    protected array $vendorInfos = array();
 
     /**
      * Replaces the old loadFromXML() so that we can use loadFromXML() to load the attribs into the class.
@@ -46,7 +51,7 @@ abstract class XMLElement
      *
      * @param array $attributes The attributes for the XML tag.
      */
-    public function loadFromXML($attributes)
+    public function loadFromXML(array $attributes): void
     {
         $this->attributes = array_change_key_case($attributes, CASE_LOWER);
         $this->setupObject();
@@ -58,7 +63,7 @@ abstract class XMLElement
      *
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -68,27 +73,24 @@ abstract class XMLElement
      * If attribute is not set then the $defaultValue is returned.
      *
      * @param string $name         The [case-insensitive] name of the attribute to lookup.
-     * @param mixed  $defaultValue The default value to use in case the attribute is not set.
+     * @param mixed|null $defaultValue The default value to use in case the attribute is not set.
      *
      * @return mixed The value of the attribute or $defaultValue if not set.
      */
-    public function getAttribute($name, $defaultValue = null)
+    public function getAttribute(string $name, mixed $defaultValue = null): mixed
     {
         $name = strtolower($name);
-        if (isset($this->attributes[$name])) {
-            return $this->attributes[$name];
-        } else {
-            return $defaultValue;
-        }
+        return $this->attributes[$name] ?? $defaultValue;
     }
 
     /**
      * Converts value specified in XML to a boolean value.
      * This is to support the default value when used w/ a boolean column.
      *
+     * @param $val
      * @return bool
      */
-    protected function booleanValue($val)
+    protected function booleanValue($val): bool
     {
         if (is_numeric($val)) {
             return (bool) $val;
@@ -97,7 +99,7 @@ abstract class XMLElement
         }
     }
 
-    protected function getDefaultValueForArray($stringValue)
+    protected function getDefaultValueForArray($stringValue): ?string
     {
         $stringValue = trim($stringValue);
 
@@ -110,7 +112,7 @@ abstract class XMLElement
             $values[] = trim($v);
         }
 
-        $value = implode($values, ' | ');
+        $value = implode(' | ', $values);
         if (empty($value) || ' | ' === $value) {
             return null;
         }
@@ -132,7 +134,7 @@ abstract class XMLElement
      *
      * @return VendorInfo
      */
-    public function addVendorInfo($data)
+    public function addVendorInfo(mixed $data): VendorInfo
     {
         if ($data instanceof VendorInfo) {
             $vi = $data;
@@ -148,18 +150,14 @@ abstract class XMLElement
     }
 
     /**
-     * Gets the any associated VendorInfo object.
+     * Gets any associated VendorInfo object.
      *
+     * @param $type
      * @return VendorInfo
      */
-    public function getVendorInfoForType($type)
+    public function getVendorInfoForType($type): VendorInfo
     {
-        if (isset($this->vendorInfos[$type])) {
-            return $this->vendorInfos[$type];
-        } else {
-            // return an empty object
-            return new VendorInfo($type);
-        }
+        return $this->vendorInfos[$type] ?? new VendorInfo($type);
     }
 
     /**
@@ -174,7 +172,7 @@ abstract class XMLElement
      *
      * @throws InvalidArgumentException
      */
-    public function getConfiguredBehavior($bname)
+    public function getConfiguredBehavior(string $bname): string
     {
         if ($config = $this->getGeneratorConfig()) {
             if ($class = $config->getConfiguredBehavior($bname)) {
@@ -197,7 +195,7 @@ abstract class XMLElement
      *
      * @see        appendXml()
      */
-    public function toString()
+    public function toString(): string
     {
         $doc = new DOMDocument('1.0');
         $doc->formatOutput = true;

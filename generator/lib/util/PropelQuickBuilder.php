@@ -7,9 +7,24 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Util;
 
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Platform\SqlitePlatform;
+use CK\Generator\Lib\Config\GeneratorConfigInterface;
+use CK\Generator\Lib\Config\QuickGeneratorConfig;
+use CK\Runtime\Lib\Adapter\DBSQLite;
+use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Propel;
+use CK\Generator\Lib\Model\Table;
+//use XmlToAppData;
+use PDOStatement;
+use PDO;
+
+/*
 require_once dirname(__FILE__) . '/../builder/util/XmlToAppData.php';
 require_once dirname(__FILE__) . '/PropelSQLParser.php';
+*/
 
 class PropelQuickBuilder
 {

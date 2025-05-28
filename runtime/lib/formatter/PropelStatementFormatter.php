@@ -9,6 +9,9 @@
  */
 namespace CK\Runtime\Lib\Formatter;
 
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\OM\BaseObject;
+use PDOStatement;
 
 /**
  * statement formatter for Propel query
@@ -20,12 +23,12 @@ namespace CK\Runtime\Lib\Formatter;
  */
 class PropelStatementFormatter extends PropelFormatter
 {
-    public function format(PDOStatement $stmt)
+    public function format(PDOStatement $stmt): PDOStatement
     {
         return $stmt;
     }
 
-    public function formatOne(PDOStatement $stmt)
+    public function formatOne(PDOStatement $stmt): ?PDOStatement
     {
         if ($stmt->rowCount() == 0) {
             return null;
@@ -34,12 +37,15 @@ class PropelStatementFormatter extends PropelFormatter
         }
     }
 
-    public function formatRecord($record = null)
+    /**
+     * @throws PropelException
+     */
+    public function formatRecord(BaseObject $record = null): ?BaseObject
     {
         throw new PropelException('The Statement formatter cannot transform a record into a statement');
     }
 
-    public function isObjectFormatter()
+    public function isObjectFormatter(): false
     {
         return false;
     }

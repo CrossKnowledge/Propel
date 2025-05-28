@@ -7,9 +7,21 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
+use PhingFile;
+use BuildException;
+use CK\Generator\Lib\Config\GeneratorConfig;
+use CK\Generator\Lib\Util\PropelSQLParser;
+use Project;
+use PDO;
+use IOException;
+use PDOException;
+use Properties;
+/*
 require_once 'task/AbstractPropelTask.php';
 require_once dirname(__FILE__) . '/../util/PropelSQLParser.php';
+*/
 
 /**
  * Executes all SQL files referenced in the sqldbmap file against their mapped databases.
@@ -62,16 +74,17 @@ class PropelSQLExec extends AbstractPropelTask
     /**
      * The buildtime connection settings
      *
-     * @var        Array
+     * @var        array
      */
-    protected $buildConnections = array();
+    protected array $buildConnections = [];
 
     /**
      * Set the sqldbmap properties file.
      *
-     * @param   $sqldbmap filename for the sqldbmap
+     * @param PhingFile $sqldbmap filename for the sqldbmap
+     * @throws IOException
      */
-    public function setSqlDbMap($sqldbmap)
+    public function setSqlDbMap(PhingFile $sqldbmap): void
     {
         $this->sqldbmap = $this->project->resolveFile($sqldbmap);
     }
@@ -79,9 +92,9 @@ class PropelSQLExec extends AbstractPropelTask
     /**
      * Get the sqldbmap properties file.
      *
-     * @return filename for the sqldbmap
+     * @return PhingFile for the sqldbmap
      */
-    public function getSqlDbMap()
+    public function getSqlDbMap(): PhingFile
     {
         return $this->sqldbmap;
     }

@@ -7,12 +7,23 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
+use Exception;
+use CK\Generator\Lib\Model\AppData;
+use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Util\PropelMigrationManager;
+use CK\Generator\Lib\Model\IDMethod;
+use CK\Generator\Lib\Model\Diff\PropelDatabaseComparator;
+use PhingFile;
+use Project;
+/*
 require_once dirname(__FILE__) . '/AbstractPropelDataModelTask.php';
 require_once dirname(__FILE__) . '/../builder/om/ClassTools.php';
 require_once dirname(__FILE__) . '/../builder/om/OMBuilder.php';
 require_once dirname(__FILE__) . '/../model/diff/PropelDatabaseComparator.php';
 require_once dirname(__FILE__) . '/../util/PropelMigrationManager.php';
+*/
 
 /**
  * This Task creates the OM classes based on the XML schema file.

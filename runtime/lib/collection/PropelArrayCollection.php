@@ -9,6 +9,13 @@
  */
 namespace CK\Runtime\Lib\Collection;
 
+use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Propel;
+use Exception;
+use CK\Runtime\Lib\Util\BasePeer;
+use CK\Runtime\Lib\OM\BaseObject;
+use ReturnTypeWillChange;
 
 /**
  * Class for iterating over a list of Propel objects stored as arrays
@@ -18,16 +25,16 @@ namespace CK\Runtime\Lib\Collection;
  */
 class PropelArrayCollection extends PropelCollection
 {
-    protected $workerObject;
+    protected BaseObject $workerObject;
 
     /**
      * Save all the elements in the collection
      *
-     * @param PropelPDO $con
+     * @param PropelPDO|null $con
      *
      * @throws PropelException
      */
-    public function save($con = null)
+    public function save(PropelPDO $con = null): void
     {
         if (!method_exists($this->getModel(), 'save')) {
             throw new PropelException('Cannot save objects on a read-only model');
@@ -53,11 +60,11 @@ class PropelArrayCollection extends PropelCollection
     /**
      * Delete all the elements in the collection
      *
-     * @param PropelPDO $con
+     * @param PropelPDO|null $con
      *
      * @throws PropelException
      */
-    public function delete($con = null)
+    public function delete(PropelPDO $con = null): void
     {
         if (!method_exists($this->getModel(), 'delete')) {
             throw new PropelException('Cannot delete objects on a read-only model');
@@ -86,8 +93,9 @@ class PropelArrayCollection extends PropelCollection
      * @param boolean $usePrefix
      *
      * @return array The list of the primary keys of the collection
+     * @throws PropelException
      */
-    public function getPrimaryKeys($usePrefix = true)
+    public function getPrimaryKeys(bool $usePrefix = true): array
     {
         $callable = array($this->getPeerClass(), 'getPrimaryKeyFromRow');
         $ret = array();
@@ -105,8 +113,9 @@ class PropelArrayCollection extends PropelCollection
      * Does not empty the collection before adding the data from the array
      *
      * @param array $arr
+     * @throws PropelException
      */
-    public function fromArray($arr)
+    public function fromArray(array $arr): void
     {
         $obj = $this->getWorkerObject();
         foreach ($arr as $element) {
@@ -120,7 +129,7 @@ class PropelArrayCollection extends PropelCollection
      * Get an array representation of the collection
      * This is not an alias for getData(), since it returns a copy of the data
      *
-     * @param string $keyColumn If null, the returned array uses an incremental index.
+     * @param string|null $keyColumn If null, the returned array uses an incremental index.
      *                                 Otherwise, the array is indexed using the specified column
      * @param boolean $usePrefix If true, the returned array prefixes keys
      *                                 with the model class name ('Article_0', 'Article_1', etc).
@@ -145,7 +154,7 @@ class PropelArrayCollection extends PropelCollection
      *
      * @return array
      */
-    public function toArray($keyColumn = null, $usePrefix = false, $keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray(string $keyColumn = null, bool $usePrefix = false, string $keyType = BasePeer::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = array()): array
     {
         $ret = array();
         foreach ($this as $key => $element) {
@@ -160,12 +169,12 @@ class PropelArrayCollection extends PropelCollection
     /**
      * Synonym for toArray(), to provide a similar interface to PopelObjectCollection
      *
-     * @param string  $keyColumn
+     * @param string|null $keyColumn
      * @param boolean $usePrefix
      *
      * @return array
      */
-    public function getArrayCopy($keyColumn = null, $usePrefix = false)
+    #[ReturnTypeWillChange] public function getArrayCopy(string $keyColumn = null, bool $usePrefix = false): array
     {
         if (null === $keyColumn && false === $usePrefix) {
             return parent::getArrayCopy();
@@ -187,7 +196,7 @@ class PropelArrayCollection extends PropelCollection
      *
      * @return array
      */
-    public function toKeyValue($keyColumn, $valueColumn)
+    public function toKeyValue(string $keyColumn, string $valueColumn): array
     {
         $ret = array();
         foreach ($this as $obj) {
@@ -201,7 +210,7 @@ class PropelArrayCollection extends PropelCollection
      * @throws PropelException
      * @return BaseObject
      */
-    protected function getWorkerObject()
+    protected function getWorkerObject(): BaseObject
     {
         if (null === $this->workerObject) {
             if ($this->model == '') {

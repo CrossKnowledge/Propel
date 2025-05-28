@@ -9,7 +9,9 @@
  */
 namespace CK\Runtime\Lib\Query;
 
-
+use CK\Runtime\Lib\Map\ColumnMap;
+use CK\Runtime\Lib\Adapter\DBPostgres;
+use CK\Runtime\Lib\Exception\PropelException;
 /**
  * This is an "inner" class that describes an object in the criteria.
  *
@@ -27,11 +29,11 @@ class ModelCriterion extends Criterion
      * @param Criteria  $outer       The outer class (this is an "inner" class).
      * @param ColumnMap $column      A Column object to help escaping the value
      * @param mixed     $value
-     * @param string    $comparison, among ModelCriteria::MODEL_CLAUSE
-     * @param string    $clause      A simple pseudo-SQL clause, e.g. 'foo.BAR LIKE ?'
-     * @param string    $type
+     * @param string $comparison, among ModelCriteria::MODEL_CLAUSE
+     * @param string $clause      A simple pseudo-SQL clause, e.g. 'foo.BAR LIKE ?'
+     * @param string|null $type
      */
-    public function __construct(Criteria $outer, $column, $value, $comparison, $clause, $type = null)
+    public function __construct(Criteria $outer, $column, mixed $value, string $comparison, string $clause, string $type = null)
     {
         $this->value = $value;
         if ($column instanceof ColumnMap) {
@@ -67,10 +69,11 @@ class ModelCriterion extends Criterion
      * first, and that is not possible through inheritance ; that's why the parent
      * code is duplicated here.
      *
-     * @param string &$sb    The string that will receive the Prepared Statement
-     * @param array  $params A list to which Prepared Statement parameters will be appended
+     * @param string &$sb The string that will receive the Prepared Statement
+     * @param array $params A list to which Prepared Statement parameters will be appended
+     * @throws PropelException
      */
-    protected function dispatchPsHandling(&$sb, array &$params)
+    protected function dispatchPsHandling(string &$sb, array &$params): void
     {
         switch ($this->comparison) {
             case Criteria::CUSTOM:
@@ -122,7 +125,7 @@ class ModelCriterion extends Criterion
      * @param string &$sb    The string that will receive the Prepared Statement
      * @param array  $params A list to which Prepared Statement parameters will be appended
      */
-    public function appendModelClauseToPs(&$sb, array &$params)
+    public function appendModelClauseToPs(string &$sb, array &$params): void
     {
         if ($this->value !== null) {
             $params[] = array('table' => $this->realtable, 'column' => $this->column, 'value' => $this->value);
@@ -140,10 +143,10 @@ class ModelCriterion extends Criterion
      * @param string &$sb    The string that will receive the Prepared Statement
      * @param array  $params A list to which Prepared Statement parameters will be appended
      */
-    public function appendModelClauseLikeToPs(&$sb, array &$params)
+    public function appendModelClauseLikeToPs(string &$sb, array &$params): void
     {
-        // LIKE is case insensitive in mySQL and SQLite, but not in PostGres
-        // If the column is case insensitive, use ILIKE / NOT ILIKE instead of LIKE / NOT LIKE
+        // LIKE is case-insensitive in mySQL and SQLite, but not in PostGres
+        // If the column is case-insensitive, use ILIKE / NOT ILIKE instead of LIKE / NOT LIKE
         if ($this->ignoreStringCase && $this->getDb() instanceof DBPostgres) {
             $this->clause = preg_replace('/LIKE \?$/i', 'ILIKE ?', $this->clause);
         }
@@ -159,7 +162,7 @@ class ModelCriterion extends Criterion
      *
      * @throws PropelException
      */
-    public function appendModelClauseSeveralToPs(&$sb, array &$params)
+    public function appendModelClauseSeveralToPs(string &$sb, array &$params): void
     {
         $clause = $this->clause;
         foreach ((array) $this->value as $value) {
@@ -182,7 +185,7 @@ class ModelCriterion extends Criterion
      * @param string &$sb    The string that will receive the Prepared Statement
      * @param array  $params A list to which Prepared Statement parameters will be appended
      */
-    public function appendModelClauseArrayToPs(&$sb, array &$params)
+    public function appendModelClauseArrayToPs(string &$sb, array &$params): void
     {
         $_bindParams = array(); // the param names used in query building
         $_idxstart = count($params);
@@ -209,7 +212,7 @@ class ModelCriterion extends Criterion
      *
      * @throws PropelException
      */
-    protected function appendModelClauseRawToPs(&$sb, array &$params)
+    protected function appendModelClauseRawToPs(string &$sb, array &$params): void
     {
         if (substr_count($this->clause, '?') != 1) {
             throw new PropelException(sprintf('Could not build SQL for expression "%s" because Criteria::RAW works only with a clause containing a single question mark placeholder', $this->column));
@@ -222,16 +225,17 @@ class ModelCriterion extends Criterion
      * This method checks another Criteria to see if they contain
      * the same attributes and hashtable entries.
      *
+     * @param Criterion|null $obj
      * @return boolean
      */
-    public function equals($obj)
+    public function equals(?Criterion $obj): bool
     {
         // TODO: optimize me with early outs
         if ($this === $obj) {
             return true;
         }
 
-        if (($obj === null) || !($obj instanceof ModelCriterion)) {
+        if (!($obj instanceof ModelCriterion)) {    //Deleted ($obj === null) as it's unnecessary
             return false;
         }
 
@@ -264,8 +268,9 @@ class ModelCriterion extends Criterion
 
     /**
      * Returns a hash code value for the object.
+     * @throws PropelException
      */
-    public function hashCode()
+    public function hashCode(): int|string
     {
         $h = crc32(serialize($this->value)) ^ crc32($this->comparison) ^ crc32($this->clause);
 
@@ -297,7 +302,7 @@ class ModelCriterion extends Criterion
      * taken from http://www.php.net/manual/en/function.str-replace.php
      *
      */
-    protected static function strReplaceOnce($search, $replace, $subject)
+    protected static function strReplaceOnce($search, $replace, $subject): string
     {
         $firstChar = strpos($subject, $search);
         if ($firstChar !== false) {

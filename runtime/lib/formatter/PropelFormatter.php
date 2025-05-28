@@ -9,7 +9,11 @@
  */
 namespace CK\Runtime\Lib\Formatter;
 
-
+use CK\Runtime\Lib\Query\ModelCriteria;
+use CK\Runtime\Lib\OM\BaseObject;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Propel;
+use PDOStatement;
 /**
  * Abstract class for query formatter
  *
@@ -22,11 +26,15 @@ abstract class PropelFormatter
     protected
         $dbName,
         $class,
-        $peer,
-        $with = array(),
-        $asColumns = array(),
-        $hasLimit = false,
-        $currentObjects = array();
+        $peer;
+    protected
+    array $currentObjects = array();
+    protected
+    array $with = array();
+    protected
+    array $asColumns = array();
+    protected
+    bool $hasLimit = false;
 
     public function __construct(ModelCriteria $criteria = null)
     {
@@ -43,7 +51,7 @@ abstract class PropelFormatter
      *
      * @return PropelFormatter The current formatter object
      */
-    public function init(ModelCriteria $criteria)
+    public function init(ModelCriteria $criteria): static
     {
         $this->dbName = $criteria->getDbName();
         $this->setClass($criteria->getModelName());
@@ -66,7 +74,7 @@ abstract class PropelFormatter
         return $this->dbName;
     }
 
-    public function setClass($class)
+    public function setClass($class): void
     {
         $this->class = $class;
         $this->peer = constant($this->class . '::PEER');
@@ -77,7 +85,7 @@ abstract class PropelFormatter
         return $this->class;
     }
 
-    public function setPeer($peer)
+    public function setPeer($peer): void
     {
         $this->peer = $peer;
     }
@@ -87,17 +95,17 @@ abstract class PropelFormatter
         return $this->peer;
     }
 
-    public function setWith($withs = array())
+    public function setWith($withs = array()): void
     {
         $this->with = $withs;
     }
 
-    public function getWith()
+    public function getWith(): array
     {
         return $this->with;
     }
 
-    public function setAsColumns($asColumns = array())
+    public function setAsColumns($asColumns = array()): void
     {
         $this->asColumns = $asColumns;
     }
@@ -107,7 +115,7 @@ abstract class PropelFormatter
         return $this->asColumns;
     }
 
-    public function setHasLimit($hasLimit = false)
+    public function setHasLimit($hasLimit = false): void
     {
         $this->hasLimit = $hasLimit;
     }
@@ -120,11 +128,11 @@ abstract class PropelFormatter
     /**
      * Formats an ActiveRecord object
      *
-     * @param BaseObject $record the object to format
+     * @param BaseObject|null $record the object to format
      *
-     * @return BaseObject The original record
+     * @return BaseObject|null The original record
      */
-    public function formatRecord($record = null)
+    public function formatRecord(BaseObject $record = null): ?BaseObject
     {
         return $record;
     }
@@ -135,19 +143,25 @@ abstract class PropelFormatter
 
     abstract public function isObjectFormatter();
 
-    public function checkInit()
+    /**
+     * @throws PropelException
+     */
+    public function checkInit(): void
     {
         if (null === $this->peer) {
             throw new PropelException('You must initialize a formatter object before calling format() or formatOne()');
         }
     }
 
+    /**
+     * @throws PropelException
+     */
     public function getTableMap()
     {
         return Propel::getDatabaseMap($this->dbName)->getTableByPhpName($this->class);
     }
 
-    protected function isWithOneToMany()
+    protected function isWithOneToMany(): bool
     {
         foreach ($this->with as $modelWith) {
             if ($modelWith->isWithOneToMany()) {
@@ -165,12 +179,12 @@ abstract class PropelFormatter
      * The column offset in the row is used to index the array of classes
      * As there may be more than one object of the same class in the chain
      *
-     * @param int    $col   Offset of the object in the list of objects to hydrate
+     * @param int $col   Offset of the object in the list of objects to hydrate
      * @param string $class Propel model object class
      *
      * @return BaseObject
      */
-    protected function getWorkerObject($col, $class)
+    protected function getWorkerObject(int $col, string $class): BaseObject
     {
         $key = $col . '_' . $class;
 
@@ -189,11 +203,11 @@ abstract class PropelFormatter
      * @param array $row associative array indexed by column number,
      *                   as returned by PDOStatement::fetch(PDO::FETCH_NUM)
      * @param string $class The classname of the object to create
-     * @param int    $col   The start column for the hydration (modified)
+     * @param int $col   The start column for the hydration (modified)
      *
      * @return BaseObject
      */
-    public function getSingleObjectFromRow($row, $class, &$col = 0)
+    public function getSingleObjectFromRow(array $row, string $class, int &$col = 0): BaseObject
     {
         $obj = $this->getWorkerObject($col, $class);
         $col = $obj->hydrate($row, $col);

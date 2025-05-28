@@ -9,7 +9,7 @@
  */
 namespace CK\Runtime\Lib\Query;
 
-
+use CK\Runtime\Lib\Exception\PropelException;
 /**
  * Factory for model queries
  *
@@ -25,7 +25,7 @@ class PropelQuery
      * @return ModelCriteria
      * @throws PropelException
      */
-    public static function from($queryClassAndAlias)
+    public static function from(string $queryClassAndAlias): ModelCriteria
     {
         list($class, $alias) = ModelCriteria::getClassAndAlias($queryClassAndAlias);
         $queryClass = $class . 'Query';

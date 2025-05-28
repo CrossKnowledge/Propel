@@ -2,7 +2,7 @@ FROM php:8.3-cli
 
 # Install system packages and PHP extensions with cleanup
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git unzip zlib1g-dev libzip-dev \
+    git unzip zlib1g-dev libzip-dev tree \
     && docker-php-ext-install zip pdo pdo_mysql \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

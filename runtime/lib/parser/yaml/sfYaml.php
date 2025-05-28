@@ -9,7 +9,8 @@
  */
 namespace CK\Runtime\Lib\Parser\YAML;
 
-
+use InvalidArgumentException;
+use Exception;
 /**
  * sfYaml offers convenience methods to load and dump YAML.
  *

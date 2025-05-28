@@ -97,7 +97,7 @@ class PhpNameGenerator implements NameGenerator
      * @see        NameGenerator
      * @see        #underscoreMethod()
      */
-    protected function underscoreMethod($schemaName)
+    protected function underscoreMethod(string $schemaName): string
     {
         $name = "";
         $tok = strtok($schemaName, self::STD_SEPARATOR_CHAR);
@@ -124,7 +124,7 @@ class PhpNameGenerator implements NameGenerator
      * @see        NameGenerator
      * @see        #underscoreMethod()
      */
-    protected function cleanMethod($schemaName)
+    protected function cleanMethod(string $schemaName): string
     {
         $name = "";
         $regexp = '/([a-z0-9]+)/i';
@@ -154,7 +154,7 @@ class PhpNameGenerator implements NameGenerator
      * @see        NameGenerator
      * @see        #underscoreMethod(String)
      */
-    protected function phpnameMethod($schemaName)
+    protected function phpnameMethod(string $schemaName): string
     {
         $name = "";
         $tok = strtok($schemaName, self::STD_SEPARATOR_CHAR);
@@ -174,7 +174,7 @@ class PhpNameGenerator implements NameGenerator
      *
      * @return string The <code>name</code> parameter, unchanged.
      */
-    protected function nochangeMethod($name)
+    protected function nochangeMethod(string $name): string
     {
         return $name;
     }

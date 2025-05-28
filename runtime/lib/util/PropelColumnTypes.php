@@ -23,34 +23,61 @@ class PropelColumnTypes
 {
 
     const
-        CHAR = "CHAR",
-        VARCHAR = "VARCHAR",
-        LONGVARCHAR = "LONGVARCHAR",
-        CLOB = "CLOB",
-        CLOB_EMU = "CLOB_EMU",
-        NUMERIC = "NUMERIC",
-        DECIMAL = "DECIMAL",
-        TINYINT = "TINYINT",
-        SMALLINT = "SMALLINT",
-        INTEGER = "INTEGER",
-        BIGINT = "BIGINT",
-        REAL = "REAL",
-        FLOAT = "FLOAT",
-        DOUBLE = "DOUBLE",
-        BINARY = "BINARY",
-        VARBINARY = "VARBINARY",
-        LONGVARBINARY = "LONGVARBINARY",
-        BLOB = "BLOB",
-        DATE = "DATE",
-        TIME = "TIME",
-        TIMESTAMP = "TIMESTAMP",
-        BU_DATE = "BU_DATE",
-        BU_TIMESTAMP = "BU_TIMESTAMP",
-        BOOLEAN = "BOOLEAN",
-        BOOLEAN_EMU = "BOOLEAN_EMU",
-        OBJECT = "OBJECT",
-        PHP_ARRAY = "ARRAY",
-        ENUM = "ENUM";
+    string ENUM = "ENUM";
+    const
+    string PHP_ARRAY = "ARRAY";
+    const
+    string OBJECT = "OBJECT";
+    const
+    string BOOLEAN_EMU = "BOOLEAN_EMU";
+    const
+    string BOOLEAN = "BOOLEAN";
+    const
+    string BU_TIMESTAMP = "BU_TIMESTAMP";
+    const
+    string BU_DATE = "BU_DATE";
+    const
+    string TIMESTAMP = "TIMESTAMP";
+    const
+    string TIME = "TIME";
+    const
+    string DATE = "DATE";
+    const
+    string BLOB = "BLOB";
+    const
+    string LONGVARBINARY = "LONGVARBINARY";
+    const
+    string VARBINARY = "VARBINARY";
+    const
+    string BINARY = "BINARY";
+    const
+    string DOUBLE = "DOUBLE";
+    const
+    string FLOAT = "FLOAT";
+    const
+    string REAL = "REAL";
+    const
+    string BIGINT = "BIGINT";
+    const
+    string INTEGER = "INTEGER";
+    const
+    string SMALLINT = "SMALLINT";
+    const
+    string TINYINT = "TINYINT";
+    const
+    string DECIMAL = "DECIMAL";
+    const
+    string NUMERIC = "NUMERIC";
+    const
+    string CLOB_EMU = "CLOB_EMU";
+    const
+    string CLOB = "CLOB";
+    const
+    string LONGVARCHAR = "LONGVARCHAR";
+    const
+    string VARCHAR = "VARCHAR";
+    const
+    string CHAR = "CHAR";
 
     private static array $propelToPdoMap = array(
         self::CHAR        => PDO::PARAM_STR,
@@ -90,7 +117,7 @@ class PropelColumnTypes
      *
      * @return int
      */
-    public static function getPdoType($propelType)
+    public static function getPdoType(string $propelType): int
     {
         return self::$propelToPdoMap[$propelType];
     }

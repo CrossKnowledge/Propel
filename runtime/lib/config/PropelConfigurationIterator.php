@@ -9,6 +9,8 @@
  */
 namespace CK\Runtime\Lib\Config;
 
+use RecursiveIteratorIterator;
+use ReturnTypeWillChange;
 
 /**
  * PropelConfigurationIterator is used internally by PropelConfiguration to
@@ -23,33 +25,33 @@ class PropelConfigurationIterator extends RecursiveIteratorIterator
     /**
      * Node is a parent node
      */
-    const NODE_PARENT = 0;
+    const int NODE_PARENT = 0;
 
     /**
      * Node is an actual configuration item
      */
-    const NODE_ITEM = 1;
+    const int NODE_ITEM = 1;
 
     /**
      * Namespace stack when recursively iterating the configuration tree
      *
      * @var       array
      */
-    protected $namespaceStack = array();
+    protected array $namespaceStack = array();
 
     /**
      * Current node type. Possible values: null (undefined), self::NODE_PARENT or self::NODE_ITEM
      *
-     * @var       integer
+     * @ var       integer
      */
-    protected $nodeType = null;
+    protected ?int $nodeType = null;
 
     /**
      * Get current namespace
      *
      * @return string
      */
-    public function getNamespace()
+    public function getNamespace(): string
     {
         return implode('.', $this->namespaceStack);
     }
@@ -58,12 +60,12 @@ class PropelConfigurationIterator extends RecursiveIteratorIterator
      * Get current node type.
      *
      * @see       http://www.php.net/RecursiveIteratorIterator
-     * @return integer
+     * @return int|null - null (undefined)
      *             - null (undefined)
      *             - self::NODE_PARENT
      *             - self::NODE_ITEM
      */
-    public function getNodeType()
+    public function getNodeType(): ?int
     {
         return $this->nodeType;
     }
@@ -74,7 +76,7 @@ class PropelConfigurationIterator extends RecursiveIteratorIterator
      * @see       http://www.php.net/RecursiveIteratorIterator
      * @return mixed
      */
-    public function current()
+    #[ReturnTypeWillChange] public function current(): mixed
     {
         $current = parent::current();
         if (is_array($current)) {
@@ -92,7 +94,7 @@ class PropelConfigurationIterator extends RecursiveIteratorIterator
      *
      * @see       http://www.php.net/RecursiveIteratorIterator
      */
-    public function endChildren()
+    #[ReturnTypeWillChange] public function endChildren(): void
     {
         if ($this->namespaceStack) {
             array_pop($this->namespaceStack);

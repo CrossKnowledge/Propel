@@ -7,9 +7,15 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
+use CK\Generator\Lib\Util\PropelMigrationManager;
+use CK\Runtime\Lib\Exception\PropelException;
+use Project;
+/*
 require_once dirname(__FILE__) . '/BasePropelMigrationTask.php';
 require_once dirname(__FILE__) . '/../util/PropelMigrationManager.php';
+*/
 
 /**
  * This Task lists the migrations yet to be executed
@@ -19,6 +25,9 @@ require_once dirname(__FILE__) . '/../util/PropelMigrationManager.php';
  */
 class PropelMigrationStatusTask extends BasePropelMigrationTask
 {
+    /**
+     * @throws PropelException
+     */
     public function main()
     {
         $manager = new PropelMigrationManager();

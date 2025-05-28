@@ -9,7 +9,7 @@
  */
 namespace CK\Runtime\Lib\Map;
 
-
+use CK\Runtime\Lib\Exception\PropelException;
 /**
  * RelationMap is used to model a database relationship.
  *
@@ -27,30 +27,30 @@ namespace CK\Runtime\Lib\Map;
 class RelationMap
 {
     // types
-    const MANY_TO_ONE = 1;
-    const ONE_TO_MANY = 2;
-    const ONE_TO_ONE = 3;
-    const MANY_TO_MANY = 4;
+    const int MANY_TO_ONE = 1;
+    const int ONE_TO_MANY = 2;
+    const int ONE_TO_ONE = 3;
+    const int MANY_TO_MANY = 4;
 
     // representations
-    const LOCAL_TO_FOREIGN = 0;
-    const LEFT_TO_RIGHT = 1;
+    const int LOCAL_TO_FOREIGN = 0;
+    const int LEFT_TO_RIGHT = 1;
 
-    protected $name;
-    protected $pluralName;
-    protected $type;
-    protected $localTable;
-    protected $foreignTable;
+    protected string $name;
+    protected string $pluralName;
+    protected int $type;
+    protected TableMap $localTable;
+    protected TableMap $foreignTable;
     /**
      * @var ColumnMap[]
      */
-    protected $localColumns = array();
+    protected array $localColumns = array();
     /**
      * @var ColumnMap[]
      */
-    protected $foreignColumns = array();
-    protected $onUpdate;
-    protected $onDelete;
+    protected array $foreignColumns = array();
+    protected int $onUpdate;
+    protected int $onDelete;
 
     /**
      * Constructor.
@@ -187,9 +187,9 @@ class RelationMap
      *
      * @param int $direction How the associative array must return columns
      *
-     * @return Array Associative array (local => foreign) of fully qualified column names
+     * @return array Associative array (local => foreign) of fully qualified column names
      */
-    public function getColumnMappings($direction = RelationMap::LOCAL_TO_FOREIGN)
+    public function getColumnMappings(int $direction = RelationMap::LOCAL_TO_FOREIGN): array
     {
         $h = array();
         if ($direction == RelationMap::LEFT_TO_RIGHT && $this->getType() == RelationMap::MANY_TO_ONE) {
@@ -229,9 +229,9 @@ class RelationMap
     /**
      * Get the local columns
      *
-     * @return Array list of ColumnMap objects
+     * @return array list of ColumnMap objects
      */
-    public function getLocalColumns()
+    public function getLocalColumns(): array
     {
         return $this->localColumns;
     }
@@ -239,9 +239,9 @@ class RelationMap
     /**
      * Get the foreign columns
      *
-     * @return Array list of ColumnMap objects
+     * @return array list of ColumnMap objects
      */
-    public function getForeignColumns()
+    public function getForeignColumns(): array
     {
         return $this->foreignColumns;
     }

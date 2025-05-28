@@ -10,6 +10,10 @@
 namespace CK\Runtime\Lib\Connection;
 
 
+use PDOStatement;
+use PDO;
+use ReturnTypeWillChange;
+
 /**
  * PDOStatement that provides some enhanced functionality needed by Propel.
  *
@@ -27,7 +31,7 @@ class DebugPDOStatement extends PDOStatement
      *
      * @var       PropelPDO
      */
-    protected $pdo;
+    protected PropelPDO $pdo;
 
     /**
      * Hashmap for resolving the PDO::PARAM_* class constants to their human-readable names.
@@ -36,7 +40,7 @@ class DebugPDOStatement extends PDOStatement
      * @see       self::bindValue()
      * @var       array
      */
-    protected static $typeMap = array(
+    protected static array $typeMap = array(
         PDO::PARAM_BOOL => "PDO::PARAM_BOOL",
         PDO::PARAM_INT => "PDO::PARAM_INT",
         PDO::PARAM_STR => "PDO::PARAM_STR",
@@ -47,7 +51,7 @@ class DebugPDOStatement extends PDOStatement
     /**
      * @var       array  The values that have been bound
      */
-    protected $boundValues = array();
+    protected array $boundValues = array();
 
     /**
      * Construct a new statement class with reference to main DebugPDO object from
@@ -67,7 +71,7 @@ class DebugPDOStatement extends PDOStatement
      *
      * @return string
      */
-    public function getExecutedQueryString(array $values = array())
+    public function getExecutedQueryString(array $values = array()): string
     {
         $sql = $this->queryString;
         $boundValues = empty($values) ? $this->boundValues : $values;
@@ -94,11 +98,11 @@ class DebugPDOStatement extends PDOStatement
      * Executes a prepared statement.  Returns a boolean value indicating success.
      * Overridden for query counting and logging.
      *
-     * @param string $input_parameters
+     * @param ?string $input_parameters
      *
      * @return boolean
      */
-    public function execute($input_parameters = null)
+    #[ReturnTypeWillChange] public function execute($input_parameters = null): bool
     {
         $debug = $this->pdo->getDebugSnapshot();
         $return = parent::execute($input_parameters);

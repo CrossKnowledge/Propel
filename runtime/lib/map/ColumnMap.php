@@ -9,7 +9,10 @@
  */
 namespace CK\Runtime\Lib\Map;
 
-
+use CK\Runtime\Lib\Util\PropelColumnTypes;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Adapter\DBAdapter;
+use PDO;
 /**
  * ColumnMap is used to model a column of a table in a database.
  *
@@ -29,51 +32,51 @@ class ColumnMap
 {
 
     // Propel type of the column
-    protected $type;
+    protected string $type;
 
     // Size of the column
-    protected $size = 0;
+    protected int $size = 0;
 
     // Is it a primary key?
-    protected $pk = false;
+    protected bool $pk = false;
 
     // Is null value allowed?
-    protected $notNull = false;
+    protected bool $notNull = false;
 
     // The default value for this column
-    protected $defaultValue;
+    protected mixed $defaultValue;
 
     // Name of the table that this column is related to
-    protected $relatedTableName = "";
+    protected string $relatedTableName = "";
 
     // Name of the column that this column is related to
-    protected $relatedColumnName = "";
+    protected string $relatedColumnName = "";
 
     // The TableMap for this column
-    protected $table;
+    protected TableMap $table;
 
     // The name of the column
-    protected $columnName;
+    protected string $columnName;
 
     // The php name of the column
-    protected $phpName;
+    protected string $phpName;
 
     // The validators for this column
-    protected $validators = array();
+    protected array $validators = array();
 
     // The allowed values for an ENUM column
-    protected $valueSet = array();
+    protected array $valueSet = array();
 
     // Is this a primaryString column?
-    protected $isPkString = false;
+    protected bool $isPkString = false;
 
     /**
      * Constructor.
      *
      * @param string $name The name of the column.
-     * @param      TableMap containingTable TableMap of the table this column is in.
+     * @param      TableMap $containingTable TableMap of the table this column is in.
      */
-    public function __construct($name, TableMap $containingTable)
+    public function __construct(string $name, TableMap $containingTable)
     {
         $this->columnName = $name;
         $this->table = $containingTable;
@@ -84,7 +87,7 @@ class ColumnMap
      *
      * @return string A String with the column name.
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->columnName;
     }
@@ -126,7 +129,7 @@ class ColumnMap
      *
      * @return void
      */
-    public function setPhpName($phpName)
+    public function setPhpName($phpName): void
     {
         $this->phpName = $phpName;
     }
@@ -136,7 +139,7 @@ class ColumnMap
      *
      * @return string A String with the column name.
      */
-    public function getPhpName()
+    public function getPhpName(): string
     {
         return $this->phpName;
     }
@@ -148,7 +151,7 @@ class ColumnMap
      *
      * @return void
      */
-    public function setType($type)
+    public function setType($type): void
     {
         $this->type = $type;
     }
@@ -158,7 +161,7 @@ class ColumnMap
      *
      * @return string A string representing the Propel type (e.g. PropelColumnTypes::DATE).
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -168,7 +171,7 @@ class ColumnMap
      *
      * @return int The PDO::PARMA_* value
      */
-    public function getPdoType()
+    public function getPdoType(): int
     {
         return PropelColumnTypes::getPdoType($this->type);
     }
@@ -178,7 +181,7 @@ class ColumnMap
      *
      * @return boolean
      */
-    public function isLob()
+    public function isLob(): bool
     {
         return ($this->type == PropelColumnTypes::BLOB || $this->type == PropelColumnTypes::VARBINARY || $this->type == PropelColumnTypes::LONGVARBINARY);
     }
@@ -189,7 +192,7 @@ class ColumnMap
      * @return boolean
      * @since      1.3
      */
-    public function isTemporal()
+    public function isTemporal(): bool
     {
         return ($this->type == PropelColumnTypes::TIMESTAMP || $this->type == PropelColumnTypes::DATE || $this->type == PropelColumnTypes::TIME || $this->type == PropelColumnTypes::BU_DATE || $this->type == PropelColumnTypes::BU_TIMESTAMP);
     }
@@ -203,7 +206,7 @@ class ColumnMap
      * @return boolean
      * @deprecated Propel supports non-epoch dates
      */
-    public function isEpochTemporal()
+    public function isEpochTemporal(): bool
     {
         return ($this->type == PropelColumnTypes::TIMESTAMP || $this->type == PropelColumnTypes::DATE || $this->type == PropelColumnTypes::TIME);
     }
@@ -213,7 +216,7 @@ class ColumnMap
      *
      * @return boolean
      */
-    public function isNumeric()
+    public function isNumeric(): bool
     {
         return ($this->type == PropelColumnTypes::NUMERIC || $this->type == PropelColumnTypes::DECIMAL || $this->type == PropelColumnTypes::TINYINT || $this->type == PropelColumnTypes::SMALLINT || $this->type == PropelColumnTypes::INTEGER || $this->type == PropelColumnTypes::BIGINT || $this->type == PropelColumnTypes::REAL || $this->type == PropelColumnTypes::FLOAT || $this->type == PropelColumnTypes::DOUBLE);
     }
@@ -223,7 +226,7 @@ class ColumnMap
      *
      * @return boolean
      */
-    public function isInteger()
+    public function isInteger(): bool
     {
         return $this->getPdoType() === PDO::PARAM_INT;
     }
@@ -233,7 +236,7 @@ class ColumnMap
      *
      * @return boolean
      */
-    public function isText()
+    public function isText(): bool
     {
         return ($this->type == PropelColumnTypes::VARCHAR || $this->type == PropelColumnTypes::LONGVARCHAR || $this->type == PropelColumnTypes::CHAR);
     }
@@ -245,7 +248,7 @@ class ColumnMap
      *
      * @return void
      */
-    public function setSize($size)
+    public function setSize(int $size): void
     {
         $this->size = $size;
     }
@@ -255,7 +258,7 @@ class ColumnMap
      *
      * @return int An int specifying the size.
      */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->size;
     }
@@ -267,7 +270,7 @@ class ColumnMap
      *
      * @return void
      */
-    public function setPrimaryKey($pk)
+    public function setPrimaryKey(bool $pk): void
     {
         $this->pk = $pk;
     }
@@ -277,7 +280,7 @@ class ColumnMap
      *
      * @return boolean True if column is a primary key.
      */
-    public function isPrimaryKey()
+    public function isPrimaryKey(): bool
     {
         return $this->pk;
     }
@@ -285,11 +288,11 @@ class ColumnMap
     /**
      * Set if this column may be null.
      *
-     * @param      boolean nn True if column may be null.
+     * @param boolean $nn nn True if column may be null.
      *
      * @return void
      */
-    public function setNotNull($nn)
+    public function setNotNull(bool $nn): void
     {
         $this->notNull = $nn;
     }
@@ -364,7 +367,7 @@ class ColumnMap
      *
      * @return RelationMap|null
      */
-    public function getRelation()
+    public function getRelation(): ?RelationMap
     {
         if (!$this->relatedTableName) {
             return null;
@@ -376,14 +379,15 @@ class ColumnMap
                 }
             }
         }
+        return null;    //Needed if no condition was met.
     }
 
     /**
-     * Get the table.column that this column is related to.
+     * Get the table. Column that this column is related to.
      *
      * @return string A String with the full name for the related column.
      */
-    public function getRelatedName()
+    public function getRelatedName(): string
     {
         return $this->relatedTableName . "." . $this->relatedColumnName;
     }
@@ -393,7 +397,7 @@ class ColumnMap
      *
      * @return string A String with the name for the related table.
      */
-    public function getRelatedTableName()
+    public function getRelatedTableName(): string
     {
         return $this->relatedTableName;
     }
@@ -403,7 +407,7 @@ class ColumnMap
      *
      * @return string A String with the name for the related column.
      */
-    public function getRelatedColumnName()
+    public function getRelatedColumnName(): string
     {
         return $this->relatedColumnName;
     }
@@ -414,7 +418,7 @@ class ColumnMap
      * @return TableMap        The related TableMap object
      * @throws PropelException when called on a column with no foreign key
      */
-    public function getRelatedTable()
+    public function getRelatedTable(): TableMap
     {
         if ($this->relatedTableName) {
             return $this->table->getDatabaseMap()->getTable($this->relatedTableName);
@@ -429,22 +433,22 @@ class ColumnMap
      * @return ColumnMap       The related ColumnMap object
      * @throws PropelException when called on a column with no foreign key
      */
-    public function getRelatedColumn()
+    public function getRelatedColumn(): ColumnMap
     {
         return $this->getRelatedTable()->getColumn($this->relatedColumnName);
     }
 
-    public function addValidator($validator)
+    public function addValidator($validator): void
     {
         $this->validators[] = $validator;
     }
 
-    public function hasValidators()
+    public function hasValidators(): bool
     {
         return count($this->validators) > 0;
     }
 
-    public function getValidators()
+    public function getValidators(): array
     {
         return $this->validators;
     }
@@ -454,7 +458,7 @@ class ColumnMap
      *
      * @param array $values A list of allowed values
      */
-    public function setValueSet($values)
+    public function setValueSet($values): void
     {
         $this->valueSet = $values;
     }
@@ -464,17 +468,17 @@ class ColumnMap
      *
      * @return array A list of allowed values
      */
-    public function getValueSet()
+    public function getValueSet(): array
     {
         return $this->valueSet;
     }
 
-    public function isInValueSet($value)
+    public function isInValueSet($value): bool
     {
         return in_array($value, $this->valueSet);
     }
 
-    public function getValueSetKey($value)
+    public function getValueSetKey($value): false|int|string
     {
         return array_search($value, $this->valueSet);
     }

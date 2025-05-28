@@ -28,7 +28,7 @@ abstract class PropelParser
      *
      * @return mixed Converted data, depending on the parser format
      */
-    abstract public function fromArray($array);
+    abstract public function fromArray(array $array): mixed;
 
     /**
      * Converts data from the parser format to an associative array.
@@ -39,14 +39,14 @@ abstract class PropelParser
      *
      * @return array Converted data
      */
-    abstract public function toArray($data);
+    abstract public function toArray(mixed $data): array;
 
     public function listFromArray($data)
     {
         return $this->fromArray($data);
     }
 
-    public function listToArray($data)
+    public function listToArray($data): array
     {
         return $this->toArray($data);
     }
@@ -60,33 +60,32 @@ abstract class PropelParser
      *
      * @throws PropelException
      */
-    public function load($path)
+    public function load(string $path): string
     {
         if (!file_exists($path)) {
             throw new PropelException(sprintf('File "%s" does not exist or is unreadable', $path));
         }
         ob_start();
         include($path);
-        $contents = ob_get_clean();
-
-        return $contents;
+        return ob_get_clean();
     }
 
     /**
      * Dumps data to a file, or to STDOUT if no filename is given
      *
      * @param string $data The file content
-     * @param string $path Path of the file to create
+     * @param string|null $path Path of the file to create
      *
      * @return int|null If path given, the written bytes, null otherwise.
      */
-    public function dump($data, $path = null)
+    public function dump(string $data, string $path = null): ?int
     {
         if ($path !== null) {
             return file_put_contents($path, $data);
         } else {
             echo $data;
         }
+        return null;
     }
 
     /**
@@ -98,7 +97,7 @@ abstract class PropelParser
      *
      * @throws PropelException
      */
-    public static function getParser($type = 'XML')
+    public static function getParser(string $type = 'XML'): PropelParser
     {
         $class = sprintf('Propel%sParser', $type);
         if (!class_exists($class)) {

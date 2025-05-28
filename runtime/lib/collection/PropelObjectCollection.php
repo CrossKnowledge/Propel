@@ -9,6 +9,15 @@
  */
 namespace CK\Runtime\Lib\Collection;
 
+use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Propel;
+use CK\Runtime\Lib\OM\BaseObject;
+use CK\Runtime\Lib\Query\PropelQuery;
+use Exception;
+use CK\Runtime\Lib\Query\Criteria;
+use CK\Runtime\Lib\Map\RelationMap;
+use ReturnTypeWillChange;
 
 /**
  * Class for iterating over a list of Propel objects
@@ -21,11 +30,12 @@ class PropelObjectCollection extends PropelCollection
     /**
      * Save all the elements in the collection
      *
-     * @param PropelPDO $con
+     * @param PropelPDO|null $con
      *
      * @throws PropelException
+     * @throws Exception
      */
-    public function save($con = null)
+    public function save(PropelPDO $con = null): void
     {
         if (!method_exists($this->getModel(), 'save')) {
             throw new PropelException('Cannot save objects on a read-only model');
@@ -49,11 +59,12 @@ class PropelObjectCollection extends PropelCollection
     /**
      * Delete all the elements in the collection
      *
-     * @param PropelPDO $con
+     * @param PropelPDO|null $con
      *
      * @throws PropelException
+     * @throws Exception
      */
-    public function delete($con = null)
+    public function delete(PropelPDO $con = null): void
     {
         if (!method_exists($this->getModel(), 'delete')) {
             throw new PropelException('Cannot delete objects on a read-only model');
@@ -81,7 +92,7 @@ class PropelObjectCollection extends PropelCollection
      *
      * @return array The list of the primary keys of the collection
      */
-    public function getPrimaryKeys($usePrefix = true)
+    public function getPrimaryKeys(bool $usePrefix = true): array
     {
         $ret = array();
 
@@ -101,7 +112,7 @@ class PropelObjectCollection extends PropelCollection
      *
      * @param array $arr
      */
-    public function fromArray($arr)
+    public function fromArray(array $arr): void
     {
         $class = $this->getModel();
         foreach ($arr as $element) {
@@ -115,7 +126,7 @@ class PropelObjectCollection extends PropelCollection
     /**
      * Get an array representation of the collection
      *
-     * @param string $keyColumn If null, the returned array uses an incremental index.
+     * @param string|null $keyColumn If null, the returned array uses an incremental index.
      *                                 Otherwise, the array is indexed using the specified column
      * @param boolean $usePrefix If true, the returned array prefixes keys
      *                                 with the model class name ('Article_0', 'Article_1', etc).
@@ -140,7 +151,7 @@ class PropelObjectCollection extends PropelCollection
      *
      * @return array
      */
-    public function getArrayCopy($keyColumn = null, $usePrefix = false)
+    #[ReturnTypeWillChange] public function getArrayCopy(string $keyColumn = null, bool $usePrefix = false): array
     {
         if (null === $keyColumn && false === $usePrefix) {
             return parent::getArrayCopy();
@@ -168,12 +179,12 @@ class PropelObjectCollection extends PropelCollection
      *   $res = $coll->toKeyValue(array('RelatedModel', 'Name'), 'Name');
      * </code>
      *
-     * @param string|array $keyColumn   The name of the column, or a list of columns to call.
-     * @param string       $valueColumn
+     * @param array|string $keyColumn   The name of the column, or a list of columns to call.
+     * @param string|null $valueColumn
      *
      * @return array
      */
-    public function toKeyValue($keyColumn = 'PrimaryKey', $valueColumn = null)
+    public function toKeyValue(array|string $keyColumn = 'PrimaryKey', string $valueColumn = null): array
     {
         $ret = array();
         $valueGetterMethod = (null === $valueColumn) ? '__toString' : ('get' . $valueColumn);
@@ -199,7 +210,7 @@ class PropelObjectCollection extends PropelCollection
      *
      * @return mixed
      */
-    protected function getValueForColumns($object, array $columns)
+    protected function getValueForColumns(object $object, array $columns): mixed
     {
         $value = $object;
 
@@ -215,15 +226,15 @@ class PropelObjectCollection extends PropelCollection
      * Makes an additional query to populate the objects related to the collection objects
      * by a certain relation
      *
-     * @param string    $relation Relation name (e.g. 'Book')
-     * @param Criteria  $criteria Optional Criteria object to filter the related object collection
-     * @param PropelPDO $con      Optional connection object
+     * @param string $relation Relation name (e.g. 'Book')
+     * @param Criteria|null $criteria Optional Criteria object to filter the related object collection
+     * @param PropelPDO|null $con      Optional connection object
      *
      * @return PropelObjectCollection The list of related objects
      *
      * @throws PropelException
      */
-    public function populateRelation($relation, $criteria = null, $con = null)
+    public function populateRelation(string $relation, Criteria $criteria = null, PropelPDO $con = null): PropelObjectCollection
     {
         if (!Propel::isInstancePoolingEnabled()) {
             throw new PropelException('populateRelation() needs instance pooling to be enabled prior to populating the collection');
@@ -274,7 +285,7 @@ class PropelObjectCollection extends PropelCollection
     /**
      * {@inheritdoc}
      */
-    public function search($element)
+    public function search(mixed $element): mixed
     {
         if ($element instanceof BaseObject) {
             if (null !== $elt = $this->getIdenticalObject($element)) {
@@ -288,7 +299,7 @@ class PropelObjectCollection extends PropelCollection
     /**
      * {@inheritdoc}
      */
-    public function contains($element)
+    public function contains(mixed $element): bool
     {
         if ($element instanceof BaseObject) {
             if (null !== $elt = $this->getIdenticalObject($element)) {

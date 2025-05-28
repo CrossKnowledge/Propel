@@ -9,6 +9,16 @@
  */
 namespace CK\Generator\Lib\Config;
 
+use PDO;
+use BuildException;
+use CK\Generator\Lib\Platform;
+use Phing;
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Builder\DataModelBuilder;
+use CK\Propel\Generator\Lib\Builder\Util\Pluralizer;
+use SchemaParser;
+
 //require_once dirname(__FILE__) . '/GeneratorConfigInterface.php';
 // Phing dependencies
 require_once 'phing/Phing.php';
@@ -159,7 +169,7 @@ class GeneratorConfig implements GeneratorConfigInterface
      *
      * @param PDO $con
      *
-     * @return Platform
+     * @ return Platform
      * @throws BuildException
      */
     public function getConfiguredPlatform(PDO $con = null, $database = null)

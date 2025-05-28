@@ -9,6 +9,15 @@
  */
 namespace CK\Runtime\Lib\Adapter;
 
+use CK\Runtime\Lib\Util\BasePeer;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Query\Criteria;
+use CK\Runtime\Lib\Map\ColumnMap;
+use CK\Runtime\Lib\Util\PropelColumnTypes;
+use CK\Runtime\Lib\Query\ModelCriteria;
+use CK\Runtime\Lib\Connection\PropelPDO;
+use PDOStatement;
+use PDO;
 
 /**
  * Oracle adapter.
@@ -34,7 +43,7 @@ class DBOracle extends DBAdapter
      * @param PDO   $con
      * @param array $settings A $PDO PDO connection instance
      */
-    public function initConnection(PDO $con, array $settings)
+    public function initConnection(PDO $con, array $settings): void
     {
         $con->exec("ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD'");
         $con->exec("ALTER SESSION SET NLS_TIMESTAMP_FORMAT='YYYY-MM-DD HH24:MI:SS'");
@@ -54,7 +63,7 @@ class DBOracle extends DBAdapter
      *
      * @return string The upper case string.
      */
-    public function toUpperCase($in)
+    public function toUpperCase(string $in): string
     {
         return "UPPER(" . $in . ")";
     }
@@ -66,7 +75,7 @@ class DBOracle extends DBAdapter
      *
      * @return string The string in a case that can be ignored.
      */
-    public function ignoreCase($in)
+    public function ignoreCase(string $in): string
     {
         return "UPPER(" . $in . ")";
     }
@@ -79,7 +88,7 @@ class DBOracle extends DBAdapter
      *
      * @return string
      */
-    public function concatString($s1, $s2)
+    public function concatString(string $s1, string $s2): string
     {
         return "CONCAT($s1, $s2)";
     }
@@ -87,13 +96,13 @@ class DBOracle extends DBAdapter
     /**
      * Returns SQL which extracts a substring.
      *
-     * @param string  $s   String to extract from.
+     * @param string $s   String to extract from.
      * @param integer $pos Offset to start from.
      * @param integer $len Number of characters to extract.
      *
      * @return string
      */
-    public function subString($s, $pos, $len)
+    public function subString(string $s, int $pos, int $len): string
     {
         return "SUBSTR($s, $pos, $len)";
     }
@@ -105,20 +114,19 @@ class DBOracle extends DBAdapter
      *
      * @return string
      */
-    public function strLength($s)
+    public function strLength(string $s): string
     {
         return "LENGTH($s)";
     }
 
     /**
-     * @see       DBAdapter::applyLimit()
-     *
      * @param string        $sql
-     * @param integer       $offset
-     * @param integer       $limit
-     * @param null|Criteria $criteria
+     * @param integer $offset
+     * @param integer $limit
+     *@see       DBAdapter::applyLimit()
+     *
      */
-    public function applyLimit(&$sql, $offset, $limit, $criteria = null)
+    public function applyLimit(string &$sql, int $offset, int $limit)
     {
         if (BasePeer::needsSelectAliases($criteria)) {
             $crit = clone $criteria;
@@ -149,12 +157,12 @@ class DBOracle extends DBAdapter
 
     /**
      * @param PDO    $con
-     * @param string $name
+     * @param string|null $name
      *
-     * @throws PropelException
      * @return integer
+     *@throws PropelException
      */
-    public function getId(PDO $con, $name = null)
+    public function getId(PDO $con, string $name = null)
     {
         if ($name === null) {
             throw new PropelException("Unable to fetch next sequence ID without sequence name.");
@@ -167,11 +175,11 @@ class DBOracle extends DBAdapter
     }
 
     /**
-     * @param string $seed
+     * @param mixed|null $seed
      *
      * @return string
      */
-    public function random($seed = null)
+    public function random(mixed $seed = null)
     {
         return 'dbms_random.value';
     }
@@ -217,19 +225,19 @@ class DBOracle extends DBAdapter
     }
 
     /**
+     * @param PDOStatement $stmt
+     * @param string       $parameter
+     * @param mixed $value
+     * @param ColumnMap    $cMap
+     * @param integer|null $position
+     *
+     * @return boolean
      * @see       DBAdapter::bindValue()
      * Warning: duplicates logic from OraclePlatform::getColumnBindingPHP().
      * Any code modification here must be ported there.
      *
-     * @param PDOStatement $stmt
-     * @param string       $parameter
-     * @param mixed        $value
-     * @param ColumnMap    $cMap
-     * @param null|integer $position
-     *
-     * @return boolean
      */
-    public function bindValue(PDOStatement $stmt, $parameter, $value, ColumnMap $cMap, $position = null)
+    public function bindValue(PDOStatement $stmt, string $parameter, mixed $value, ColumnMap $cMap, int $position = null)
     {
         if ($cMap->isTemporal()) {
             $value = $this->formatTemporalValue($value, $cMap);
@@ -248,12 +256,12 @@ class DBOracle extends DBAdapter
      * Do Explain Plan for query object or query string
      *
      * @param PropelPDO            $con   propel connection
-     * @param ModelCriteria|string $query query the criteria or the query string
+     * @param string|ModelCriteria $query query the criteria or the query string
      *
-     * @throws PropelException
      * @return PDOStatement    A PDO statement executed using the connection, ready to be fetched
+     *@throws PropelException
      */
-    public function doExplainPlan(PropelPDO $con, $query)
+    public function doExplainPlan(PropelPDO $con, string|ModelCriteria $query)
     {
         $con->beginTransaction();
         if ($query instanceof ModelCriteria) {

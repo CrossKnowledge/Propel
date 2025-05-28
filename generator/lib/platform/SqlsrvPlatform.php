@@ -7,7 +7,7 @@
  *
  * @license    MIT License
  */
-namespace CK\Generator\Platform;
+namespace CK\Generator\Lib\Platform;
 
 
 //require_once dirname(__FILE__) . '/MssqlPlatform.php';

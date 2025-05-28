@@ -16,7 +16,7 @@ use CK\Generator\Lib\Config\GeneratorConfigInterface;
 use CK\Generator\Lib\Builder\OM\PeerBuilder;
 use CK\Generator\Lib\Builder\OM\ObjectBuilder;
 use CK\Propel\Generator\Lib\Builder\Util\Pluralizer;
-use CK\Generator\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
 use CK\Generator\Lib\Model\Database;
 
 /**

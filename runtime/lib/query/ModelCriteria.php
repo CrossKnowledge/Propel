@@ -9,7 +9,21 @@
  */
 namespace CK\Runtime\Lib\Query;
 
-
+use CK\Runtime\Lib\Map\DatabaseMap;
+use CK\Runtime\Lib\Propel;
+use CK\Runtime\Lib\Map\TableMap;
+use CK\Runtime\Lib\Formatter\PropelFormatter;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Util\BasePeer;
+use CK\Runtime\Lib\Map\RelationMap;
+use CK\Runtime\Lib\Formatter\ModelWith;
+use CK\Runtime\Lib\Connection\PropelPDO;
+use PDOStatement;
+use PDO;
+use Exception;
+use CK\Runtime\Lib\Util\PropelModelPager;
+use CK\Runtime\Lib\Collection\PropelObjectCollection;
+use CK\Runtime\Lib\Map\ColumnMap;
 /**
  * This class extends the Criteria by adding runtime introspection abilities
  * in order to ease the building of queries.
@@ -69,11 +83,12 @@ class ModelCriteria extends Criteria
      * Creates a new instance with the default capacity which corresponds to
      * the specified database.
      *
-     * @param string $dbName     The database name
-     * @param string $modelName  The phpName of a model, e.g. 'Book'
-     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string|null $modelAlias The alias for the model in this query, e.g. 'b'
+     * @throws PropelException
      */
-    public function __construct($dbName, $modelName, $modelAlias = null)
+    public function __construct($dbName, string $modelName, string $modelAlias = null)
     {
         $this->setDbName($dbName);
         $this->originalDbName = $dbName;
@@ -1215,11 +1230,12 @@ class ModelCriteria extends Criteria
      * and format the list of results with the current formatter
      * By default, returns an array of model objects
      *
-     * @param PropelPDO $con an optional connection object
+     * @param PropelPDO|null $con an optional connection object
      *
      * @return PropelObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @throws PropelException
      */
-    public function find($con = null)
+    public function find(PropelPDO $con = null)
     {
         if ($con === null) {
             $con = Propel::getConnection($this->getDbName(), Propel::CONNECTION_READ);
@@ -1291,12 +1307,13 @@ class ModelCriteria extends Criteria
      * $bookOpinion = $c->findPk(array(34, 634), $con);
      * </code>
      *
-     * @param mixed     $key Primary key to use for the query
-     * @param PropelPDO $con an optional connection object
+     * @param mixed $key Primary key to use for the query
+     * @param PropelPDO|null $con an optional connection object
      *
      * @return mixed the result, formatted by the current formatter
+     * @throws PropelException
      */
-    public function findPk($key, $con = null)
+    public function findPk(mixed $key, PropelPDO $con = null): mixed
     {
         if ($con === null) {
             $con = Propel::getConnection($this->getDbName(), Propel::CONNECTION_READ);
@@ -1331,14 +1348,14 @@ class ModelCriteria extends Criteria
      * $bookOpinion = $c->findPks(array(array(34, 634), array(45, 518), array(34, 765)), $con);
      * </code>
      *
-     * @param array     $keys Primary keys to use for the query
-     * @param PropelPDO $con  an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param PropelPDO|null $con  an optional connection object
      *
      * @return mixed the list of results, formatted by the current formatter
      *
      * @throws PropelException
      */
-    public function findPks($keys, $con = null)
+    public function findPks(array $keys, PropelPDO $con = null): mixed
     {
         if ($con === null) {
             $con = Propel::getConnection($this->getDbName(), Propel::CONNECTION_READ);
@@ -1369,7 +1386,7 @@ class ModelCriteria extends Criteria
      *
      * @throws PropelException
      */
-    protected function doSelect($con)
+    protected function doSelect(PropelPDO $con): PDOStatement
     {
         // check that the columns of the main class are already added (if this is the primary ModelCriteria)
         if (!$this->hasSelectClause() && !$this->getPrimaryCriteria()) {
@@ -1397,16 +1414,17 @@ class ModelCriteria extends Criteria
     /**
      * Apply a condition on a column and issues the SELECT query
      *
-     * @see       filterBy()
-     * @see       find()
-     *
-     * @param string    $column A string representing the column phpName, e.g. 'AuthorId'
-     * @param mixed     $value  A value for the condition
-     * @param PropelPDO $con    An optional connection object
+     * @param string $column A string representing the column phpName, e.g. 'AuthorId'
+     * @param mixed $value A value for the condition
+     * @param PropelPDO|null $con An optional connection object
      *
      * @return mixed the list of results, formatted by the current formatter
+     * @throws PropelException
+     * @see       find()
+     *
+     * @see       filterBy()
      */
-    public function findBy($column, $value, $con = null)
+    public function findBy(string $column, mixed $value, PropelPDO $con = null): mixed
     {
         $method = 'filterBy' . $column;
         $this->$method($value);
@@ -2234,6 +2252,7 @@ class ModelCriteria extends Criteria
      * Supports findByXXX(), findOneByXXX(), filterByXXX(), orderByXXX(), and groupByXXX() methods,
      * where XXX is a column phpName.
      * Supports XXXJoin(), where XXX is a join direction (in 'left', 'right', 'inner')
+     * @throws PropelException
      */
     public function __call($name, $arguments)
     {

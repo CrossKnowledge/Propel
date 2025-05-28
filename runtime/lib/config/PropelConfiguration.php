@@ -9,6 +9,11 @@
  */
 namespace CK\Runtime\Lib\Config;
 
+use CK\Runtime\Lib\Exception\PropelException;
+use ArrayAccess;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
+use ReturnTypeWillChange;
 
 /**
  * PropelConfiguration is a container for all Propel's runtime configuration data.
@@ -24,13 +29,13 @@ namespace CK\Runtime\Lib\Config;
  */
 class PropelConfiguration implements ArrayAccess
 {
-    const TYPE_ARRAY = 1;
-    const TYPE_ARRAY_FLAT = 2;
-    const TYPE_OBJECT = 3;
+    const int TYPE_ARRAY = 1;
+    const int TYPE_ARRAY_FLAT = 2;
+    const int TYPE_OBJECT = 3;
 
-    protected $parameters = array();
-    protected $flattenedParameters = array();
-    protected $isFlattened = false;
+    protected array $parameters = array();
+    protected array $flattenedParameters = array();
+    protected bool $isFlattened = false;
 
     /**
      * Construct a new configuration container
@@ -49,7 +54,7 @@ class PropelConfiguration implements ArrayAccess
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    #[ReturnTypeWillChange] public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->parameters);
     }
@@ -60,7 +65,7 @@ class PropelConfiguration implements ArrayAccess
      * @param integer $offset
      * @param mixed   $value
      */
-    public function offsetSet($offset, $value)
+    #[ReturnTypeWillChange] public function offsetSet($offset, mixed $value): void
     {
         $this->parameters[$offset] = $value;
         $this->isFlattened = false;
@@ -73,7 +78,7 @@ class PropelConfiguration implements ArrayAccess
      *
      * @return array
      */
-    public function offsetGet($offset)
+    #[ReturnTypeWillChange] public function offsetGet($offset): array
     {
         return $this->parameters[$offset];
     }
@@ -83,7 +88,7 @@ class PropelConfiguration implements ArrayAccess
      *
      * @param integer $offset
      */
-    public function offsetUnset($offset)
+    #[ReturnTypeWillChange] public function offsetUnset($offset): void
     {
         unset($this->parameters[$offset]);
         $this->isFlattened = false;
@@ -102,11 +107,11 @@ class PropelConfiguration implements ArrayAccess
      * </code>
      *
      * @param string $name    Parameter name
-     * @param mixed  $default Default value to be used if the requested value is not found
+     * @param mixed|null $default Default value to be used if the requested value is not found
      *
      * @return mixed Parameter value or the default
      */
-    public function getParameter($name, $default = null)
+    public function getParameter(string $name, mixed $default = null): mixed
     {
         $flattenedParameters = $this->getFlattenedParameters();
         if (isset($flattenedParameters[$name])) {
@@ -126,11 +131,11 @@ class PropelConfiguration implements ArrayAccess
      *   print_r($c['foo1']); => array('foo2' => 'bar')
      * </code>
      *
-     * @param string  $name              Configuration item name (name.space.name)
+     * @param string $name              Configuration item name (name.space.name)
      * @param mixed   $value             Value to be stored
      * @param Boolean $autoFlattenArrays
      */
-    public function setParameter($name, $value, $autoFlattenArrays = true)
+    public function setParameter(string $name, mixed $value, bool $autoFlattenArrays = true): void
     {
         $param = &$this->parameters;
         $parts = explode('.', $name); //name.space.name
@@ -147,13 +152,13 @@ class PropelConfiguration implements ArrayAccess
     }
 
     /**
-     * @throws PropelException
-     *
      * @param integer $type
      *
      * @return mixed
+          *@throws PropelException
+     *
      */
-    public function getParameters($type = PropelConfiguration::TYPE_ARRAY)
+    public function getParameters(int $type = PropelConfiguration::TYPE_ARRAY): mixed
     {
         switch ($type) {
             case PropelConfiguration::TYPE_ARRAY:
@@ -170,7 +175,7 @@ class PropelConfiguration implements ArrayAccess
     /**
      * @return array
      */
-    public function getFlattenedParameters()
+    public function getFlattenedParameters(): array
     {
         if (!$this->isFlattened) {
             $this->flattenParameters();
@@ -180,7 +185,7 @@ class PropelConfiguration implements ArrayAccess
         return $this->flattenedParameters;
     }
 
-    protected function flattenParameters()
+    protected function flattenParameters(): void
     {
         $result = array();
         $it = new PropelConfigurationIterator(new RecursiveArrayIterator($this->parameters), RecursiveIteratorIterator::SELF_FIRST);

@@ -8,8 +8,13 @@
  * @license    MIT License
  */
 
-namespace CK\Generator\Platform;
+namespace CK\Generator\Lib\Platform;
 
+use PDO;
+use CK\Generator\Lib\Config\GeneratorConfigInterface;
+use CK\Generator\Lib\Model\Column;
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\Domain;
 /**
  * Interface for RDBMS platform specific behaviour.
  *
@@ -29,12 +34,12 @@ interface PropelPlatformInterface
     /**
      * Constant for sequence id method.
      */
-    const SEQUENCE = "sequence";
+    const string SEQUENCE = "sequence";
 
     /**
      * Constant for serial id method (postgresql).
      */
-    const SERIAL = "serial";
+    const string SERIAL = "serial";
 
     /**
      * Sets a database connection to use (for quoting, etc.).
@@ -95,7 +100,7 @@ interface PropelPlatformInterface
     public function getNullString($notNull);
 
     /**
-     * @return The RDBMS-specific SQL fragment for autoincrement.
+     * @ return The RDBMS-specific SQL fragment for autoincrement.
      */
     public function getAutoIncrement();
 

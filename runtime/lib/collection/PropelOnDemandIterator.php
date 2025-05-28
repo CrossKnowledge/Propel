@@ -9,6 +9,15 @@
  */
 namespace CK\Runtime\Lib\Collection;
 
+use Iterator;
+use CK\Runtime\Lib\Formatter\PropelFormatter;
+use CK\Runtime\Lib\Formatter\PropelObjectFormatter;
+use CK\Runtime\Lib\Propel;
+use CK\Runtime\Lib\OM\BaseObject;
+use CK\Runtime\Lib\Exception\PropelException;
+use PDO;
+use PDOStatement;
+use ReturnTypeWillChange;
 
 /**
  * Class for iterating over a statement and returning one Propel object at a time
@@ -19,28 +28,29 @@ namespace CK\Runtime\Lib\Collection;
 class PropelOnDemandIterator implements Iterator
 {
     /**
-     * @var PropelObjectFormatter
+     * @ var PropelObjectFormatter
+     * @var PropelFormatter|PropelObjectFormatter
      */
-    protected $formatter;
+    protected PropelFormatter|PropelObjectFormatter $formatter;
 
     /**
      * @var PDOStatement
      */
-    protected $stmt;
+    protected PDOStatement $stmt;
 
     protected $currentRow;
 
-    protected $currentKey = -1;
+    protected int $currentKey = -1;
 
     /**
      * @var boolean|null
      */
-    protected $isValid = null;
+    protected ?bool $isValid = null;
 
     /**
      * @var boolean
      */
-    protected $enableInstancePoolingOnFinish = false;
+    protected bool $enableInstancePoolingOnFinish = false;
 
     /**
      * @param PropelFormatter $formatter
@@ -53,7 +63,7 @@ class PropelOnDemandIterator implements Iterator
         $this->enableInstancePoolingOnFinish = Propel::disableInstancePooling();
     }
 
-    public function closeCursor()
+    public function closeCursor(): void
     {
         $this->stmt->closeCursor();
     }
@@ -64,7 +74,7 @@ class PropelOnDemandIterator implements Iterator
      *
      * @return integer Number of results
      */
-    public function count()
+    public function count(): int
     {
         return $this->stmt->rowCount();
     }
@@ -77,7 +87,7 @@ class PropelOnDemandIterator implements Iterator
      *
      * @return BaseObject
      */
-    public function current()
+    #[ReturnTypeWillChange] public function current(): BaseObject
     {
         return $this->formatter->getAllObjectsFromRow($this->currentRow);
     }
@@ -85,9 +95,10 @@ class PropelOnDemandIterator implements Iterator
     /**
      * Gets the current key in the iterator
      *
-     * @return string
+     * @ return string
+     * @return int|string
      */
-    public function key()
+    #[ReturnTypeWillChange] public function key(): int|string
     {
         return $this->currentKey;
     }
@@ -96,7 +107,7 @@ class PropelOnDemandIterator implements Iterator
      * Advances the cursor in the statement
      * Closes the cursor if the end of the statement is reached
      */
-    public function next()
+    #[ReturnTypeWillChange] public function next(): void
     {
         $this->currentRow = $this->stmt->fetch(PDO::FETCH_NUM);
         $this->currentKey++;
@@ -112,8 +123,9 @@ class PropelOnDemandIterator implements Iterator
     /**
      * Initializes the iterator by advancing to the first position
      * This method can only be called once (this is a NoRewindIterator)
+     * @throws PropelException
      */
-    public function rewind()
+    #[ReturnTypeWillChange] public function rewind(): void
     {
         // check that the hydration can begin
         if (null === $this->formatter) {
@@ -133,7 +145,7 @@ class PropelOnDemandIterator implements Iterator
     /**
      * @return boolean
      */
-    public function valid()
+    #[ReturnTypeWillChange] public function valid(): bool
     {
         return (boolean) $this->isValid;
     }

@@ -7,9 +7,18 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Util;
 
+use CK\Generator\Lib\Config\GeneratorConfigInterface;
+use PDO;
+use PDOException;
+use InvalidArgumentException;
+use Exception;
+
+/*
 require_once dirname(__FILE__) . '/../config/GeneratorConfigInterface.php';
 require_once dirname(__FILE__) . '/../util/PropelSQLParser.php';
+*/
 
 /**
  * Service class for managing SQL.

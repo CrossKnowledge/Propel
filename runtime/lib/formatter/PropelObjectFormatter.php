@@ -9,7 +9,11 @@
  */
 namespace CK\Runtime\Lib\Formatter;
 
-
+use CK\Runtime\Lib\Propel;
+use CK\Runtime\Lib\Exception\PropelException;
+use PDOStatement;
+use PDO;
+use CK\Runtime\Lib\OM\BaseObject;
 /**
  * Object formatter for Propel query
  * format() returns a PropelObjectCollection of Propel model objects
@@ -20,10 +24,13 @@ namespace CK\Runtime\Lib\Formatter;
  */
 class PropelObjectFormatter extends PropelFormatter
 {
-    protected $collectionName = 'PropelObjectCollection';
+    protected string $collectionName = 'PropelObjectCollection';
 
     private $mainObject;
 
+    /**
+     * @throws PropelException
+     */
     public function format(PDOStatement $stmt)
     {
         $this->checkInit();
@@ -69,7 +76,10 @@ class PropelObjectFormatter extends PropelFormatter
         return $collection;
     }
 
-    public function formatOne(PDOStatement $stmt)
+    /**
+     * @throws PropelException
+     */
+    public function formatOne(PDOStatement $stmt): ?BaseObject
     {
         $this->checkInit();
 
@@ -84,7 +94,7 @@ class PropelObjectFormatter extends PropelFormatter
         return $result;
     }
 
-    public function isObjectFormatter()
+    public function isObjectFormatter(): true
     {
         return true;
     }
@@ -99,7 +109,7 @@ class PropelObjectFormatter extends PropelFormatter
      *
      * @return BaseObject
      */
-    public function getAllObjectsFromRow($row)
+    public function getAllObjectsFromRow(array $row): BaseObject
     {
         // get the main object
         list($obj, $col) = call_user_func(array($this->peer, 'populateObject'), $row);

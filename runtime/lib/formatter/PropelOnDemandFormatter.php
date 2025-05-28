@@ -9,6 +9,12 @@
  */
 namespace CK\Runtime\Lib\Formatter;
 
+use CK\Runtime\Lib\Query\ModelCriteria;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\OM\BaseObject;
+use ReflectionClass;
+use PDOStatement;
+use ReflectionException;
 
 /**
  * Object formatter for Propel query
@@ -21,11 +27,11 @@ namespace CK\Runtime\Lib\Formatter;
  */
 class PropelOnDemandFormatter extends PropelObjectFormatter
 {
-    protected $collectionName = 'PropelOnDemandCollection';
+    protected string $collectionName = 'PropelOnDemandCollection';
 
-    protected $isSingleTableInheritance = false;
+    protected bool $isSingleTableInheritance = false;
 
-    public function init(ModelCriteria $criteria)
+    public function init(ModelCriteria $criteria): static
     {
         parent::init($criteria);
         $this->isSingleTableInheritance = $criteria->getTableMap()->isSingleTableInheritance();
@@ -56,8 +62,9 @@ class PropelOnDemandFormatter extends PropelObjectFormatter
      *                   as returned by PDOStatement::fetch(PDO::FETCH_NUM)
      *
      * @return BaseObject
+     * @throws ReflectionException
      */
-    public function getAllObjectsFromRow($row)
+    public function getAllObjectsFromRow(array $row): BaseObject
     {
         $col = 0;
         // main object

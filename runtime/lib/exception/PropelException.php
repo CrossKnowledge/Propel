@@ -34,7 +34,7 @@ class PropelException extends Exception
      * @param string|null $message
      * @param Exception $previous
      *
-     * @return PropelException
+     * @ return PropelException //How is this supposed to return a PropelException?
      */
     public function __construct(?string $message = null, Exception $previous = null)
     {

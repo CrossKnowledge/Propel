@@ -9,6 +9,11 @@
  */
 namespace CK\Runtime\Lib\Formatter;
 
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\OM\BaseObject;
+use PDOStatement;
+use PDO;
+use ReflectionClass;
 
 /**
  * Array formatter for Propel query
@@ -20,8 +25,8 @@ namespace CK\Runtime\Lib\Formatter;
  */
 class PropelArrayFormatter extends PropelFormatter
 {
-    protected $collectionName = 'PropelArrayCollection';
-    protected $alreadyHydratedObjects = array();
+    protected string $collectionName = 'PropelArrayCollection';
+    protected array $alreadyHydratedObjects = array();
     protected $emptyVariable;
 
     public function format(PDOStatement $stmt)
@@ -68,11 +73,11 @@ class PropelArrayFormatter extends PropelFormatter
     /**
      * Formats an ActiveRecord object
      *
-     * @param BaseObject $record the object to format
+     * @param BaseObject|null $record the object to format
      *
      * @return array The original record turned into an array
      */
-    public function formatRecord($record = null)
+    public function formatRecord(BaseObject $record = null)
     {
         return $record ? $record->toArray() : array();
     }
@@ -90,9 +95,9 @@ class PropelArrayFormatter extends PropelFormatter
      * @param array $row associative array indexed by column number,
      *                   as returned by PDOStatement::fetch(PDO::FETCH_NUM)
      *
-     * @return Array
+     * @return array
      */
-    public function &getStructuredArrayFromRow($row)
+    public function &getStructuredArrayFromRow(array $row): array
     {
         $col = 0;
 

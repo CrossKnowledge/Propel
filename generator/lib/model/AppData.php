@@ -10,6 +10,10 @@
 
 namespace CK\Generator\Lib\Model;
 
+use CK\Generator\Lib\Config\GeneratorConfig;
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Config\GeneratorConfigInterface;
+use Exception;
 require_once dirname(__FILE__) . '/../exception/EngineException.php';
 //require_once dirname(__FILE__) . '/Database.php';
 
@@ -220,11 +224,11 @@ class AppData
      * Add a database to the list and sets the AppData property to this
      * AppData
      *
-     * @param Database|string $db the database to add
+     * @param string|Database $db the database to add
      *
      * @return Database
      */
-    public function addDatabase($db)
+    public function addDatabase(string|Database $db): Database
     {
         if ($db instanceof Database) {
             $db->setAppData($this);

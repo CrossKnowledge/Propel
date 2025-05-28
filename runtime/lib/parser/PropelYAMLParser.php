@@ -13,6 +13,8 @@ if (!class_exists('CK\Runtime\Lib\Parser\YAML\SfYaml')) {
     require_once dirname(__FILE__) . '/yaml/sfYaml.php';
 }
 
+use CK\Runtime\Lib\Parser\YAML\sfYaml;
+
 //if (!class_exists('sfYaml')) {
     //require_once dirname(__FILE__) . '/yaml/sfYaml.php';
 //}
@@ -33,7 +35,7 @@ class PropelYAMLParser extends PropelParser
      *
      * @return string Converted data, as a YAML string
      */
-    public function fromArray($array)
+    public function fromArray(array $array): string
     {
         return sfYaml::dump($array, 3);
     }
@@ -45,7 +47,7 @@ class PropelYAMLParser extends PropelParser
      *
      * @return string Converted data, as a YAML string
      */
-    public function toYAML($array)
+    public function toYAML(array $array): string
     {
         return $this->fromArray($array);
     }
@@ -53,11 +55,11 @@ class PropelYAMLParser extends PropelParser
     /**
      * Converts data from YAML to an associative array.
      *
-     * @param string $data Source data to convert, as a YAML string
+     * @param mixed $data Source data to convert, as a YAML string
      *
      * @return array Converted data
      */
-    public function toArray($data)
+    public function toArray(mixed $data): array
     {
         return sfYaml::load($data);
     }
@@ -69,7 +71,7 @@ class PropelYAMLParser extends PropelParser
      *
      * @return array Converted data
      */
-    public function fromYAML($data)
+    public function fromYAML(string $data): array
     {
         return $this->toArray($data);
     }

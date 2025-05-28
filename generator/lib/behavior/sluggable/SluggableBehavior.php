@@ -12,9 +12,9 @@ namespace CK\Generator\Lib\Behavior\Sluggable;
 
 use CK\Generator\Lib\Model\Behavior;
 use CK\Generator\Lib\Model\Unique;
-use CK\Generator\Platform\PgsqlPlatform;
-use CK\Generator\Platform\MssqlPlatform;
-use CK\Generator\Platform\OraclePlatform;
+use CK\Generator\Lib\Platform\PgsqlPlatform;
+use CK\Generator\Lib\Platform\MssqlPlatform;
+use CK\Generator\Lib\Platform\OraclePlatform;
 //use QueryBuilder;
 
 /**

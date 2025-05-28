@@ -11,7 +11,7 @@
 namespace CK\Generator\Lib\Model;
 
 //require_once dirname(__FILE__) . '/XMLElement.php';
-use CK\Generator\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
 
 require_once dirname(__FILE__) . '/../exception/EngineException.php';
 //require_once dirname(__FILE__) . '/PropelTypes.php';

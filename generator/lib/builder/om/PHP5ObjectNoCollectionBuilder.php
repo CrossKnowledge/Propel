@@ -12,7 +12,7 @@ namespace CK\Generator\Lib\Builder\OM;
 
 use CK\Generator\Lib\Model\Column;
 use CK\Generator\Lib\Model\PropelTypes;
-use CK\Generator\Platform\OraclePlatform;
+use CK\Generator\Lib\Platform\OraclePlatform;
 use CK\Generator\Lib\Model\ForeignKey;
 use CK\Generator\Lib\Model\Table;
 

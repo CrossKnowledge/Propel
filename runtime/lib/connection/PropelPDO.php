@@ -10,7 +10,13 @@
 
 namespace CK\Runtime\Lib\Connection;
 
-use CK\Runtime\Propel;
+use CK\Runtime\Lib\Logger\BasicLogger;
+use CK\Runtime\Lib\Propel;
+use CK\Runtime\Lib\Config\PropelConfiguration;
+use CK\Runtime\Lib\Exception\PropelException;
+use PDOException;
+use PDOStatement;
+use ReturnTypeWillChange;
 
 use PDO;
 
@@ -39,14 +45,14 @@ class PropelPDO extends PDO
     /**
      * Attribute to use to set whether to cache prepared statements.
      */
-    const PROPEL_ATTR_CACHE_PREPARES = -1;
+    const int PROPEL_ATTR_CACHE_PREPARES = -1;
 
     /**
      * Attribute to use to set the connection name useful for explains
      */
-    const PROPEL_ATTR_CONNECTION_NAME = -2;
+    const int PROPEL_ATTR_CONNECTION_NAME = -2;
 
-    const DEFAULT_SLOW_THRESHOLD = 0.1;
+    const float DEFAULT_SLOW_THRESHOLD = 0.1;
     const bool DEFAULT_ONLYSLOW_ENABLED = false;
 
     /**
@@ -180,7 +186,7 @@ class PropelPDO extends PDO
     /**
      * Get the runtime configuration
      *
-     * @return PropelConfiguration
+     * @return PropelConfiguration|array
      */
     public function getConfiguration(): PropelConfiguration|array
     {

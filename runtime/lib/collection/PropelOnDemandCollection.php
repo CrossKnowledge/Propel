@@ -9,6 +9,10 @@
  */
 namespace CK\Runtime\Lib\Collection;
 
+use CK\Runtime\Lib\Formatter\PropelFormatter;
+use CK\Runtime\Lib\Exception\PropelException;
+use PDOStatement;
+use ReturnTypeWillChange;
 
 /**
  * Class for iterating over a statement and returning one Propel object at a time
@@ -21,13 +25,14 @@ class PropelOnDemandCollection extends PropelCollection
     /**
      * @var       PropelOnDemandIterator
      */
-    protected $iterator;
+    //protected \ArrayIterator $iterator;
+    protected PropelOnDemandIterator $iterator;
 
     /**
      * @param PropelFormatter $formatter
      * @param PDOStatement    $stmt
      */
-    public function initIterator(PropelFormatter $formatter, PDOStatement $stmt)
+    public function initIterator(PropelFormatter $formatter, PDOStatement $stmt): void
     {
         $this->iterator = new PropelOnDemandIterator($formatter, $stmt);
     }
@@ -51,7 +56,7 @@ class PropelOnDemandCollection extends PropelCollection
     /**
      * @return PropelOnDemandIterator
      */
-    public function getIterator()
+    public function getIterator(): PropelOnDemandIterator
     {
         return $this->iterator;
     }
@@ -108,19 +113,19 @@ class PropelOnDemandCollection extends PropelCollection
     /**
      * @throws PropelException
      */
-    public function serialize()
+    public function serialize(): string
     {
         throw new PropelException('The On Demand Collection cannot be serialized');
     }
 
     /**
-     * @throws PropelException
-     *
      * @param string $data
      *
      * @return void
+     * @throws PropelException
+     *
      */
-    public function unserialize($data)
+    public function unserialize(string $data): void
     {
         throw new PropelException('The On Demand Collection cannot be serialized');
     }
@@ -145,7 +150,7 @@ class PropelOnDemandCollection extends PropelCollection
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function prepend($value)
+    public function prepend(mixed $value)
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -170,7 +175,7 @@ class PropelOnDemandCollection extends PropelCollection
         throw new PropelException('The On Demand Collection does not allow access by offset');
     }
 
-    public function ksort()
+    #[ReturnTypeWillChange] public function ksort(int $flags = SORT_REGULAR)
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -203,7 +208,7 @@ class PropelOnDemandCollection extends PropelCollection
     /**
      * {@inheritdoc}
      */
-    public function exportTo($parser, $usePrefix = true, $includeLazyLoadColumns = true)
+    public function exportTo(mixed $parser, bool $usePrefix = true, bool $includeLazyLoadColumns = true): string
     {
         throw new PropelException('A PropelOnDemandCollection cannot be exported.');
     }

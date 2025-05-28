@@ -9,6 +9,8 @@
  */
 namespace CK\Runtime\Lib\Adapter\MSSQL;
 
+use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Exception\PropelException;
 /**
  * dblib doesn't support transactions so we need to add a workaround for transactions, last insert ID, and quoting
  *

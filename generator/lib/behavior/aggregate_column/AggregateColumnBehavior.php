@@ -10,7 +10,8 @@
 namespace CK\Generator\Lib\Behavior;
 
 use CK\Generator\Lib\Model\Behavior;
-use CK\Generator\Lib\Model\Table;
+use InvalidArgumentException;
+
 
 //require_once 'AggregateColumnRelationBehavior.php';
 

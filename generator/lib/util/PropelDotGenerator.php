@@ -7,7 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Util;
 
+use CK\Generator\Lib\Model\Database;
 /**
  * A generator for DOT graph information.
  *
@@ -25,7 +27,7 @@ class PropelDotGenerator
      *
      * @return string The DOT syntax created.
      */
-    public static function create(Database $database)
+    public static function create(Database $database): string
     {
         $dotSyntax = '';
 

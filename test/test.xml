@@ -44,14 +44,14 @@
 
 	<target name="configure">
 		<echo>-------------------------------------------------</echo>
-		<echo> +++++ Running Propel unit tests</echo>
+		<echo> +++++ Running Propel unit tests (Namespaced)</echo>
 		<echo>-------------------------------------------------</echo>
 		<define name="TESTS_BASE_DIR" value="${tests.dir.resolved}" />
 		<adhoc>
 			<![CDATA[
-			// initializes the Propel runtime autoload
-			require_once '${propel-runtime.classes.dir.resolved}/Propel.php';
-		]]>
+        // Initialize namespaced Propel
+        require_once 'bootstrap.php';
+        ]]>
 		</adhoc>
 
 		<fileset dir="${tests.classes.dir.resolved}" id="relevant-tests">

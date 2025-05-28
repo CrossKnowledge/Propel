@@ -9,7 +9,10 @@
  */
 namespace CK\Runtime\Lib\Parser;
 
-
+use DOMException;
+use DOMNode;
+use DOMDocument;
+use DOMElement;
 /**
  * XML parser. Converts data between associative array and XML formats
  *
@@ -22,20 +25,25 @@ class PropelXMLParser extends PropelParser
     /**
      * Converts data from an associative array to XML.
      *
-     * @param array  $array           Source data to convert
-     * @param string $rootElementName Name of the root element of the XML document
-     * @param string $charset         Character set of the input data. Defaults to UTF-8.
+     * @param array $array Source data to convert
      *
      * @return string Converted data, as an XML string
+     * @throws DOMException
      */
-    public function fromArray($array, $rootElementName = 'data', $charset = null)
+    public function fromArray(array $array): mixed
     {
+        //Note: PHP 8 expects the variables to be initialized with a value, so we shouldn't pass undefined vars: $charset, $rootElementName
+        $rootElementName    = 'data'; //By checking the code, its default value is 'data'
         $rootNode = $this->getRootNode($rootElementName);
+        $charset = null;
         $this->arrayToDOM($array, $rootNode, $charset, false);
 
         return $rootNode->ownerDocument->saveXML();
     }
 
+    /**
+     * @throws DOMException
+     */
     public function listFromArray($array, $rootElementName = 'data', $charset = null)
     {
         $rootNode = $this->getRootNode($rootElementName);
@@ -50,8 +58,9 @@ class PropelXMLParser extends PropelParser
      * @param string $rootElementName The Root Element Name
      *
      * @return DOMNode The root DOMNode
+     * @throws DOMException
      */
-    protected function getRootNode($rootElementName = 'data')
+    protected function getRootNode(string $rootElementName = 'data'): DOMNode
     {
         $xml = new DOMDocument('1.0', 'UTF-8');
         $xml->preserveWhiteSpace = false;
@@ -65,13 +74,14 @@ class PropelXMLParser extends PropelParser
     /**
      * Alias for PropelXMLParser::fromArray()
      *
-     * @param array  $array           Source data to convert
+     * @param array $array Source data to convert
      * @param string $rootElementName Name of the root element of the XML document
-     * @param string $charset         Character set of the input data. Defaults to UTF-8.
+     * @param string|null $charset Character set of the input data. Defaults to UTF-8.
      *
      * @return string Converted data, as an XML string
+     * @throws DOMException
      */
-    public function toXML($array, $rootElementName = 'data', $charset = null)
+    public function toXML(array $array, string $rootElementName = 'data', string $charset = null): string
     {
         return $this->fromArray($array, $rootElementName, $charset);
     }
@@ -79,26 +89,28 @@ class PropelXMLParser extends PropelParser
     /**
      * Alias for PropelXMLParser::listFromArray()
      *
-     * @param array  $array           Source data to convert
+     * @param array $array Source data to convert
      * @param string $rootElementName Name of the root element of the XML document
-     * @param string $charset         Character set of the input data. Defaults to UTF-8.
+     * @param string|null $charset Character set of the input data. Defaults to UTF-8.
      *
      * @return string Converted data, as an XML string
+     * @throws DOMException
      */
-    public function listToXML($array, $rootElementName = 'data', $charset = null)
+    public function listToXML(array $array, string $rootElementName = 'data', string $charset = null): string
     {
         return $this->listFromArray($array, $rootElementName, $charset);
     }
 
     /**
-     * @param array      $array
-     * @param DOMElement $rootElement
-     * @param string     $charset
-     * @param boolean    $removeNumbersFromKeys
+     * @param array $array
+     * @param DOMElement|DOMNode $rootElement . Note: I have added DOMNode here because fromArray() passes a DOMNode not a DOMElement
+     * @param string|null $charset
+     * @param boolean $removeNumbersFromKeys
      *
      * @return DOMElement
+     * @throws DOMException
      */
-    protected function arrayToDOM($array, $rootElement, $charset = null, $removeNumbersFromKeys = false)
+    protected function arrayToDOM(array $array, DOMElement|DOMNode $rootElement, string $charset = null, bool $removeNumbersFromKeys = false): DOMElement
     {
         foreach ($array as $key => $value) {
             if ($removeNumbersFromKeys) {
@@ -110,7 +122,7 @@ class PropelXMLParser extends PropelParser
                     $element = $this->arrayToDOM($value, $element, $charset);
                 }
             } elseif (is_string($value)) {
-                $charset = $charset ? $charset : 'utf-8';
+                $charset = $charset ?: 'utf-8';
                 if (function_exists('iconv') && strcasecmp($charset, 'utf-8') !== 0 && strcasecmp($charset, 'utf8') !== 0) {
                     $value = iconv($charset, 'UTF-8', $value);
                 }
@@ -130,11 +142,11 @@ class PropelXMLParser extends PropelParser
     /**
      * Converts data from XML to an associative array.
      *
-     * @param string $data Source data to convert, as an XML string
+     * @param mixed $data Source data to convert, as an XML string
      *
      * @return array Converted data
      */
-    public function toArray($data)
+    public function toArray(mixed $data): array
     {
         $doc = new DomDocument('1.0', 'UTF-8');
         $doc->loadXML($data);
@@ -150,7 +162,7 @@ class PropelXMLParser extends PropelParser
      *
      * @return array Converted data
      */
-    public function fromXML($data)
+    public function fromXML(string $data): array
     {
         return $this->toArray($data);
     }
@@ -160,7 +172,7 @@ class PropelXMLParser extends PropelParser
      *
      * @return array
      */
-    protected function convertDOMElementToArray(DOMNode $data)
+    protected function convertDOMElementToArray(DOMNode $data): array
     {
         $array = array();
         $elementNames = array();
@@ -200,7 +212,7 @@ class PropelXMLParser extends PropelParser
      *
      * @return boolean
      */
-    protected function hasOnlyTextNodes(DomNode $node)
+    protected function hasOnlyTextNodes(DomNode $node): bool
     {
         foreach ($node->childNodes as $childNode) {
             if ($childNode->nodeType != XML_CDATA_SECTION_NODE && $childNode->nodeType != XML_TEXT_NODE) {

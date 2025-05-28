@@ -7,6 +7,7 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Util;
 
 if (!defined('T_ML_COMMENT')) {
     define('T_ML_COMMENT', T_COMMENT);
@@ -32,8 +33,8 @@ if (!defined('T_ML_COMMENT')) {
  */
 class PropelPHPParser
 {
-    protected $code;
-    protected $isAddPhp = false;
+    protected string $code;
+    protected bool $isAddPhp = false;
 
     /**
      * Parser constructor
@@ -75,7 +76,7 @@ class PropelPHPParser
      *
      * @return mixed false if not found, or the method code string if found
      */
-    public function findMethod($methodName)
+    public function findMethod(string $methodName): mixed
     {
         // Tokenize the source
         $tokens = token_get_all($this->code);

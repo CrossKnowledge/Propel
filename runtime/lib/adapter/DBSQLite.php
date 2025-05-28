@@ -9,7 +9,7 @@
  */
 namespace CK\Runtime\Lib\Adapter;
 
-
+use PDO;
 /**
  * This is used in order to connect to a SQLite database.
  *
@@ -27,9 +27,9 @@ class DBSQLite extends DBAdapter
      * @param PDO    $con     A PDO connection instance.
      * @param string $charset The charset encoding.
      *
-     * @throws PropelException If the specified charset doesn't match sqlite_libencoding()
+     * @ throws PropelException If the specified charset doesn't match sqlite_libencoding()
      */
-    public function setCharset(PDO $con, $charset)
+    public function setCharset(PDO $con, string $charset): void
     {
     }
 
@@ -40,7 +40,7 @@ class DBSQLite extends DBAdapter
      *
      * @return string The upper case string.
      */
-    public function toUpperCase($in)
+    public function toUpperCase(string $in): string
     {
         return 'UPPER(' . $in . ')';
     }
@@ -52,7 +52,7 @@ class DBSQLite extends DBAdapter
      *
      * @return string The string in a case that can be ignored.
      */
-    public function ignoreCase($in)
+    public function ignoreCase(string $in): string
     {
         return 'UPPER(' . $in . ')';
     }
@@ -65,7 +65,7 @@ class DBSQLite extends DBAdapter
      *
      * @return string
      */
-    public function concatString($s1, $s2)
+    public function concatString(string $s1, string $s2): string
     {
         return "($s1 || $s2)";
     }
@@ -73,13 +73,13 @@ class DBSQLite extends DBAdapter
     /**
      * Returns SQL which extracts a substring.
      *
-     * @param string  $s   String to extract from.
+     * @param string $s   String to extract from.
      * @param integer $pos Offset to start from.
      * @param integer $len Number of characters to extract.
      *
      * @return string
      */
-    public function subString($s, $pos, $len)
+    public function subString(string $s, int $pos, int $len): string
     {
         return "substr($s, $pos, $len)";
     }
@@ -91,31 +91,31 @@ class DBSQLite extends DBAdapter
      *
      * @return string
      */
-    public function strLength($s)
+    public function strLength(string $s): string
     {
         return "length($s)";
     }
 
     /**
-     * @see        DBAdapter::quoteIdentifier()
-     *
      * @param string $text
      *
      * @return string
+     *@see        DBAdapter::quoteIdentifier()
+     *
      */
-    public function quoteIdentifier($text)
+    public function quoteIdentifier(string $text): string
     {
         return '[' . $text . ']';
     }
 
     /**
-     * @see        DBAdapter::applyLimit()
-     *
      * @param string  $sql
      * @param integer $offset
      * @param integer $limit
+     *@see        DBAdapter::applyLimit()
+     *
      */
-    public function applyLimit(&$sql, $offset, $limit)
+    public function applyLimit(string &$sql, int $offset, int $limit): void
     {
         if ($limit > 0) {
             $sql .= " LIMIT " . $limit . ($offset > 0 ? " OFFSET " . $offset : "");
@@ -125,11 +125,11 @@ class DBSQLite extends DBAdapter
     }
 
     /**
-     * @param string $seed
+     * @param mixed|null $seed
      *
      * @return string
      */
-    public function random($seed = null)
+    public function random(mixed $seed = null): string
     {
         return 'random()';
     }

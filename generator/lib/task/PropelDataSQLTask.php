@@ -7,11 +7,22 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
+use CK\Generator\Lib\Model\Database;
+use Exception;
+use BuildException;
+use Properties;
+use IOException;
+use FileWriter;
+use Project;
+use PhingFile;
+/*
 require_once 'model/AppData.php';
 require_once 'model/Database.php';
 require_once 'builder/util/XmlToAppData.php';
 require_once 'builder/util/XmlToDataSQL.php';
+*/
 
 /**
  * Task that transforms XML datadump files into files containing SQL INSERT statements.

@@ -25,12 +25,12 @@ class sfYamlDumper
    * Dumps a PHP value to YAML.
    *
    * @param  mixed   $input  The PHP value
-   * @param  integer $inline The level where you switch to inline YAML
-   * @param  integer $indent The level o indentation indentation (used internally)
+   * @param integer $inline The level where you switch to inline YAML
+   * @param integer $indent The level o indentation indentation (used internally)
    *
    * @return string  The YAML representation of the PHP value
    */
-  public function dump($input, $inline = 0, $indent = 0)
+  public function dump(mixed $input, int $inline = 0, int $indent = 0): string
   {
     $output = '';
     $prefix = $indent ? str_repeat(' ', $indent) : '';

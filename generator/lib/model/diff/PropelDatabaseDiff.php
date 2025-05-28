@@ -9,6 +9,7 @@
  */
 
 namespace CK\Generator\Lib\Model\Diff;
+use CK\Generator\Lib\Model\IDMethod;
 use CK\Generator\Lib\Model\Table;
 
 //require_once dirname(__FILE__) . '/../Database.php';
@@ -23,17 +24,17 @@ use CK\Generator\Lib\Model\Table;
  */
 class PropelDatabaseDiff
 {
-    protected $addedTables = array();
-    protected $removedTables = array();
-    protected $modifiedTables = array();
-    protected $renamedTables = array();
+    protected array $addedTables = array();
+    protected array $removedTables = array();
+    protected array $modifiedTables = array();
+    protected array $renamedTables = array();
 
     /**
      * Setter for the addedTables property
      *
      * @param array $addedTables
      */
-    public function setAddedTables($addedTables)
+    public function setAddedTables(array $addedTables): void
     {
         $this->addedTables = $addedTables;
     }
@@ -44,7 +45,7 @@ class PropelDatabaseDiff
      * @param string $tableName
      * @param Table  $addedTable
      */
-    public function addAddedTable($tableName, Table $addedTable)
+    public function addAddedTable(string $tableName, Table $addedTable): void
     {
         $this->addedTables[$tableName] = $addedTable;
     }
@@ -54,7 +55,7 @@ class PropelDatabaseDiff
      *
      * @param string $tableName
      */
-    public function removeAddedTable($tableName)
+    public function removeAddedTable(string $tableName): void
     {
         unset($this->addedTables[$tableName]);
     }
@@ -64,7 +65,7 @@ class PropelDatabaseDiff
      *
      * @return array
      */
-    public function getAddedTables()
+    public function getAddedTables(): array
     {
         return $this->addedTables;
     }
@@ -74,7 +75,7 @@ class PropelDatabaseDiff
      *
      * @return integer
      */
-    public function countAddedTables()
+    public function countAddedTables(): int
     {
         return count($this->addedTables);
     }
@@ -86,7 +87,7 @@ class PropelDatabaseDiff
      *
      * @param Table
      */
-    public function getAddedTable($tableName)
+    public function getAddedTable(string $tableName)
     {
         return $this->addedTables[$tableName];
     }
@@ -96,7 +97,7 @@ class PropelDatabaseDiff
      *
      * @param array $removedTables
      */
-    public function setRemovedTables($removedTables)
+    public function setRemovedTables(array $removedTables): void
     {
         $this->removedTables = $removedTables;
     }
@@ -107,7 +108,7 @@ class PropelDatabaseDiff
      * @param string $tableName
      * @param Table  $removedTable
      */
-    public function addRemovedTable($tableName, Table $removedTable)
+    public function addRemovedTable(string $tableName, Table $removedTable): void
     {
         $this->removedTables[$tableName] = $removedTable;
     }
@@ -117,7 +118,7 @@ class PropelDatabaseDiff
      *
      * @param string $tableName
      */
-    public function removeRemovedTable($tableName)
+    public function removeRemovedTable(string $tableName): void
     {
         unset($this->removedTables[$tableName]);
     }
@@ -127,7 +128,7 @@ class PropelDatabaseDiff
      *
      * @return array
      */
-    public function getRemovedTables()
+    public function getRemovedTables(): array
     {
         return $this->removedTables;
     }
@@ -137,7 +138,7 @@ class PropelDatabaseDiff
      *
      * @return integer
      */
-    public function countRemovedTables()
+    public function countRemovedTables(): int
     {
         return count($this->removedTables);
     }
@@ -149,7 +150,7 @@ class PropelDatabaseDiff
      *
      * @param Table
      */
-    public function getRemovedTable($tableName)
+    public function getRemovedTable(string $tableName)
     {
         return $this->removedTables[$tableName];
     }
@@ -159,7 +160,7 @@ class PropelDatabaseDiff
      *
      * @param array $modifiedTables
      */
-    public function setModifiedTables($modifiedTables)
+    public function setModifiedTables(array $modifiedTables): void
     {
         $this->modifiedTables = $modifiedTables;
     }
@@ -167,10 +168,10 @@ class PropelDatabaseDiff
     /**
      * Add a table difference
      *
-     * @param string          $tableName
+     * @param string $tableName
      * @param PropelTableDiff $modifiedTable
      */
-    public function addModifiedTable($tableName, PropelTableDiff $modifiedTable)
+    public function addModifiedTable(string $tableName, PropelTableDiff $modifiedTable): void
     {
         $this->modifiedTables[$tableName] = $modifiedTable;
     }
@@ -180,7 +181,7 @@ class PropelDatabaseDiff
      *
      * @return integer
      */
-    public function countModifiedTables()
+    public function countModifiedTables(): int
     {
         return count($this->modifiedTables);
     }
@@ -190,7 +191,7 @@ class PropelDatabaseDiff
      *
      * @return array
      */
-    public function getModifiedTables()
+    public function getModifiedTables(): array
     {
         return $this->modifiedTables;
     }
@@ -200,7 +201,7 @@ class PropelDatabaseDiff
      *
      * @param array $renamedTables
      */
-    public function setRenamedTables($renamedTables)
+    public function setRenamedTables(array $renamedTables): void
     {
         $this->renamedTables = $renamedTables;
     }
@@ -211,7 +212,7 @@ class PropelDatabaseDiff
      * @param string $fromName
      * @param string $toName
      */
-    public function addRenamedTable($fromName, $toName)
+    public function addRenamedTable(string $fromName, string $toName): void
     {
         $this->renamedTables[$fromName] = $toName;
     }
@@ -221,7 +222,7 @@ class PropelDatabaseDiff
      *
      * @return array
      */
-    public function getRenamedTables()
+    public function getRenamedTables(): array
     {
         return $this->renamedTables;
     }
@@ -231,7 +232,7 @@ class PropelDatabaseDiff
      *
      * @return integer
      */
-    public function countRenamedTables()
+    public function countRenamedTables(): int
     {
         return count($this->renamedTables);
     }
@@ -241,7 +242,7 @@ class PropelDatabaseDiff
      *
      * @return PropelDatabaseDiff
      */
-    public function getReverseDiff()
+    public function getReverseDiff(): PropelDatabaseDiff
     {
         $diff = new self();
         $diff->setAddedTables($this->getRemovedTables());
@@ -268,7 +269,7 @@ class PropelDatabaseDiff
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         $changes = array();
         if ($count = $this->countAddedTables()) {
@@ -287,7 +288,7 @@ class PropelDatabaseDiff
         return implode(', ', $changes);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $ret = '';
         if ($addedTables = $this->getAddedTables()) {

@@ -7,7 +7,10 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Util;
 
+use PDO;
+use PDOStatement;
 /**
  * Service class for parsing a large SQL string into an array of SQL statements
  *
@@ -17,12 +20,12 @@
  */
 class PropelSQLParser
 {
-    protected $delimiter = ';';
-    protected $delimiterLength = 1;
+    protected string $delimiter = ';';
+    protected int $delimiterLength = 1;
 
-    protected $sql = '';
-    protected $len = 0;
-    protected $pos = 0;
+    protected string $sql = '';
+    protected int $len = 0;
+    protected int $pos = 0;
 
     /**
      * Sets the inner SQL string for this object.
@@ -30,7 +33,7 @@ class PropelSQLParser
      *
      * @param string $sql The SQL string to parse
      */
-    public function setSQL($sql)
+    public function setSQL(string $sql): void
     {
         $this->sql = $sql;
         $this->pos = 0;
@@ -42,7 +45,7 @@ class PropelSQLParser
      *
      * @return string The SQL string to parse
      */
-    public function getSQL()
+    public function getSQL(): string
     {
         return $this->sql;
     }
@@ -52,11 +55,11 @@ class PropelSQLParser
      * Does not use transactions since they are not supported in DDL statements
      *
      * @param string $input      The SQL statements
-     * @param PDO    $connection a connection object
+     * @param PDO $connection a connection object
      *
      * @return integer the number of executed statements
      */
-    public static function executeString($input, $connection)
+    public static function executeString(string $input, PDO $connection): int
     {
         return self::executeStatements(self::parseString($input), $connection);
     }
@@ -66,11 +69,11 @@ class PropelSQLParser
      * Does not use transactions since they are not supported in DDL statements
      *
      * @param string $file       the path to the SQL file
-     * @param PDO    $connection a connection object
+     * @param PDO $connection a connection object
      *
      * @return integer the number of executed statements
      */
-    public static function executeFile($file, $connection)
+    public static function executeFile(string $file, PDO $connection): int
     {
         return self::executeStatements(self::parseFile($file), $connection);
     }
@@ -80,11 +83,11 @@ class PropelSQLParser
      * Does not use transactions since they are not supported in DDL statements
      *
      * @param array $statements a list of SQL statements
-     * @param PDO   $connection a connection object
+     * @param PDO $connection a connection object
      *
      * @return integer the number of executed statements
      */
-    protected static function executeStatements($statements, $connection)
+    protected static function executeStatements(array $statements, PDO $connection): int
     {
         foreach ($statements as $statement) {
             $stmt = $connection->prepare($statement);
@@ -100,7 +103,10 @@ class PropelSQLParser
     /**
      * Explodes a SQL string into an array of SQL statements.
      *
-     * @example
+     * @param string $input The SQL code to parse
+     *
+     * @return array A list of SQL statement strings
+     *@example
      * <code>
      * echo PropelSQLParser::parseString("-- Table foo
      * DROP TABLE foo;
@@ -120,11 +126,8 @@ class PropelSQLParser
      * // )
      * </code>
      *
-     * @param string $input The SQL code to parse
-     *
-     * @return array A list of SQL statement strings
      */
-    public static function parseString($input)
+    public static function parseString(string $input): array
     {
         $parser = new self();
         $parser->setSQL($input);
@@ -137,6 +140,8 @@ class PropelSQLParser
     /**
      * Explodes a SQL file into an array of SQL statements.
      *
+     * @param $file
+     * @return array A list of SQL statement strings
      * @example
      * <code>
      * echo PropelSQLParser::parseFile('/var/tmp/foo.sql');
@@ -151,11 +156,8 @@ class PropelSQLParser
      * // )
      * </code>
      *
-     * @param string $input The absolute path to the file to parse
-     *
-     * @return array A list of SQL statement strings
      */
-    public static function parseFile($file)
+    public static function parseFile($file): array
     {
         if (!file_exists($file)) {
             return array();
@@ -164,12 +166,12 @@ class PropelSQLParser
         return self::parseString(file_get_contents($file));
     }
 
-    public function convertLineFeedsToUnixStyle()
+    public function convertLineFeedsToUnixStyle(): void
     {
         $this->setSQL(str_replace(array("\r\n", "\r"), "\n", $this->sql));
     }
 
-    public function stripSQLCommentLines()
+    public function stripSQLCommentLines(): void
     {
         $this->setSQL(preg_replace(array(
             '#^\s*(//|--|\#).*(\n|$)#m',    // //, --, or # style comments
@@ -182,7 +184,7 @@ class PropelSQLParser
      *
      * @return array A list of SQL statement strings
      */
-    public function explodeIntoStatements()
+    public function explodeIntoStatements(): array
     {
         $this->pos = 0;
         $sqlStatements = array();
@@ -199,7 +201,7 @@ class PropelSQLParser
      *
      * @return string A SQL statement
      */
-    public function getNextStatement()
+    public function getNextStatement(): string
     {
         $isAfterBackslash = false;
         $isInString = false;
@@ -207,7 +209,7 @@ class PropelSQLParser
         $parsedString = '';
         $lowercaseString = ''; // helper variable for performance sake
         while ($this->pos <= $this->len) {
-            $char = isset($this->sql[$this->pos]) ? $this->sql[$this->pos] : '';
+            $char = $this->sql[$this->pos] ?? '';
 
             // check flags for strings or escaper
             switch ($char) {

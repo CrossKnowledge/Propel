@@ -7,10 +7,28 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
+use CK\Generator\Lib\Config\GeneratorConfig;
+use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Model\IDMethod;
+use CK\Generator\Lib\Model\PropelTypes;
+use CK\Generator\Lib\Model\Column;
+
+use Project;
+use PhingFile;
+use DOMDocument;
+use DOMElement;
+use BuildException;
+use FileWriter;
+use Exception;
+use PDOTask;
+
+/*
 require_once 'phing/tasks/ext/pdo/PDOTask.php';
 require_once 'config/GeneratorConfig.php';
 require_once 'model/PropelTypes.php';
+*/
 
 /**
  * This class generates an XML schema of an existing database from

@@ -35,11 +35,11 @@ use CK\Runtime\Lib\Query\Criteria;
  */
 class PropelConditionalProxy
 {
-    protected $criteria;
-    protected $parent;
+    protected Criteria $criteria;
+    protected mixed $parent;
     protected $state;
-    protected $wasTrue;
-    protected $parentState;
+    protected bool $wasTrue;
+    protected bool $parentState;
 
     public function __construct($criteria, $cond, $proxy = null)
     {
@@ -75,7 +75,7 @@ class PropelConditionalProxy
      *
      * @return PropelConditionalProxy
      */
-    public function _elseif($cond)
+    public function _elseif(bool $cond)
     {
         return $this->setConditionalState(!$this->wasTrue && $cond);
     }

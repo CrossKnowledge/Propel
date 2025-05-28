@@ -12,9 +12,9 @@ namespace CK\Generator\Lib\Builder\OM;
 
 use CK\Generator\Lib\Model\Column;
 use CK\Generator\Lib\Model\PropelTypes;
-use CK\Generator\Platform\MysqlPlatform;
+use CK\Generator\Lib\Platform\MysqlPlatform;
 use CK\Generator\Lib\Model\ForeignKey;
-use CK\Generator\Platform\OraclePlatform;
+use CK\Generator\Lib\Platform\OraclePlatform;
 use DateTime;
 //require_once dirname(__FILE__) . '/ObjectBuilder.php';
 

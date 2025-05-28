@@ -11,6 +11,7 @@ namespace CK\Runtime\Lib\Parser\YAML;
 
 
 //require_once dirname(__FILE__).'/sfYaml.php';
+use InvalidArgumentException;
 
 /**
  * sfYamlInline implements a YAML parser/dumper for the YAML inline syntax.
@@ -24,14 +25,14 @@ class sfYamlInline
 {
   const REGEX_QUOTED_STRING = '(?:"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\']*(?:\'\'[^\']*)*)\')';
 
-  /**
-   * Convert a YAML string to a PHP array.
-   *
-   * @param string $value A YAML string
-   *
-   * @return array A PHP array representing the YAML string
-   */
-  public static function load($value)
+    /**
+     * Convert a YAML string to a PHP array.
+     *
+     * @param string $value A YAML string
+     *
+     * @return bool|array|string|null A PHP array representing the YAML string. Checking the code itself, it could return more than an array
+     */
+  public static function load(string $value): bool|array|string|null
   {
     $value = trim($value);
 
@@ -122,15 +123,16 @@ class sfYamlInline
    *
    * @return string The YAML string representing the PHP array
    */
-  protected static function dumpArray($value)
+  protected static function dumpArray(array $value): string
   {
     // array
     $keys = array_keys($value);
     if (
       (1 == count($keys) && '0' == $keys[0])
       ||
-      (count($keys) > 1 && array_reduce($keys, create_function('$v,$w', 'return (integer) $v + (integer) $w;'), 0) == count($keys) * (count($keys) - 1) / 2))
-    {
+      //(count($keys) > 1 && array_reduce($keys, create_function('$v,$w', 'return (integer) $v + (integer) $w;'), 0) == count($keys) * (count($keys) - 1) / 2))
+      (count($keys) > 1 && array_reduce($keys, function($v, $w) { return (int) $v + (int) $w; }, 0) == count($keys) * (count($keys) - 1) / 2) //The previous line has deprecated function: create_function()
+    ) {
       $output = array();
       foreach ($value as $val) {
         $output[] = self::dump($val);
@@ -148,18 +150,18 @@ class sfYamlInline
     return sprintf('{ %s }', implode(', ', $output));
   }
 
-  /**
-   * Parses a scalar to a YAML string.
-   *
-   * @param scalar  $scalar
-   * @param string  $delimiters
-   * @param array   $stringDelimiter
-   * @param integer $i
-   * @param boolean $evaluate
-   *
-   * @return string A YAML string
-   */
-  public static function parseScalar($scalar, $delimiters = null, $stringDelimiters = array('"', "'"), &$i = 0, $evaluate = true)
+    /**
+     * Parses a scalar to a YAML string.
+     *
+     * @param scalar $scalar
+     * @param null $delimiters
+     * @param string[] $stringDelimiters
+     * @param integer $i
+     * @param boolean $evaluate
+     *
+     * @return bool|string|null A YAML string. Note: It was supposed to return only a String, but the code says something else.
+     */
+  public static function parseScalar($scalar, $delimiters = null, $stringDelimiters = array('"', "'"), &$i = 0, $evaluate = true): bool|string|null
   {
     if (in_array($scalar[$i], $stringDelimiters)) {
       // quoted scalar
@@ -273,12 +275,12 @@ class sfYamlInline
   /**
    * Parses a mapping to a YAML string.
    *
-   * @param string  $mapping
+   * @param string $mapping
    * @param integer $i
    *
-   * @return string A YAML string
+   * @return array A YAML string
    */
-  protected static function parseMapping($mapping, &$i = 0)
+  protected static function parseMapping(string $mapping, int &$i = 0): array
   {
     $output = array();
     $len = strlen($mapping);

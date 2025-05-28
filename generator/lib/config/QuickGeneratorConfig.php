@@ -10,8 +10,8 @@
 
 namespace CK\Generator\Lib\Config;
 
-use CK\Generator\Platform\PropelPlatformInterface;
-use CK\Generator\Platform\SqlitePlatform;
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Platform\SqlitePlatform;
 use CK\Generator\Lib\Model\Table;
 use CK\Generator\Lib\Builder\DataModelBuilder;
 

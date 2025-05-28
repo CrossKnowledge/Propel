@@ -7,7 +7,12 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Lib\Reverse;
 
+use CK\Generator\Lib\Config\GeneratorConfigInterface;
+use CK\Generator\Lib\Model\Database;
+use PDO;
+use Task;
 /**
  * Interface for reverse engineering schema parsers.
  *
@@ -23,7 +28,7 @@ interface SchemaParser
      *
      * @return PDO
      */
-    public function getConnection();
+    public function getConnection(): PDO;
 
     /**
      * Sets the database connection.
@@ -46,14 +51,14 @@ interface SchemaParser
      *
      * @return mixed
      */
-    public function getBuildProperty($name);
+    public function getBuildProperty($name): mixed;
 
     /**
      * Gets array of warning messages.
      *
      * @return array string[]
      */
-    public function getWarnings();
+    public function getWarnings(): array;
 
     /**
      * Parse the schema and populate passed-in Database model object.
@@ -63,5 +68,5 @@ interface SchemaParser
      *
      * @return int number of generated tables
      */
-    public function parse(Database $database, Task $task = null);
+    public function parse(Database $database, Task $task = null): int;
 }

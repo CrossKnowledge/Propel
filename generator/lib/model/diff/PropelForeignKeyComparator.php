@@ -33,7 +33,7 @@ class PropelForeignKeyComparator
      *
      * @return boolean false if the two fks are similar, true if they have differences
      */
-    public static function computeDiff(ForeignKey $fromFk, ForeignKey $toFk, $caseInsensitive = false)
+    public static function computeDiff(ForeignKey $fromFk, ForeignKey $toFk, bool $caseInsensitive = false): bool
     {
         // Check for differences in local and remote table
         $test = $caseInsensitive ?

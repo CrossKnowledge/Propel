@@ -8,7 +8,17 @@
  * @license    MIT License
  */
 
-namespace CK\Runtime;
+namespace CK\Runtime\Lib;
+
+use CK\Runtime\Lib\Config\PropelConfiguration;
+use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Adapter\DBAdapter;
+use CK\Runtime\Lib\Map\DatabaseMap;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Util\PropelAutoloader;
+use CK\Runtime\Lib\Logger\SimpleFileLogger;
+use PDO;
+use PDOException;
 
 /**
  * Propel's main resource pool and initialization & configuration class.
@@ -32,47 +42,47 @@ class Propel
     /**
      * The Propel version.
      */
-    const VERSION = '1.7.2-dev';
+    const string VERSION = '1.7.2-dev';
 
     /**
      * A constant for <code>default</code>.
      */
-    const DEFAULT_NAME = "default";
+    const string DEFAULT_NAME = "default";
 
     /**
      * A constant defining 'System is unusuable' logging level
      */
-    const LOG_EMERG = 0;
+    const int LOG_EMERG = 0;
 
     /**
      * A constant defining 'Immediate action required' logging level
      */
-    const LOG_ALERT = 1;
+    const int LOG_ALERT = 1;
 
     /**
      * A constant defining 'Critical conditions' logging level
      */
-    const LOG_CRIT = 2;
+    const int LOG_CRIT = 2;
 
     /**
      * A constant defining 'Error conditions' logging level
      */
-    const LOG_ERR = 3;
+    const int LOG_ERR = 3;
 
     /**
      * A constant defining 'Warning conditions' logging level
      */
-    const LOG_WARNING = 4;
+    const int LOG_WARNING = 4;
 
     /**
      * A constant defining 'Normal but significant' logging level
      */
-    const LOG_NOTICE = 5;
+    const int LOG_NOTICE = 5;
 
     /**
      * A constant defining 'Informational' logging level
      */
-    const LOG_INFO = 6;
+    const int LOG_INFO = 6;
 
     /**
      * A constant defining 'Debug-level messages' logging level
@@ -82,87 +92,88 @@ class Propel
     /**
      * The class name for a PDO object.
      */
-    const CLASS_PDO = 'PDO';
+    const string CLASS_PDO = 'PDO';
 
     /**
      * The class name for a PropelPDO object.
      */
-    const CLASS_PROPEL_PDO = 'PropelPDO';
+    const string CLASS_PROPEL_PDO = 'CK\\Runtime\\Lib\\Connection\\PropelPDO';
 
     /**
      * The class name for a DebugPDO object.
      */
-    const CLASS_DEBUG_PDO = 'DebugPDO';
+    const string CLASS_DEBUG_PDO = 'CK\\Runtime\\Lib\\Connection\\DebugPDO';
 
     /**
      * Constant used to request a READ connection (applies to replication).
      */
-    const CONNECTION_READ = 'read';
+    const string CONNECTION_READ = 'read';
 
     /**
      * Constant used to request a WRITE connection (applies to replication).
      */
-    const CONNECTION_WRITE = 'write';
+    const string CONNECTION_WRITE = 'write';
 
     /**
      * @var        string The db name that is specified as the default in the property file
      */
-    private static $defaultDBName;
+    private static string $defaultDBName;
 
     /**
      * @var        array The global cache of database maps
      */
-    private static $dbMaps = array();
+    private static array $dbMaps = array();
 
     /**
      * @var        array The cache of DB adapter keys
      */
-    private static $adapterMap = array();
+    private static array $adapterMap = array();
 
     /**
      * @var        array Cache of established connections (to eliminate overhead).
      */
-    private static $connectionMap = array();
+    private static array $connectionMap = array();
 
     /**
      * @var        PropelConfiguration Propel-specific configuration.
      */
-    private static $configuration;
+    private static ?PropelConfiguration $configuration = null;
 
     /**
      * @var        bool flag to set to true once this class has been initialized
      */
-    private static $isInit = false;
+    private static bool $isInit = false;
 
     /**
-     * @var        Log optional logger
+     * old-var        Log optional logger
+     * @var ?SimpleFileLogger
      */
-    private static $logger = null;
+    private static ?SimpleFileLogger $logger = null;
 
     /**
      * @var        string The name of the database mapper class
      */
-    private static $databaseMapClass = 'DatabaseMap';
+    private static string $databaseMapClass = 'CK\\Runtime\\Lib\\Map\\DatabaseMap';
 
     /**
      * @var        bool Whether the object instance pooling is enabled
      */
-    private static $instancePoolingEnabled = true;
+    private static bool $instancePoolingEnabled = true;
 
     /**
      * @var        bool For replication, whether to force the use of master connection.
      */
-    private static $forceMasterConnection = false;
+    private static bool $forceMasterConnection = false;
 
     /**
      * @var        string Base directory to use for autoloading. Initialized in self::initBaseDir()
      */
-    protected static $baseDir;
+    protected static string $baseDir;
 
     /**
-     * @var        array A map of class names and their file paths for autoloading
+     * @ var        array A map of class names and their file paths for autoloading
      */
-    protected static $autoloadMap = array(
+    /*protected static $autoloadMap = array(
 
         'DBAdapter'           => 'adapter/DBAdapter.php',
         'DBMSSQL'             => 'adapter/DBMSSQL.php',
@@ -254,15 +265,16 @@ class Propel
         'UniqueValidator'     => 'validator/UniqueValidator.php',
         'ValidValuesValidator' => 'validator/ValidValuesValidator.php',
         'ValidationFailed'    => 'validator/ValidationFailed.php',
-    );
+    );*/
 
     /**
      * Initializes Propel
      *
      * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Exception
      *                             rethrown wrapped into a PropelException.
      */
-    public static function initialize()
+    public static function initialize(): void
     {
         if (self::$configuration === null) {
             throw new PropelException("Propel cannot be initialized without a valid configuration. Please check the log files for further details.");
@@ -295,12 +307,12 @@ class Propel
     /**
      * Configure Propel a PHP (array) config file.
      *
-     * @param      string Path (absolute or relative to include_path) to config file.
+     * @param string $configFile Path (absolute or relative to include_path) to config file.
      *
      * @throws PropelException If configuration file cannot be opened.
      *                             (E_WARNING probably will also be raised by PHP)
      */
-    public static function configure($configFile)
+    public static function configure(string $configFile): void
     {
         $configuration = include($configFile);
         if ($configuration === false) {
@@ -312,18 +324,24 @@ class Propel
     /**
      * Configure the logging system, if config is specified in the runtime configuration.
      */
-    protected static function configureLogging()
+    protected static function configureLogging(): void
     {
         if (self::$logger === null) {
             if (isset(self::$configuration['log']) && is_array(self::$configuration['log']) && count(self::$configuration['log'])) {
-                include_once 'Log.php'; // PEAR Log class
+                //include_once 'Log.php'; // PEAR Log class
                 $c = self::$configuration['log'];
-                $type = isset($c['type']) ? $c['type'] : 'file';
-                $name = isset($c['name']) ? $c['name'] : './propel.log';
-                $ident = isset($c['ident']) ? $c['ident'] : 'propel';
-                $conf = isset($c['conf']) ? $c['conf'] : array();
-                $level = isset($c['level']) ? $c['level'] : PEAR_LOG_DEBUG;
-                self::$logger = Log::singleton($type, $name, $ident, $conf, $level);
+                $type = $c['type'] ?? 'file';
+                $name = $c['name'] ?? './propel.log';
+                $ident = $c['ident'] ?? 'propel';
+                $conf = $c['conf'] ?? [];
+                $level = $c['level'] ?? self::LOG_DEBUG; //PEAR LOG has been removed
+
+                //No PEAR here and Namespaces have been introduced.
+                //self::$logger = Log::singleton($type, $name, $ident, $conf, $level);
+                // Use a simple file logger instead of PEAR Log
+                if ($type === 'file') {
+                    self::$logger = new SimpleFileLogger($name);
+                }
             } // if isset()
         }
     }
@@ -336,7 +354,7 @@ class Propel
      * @throws PropelException Any exceptions caught during processing will be
      *                             rethrown wrapped into a PropelException.
      */
-    public static function init($c)
+    public static function init(string $c): void
     {
         self::configure($c);
         self::initialize();
@@ -347,7 +365,7 @@ class Propel
      *
      * @return bool True if Propel is already initialized.
      */
-    public static function isInit()
+    public static function isInit(): bool
     {
         return self::$isInit;
     }
@@ -355,9 +373,9 @@ class Propel
     /**
      * Sets the configuration for Propel and all dependencies.
      *
-     * @param      mixed The Configuration (array or PropelConfiguration)
+     * @param      mixed $c The Configuration (array or PropelConfiguration)
      */
-    public static function setConfiguration($c)
+    public static function setConfiguration($c): void
     {
         if (is_array($c)) {
             if (isset($c['propel']) && is_array($c['propel'])) {
@@ -371,7 +389,7 @@ class Propel
     /**
      * Get the configuration for this component.
      *
-     * @param      int - PropelConfiguration::TYPE_ARRAY: return the configuration as an array
+     * @param int $type - PropelConfiguration::TYPE_ARRAY: return the configuration as an array
      *                   (for backward compatibility this is the default)
      *                 - PropelConfiguration::TYPE_ARRAY_FLAT: return the configuration as a flat array
      *                   ($config['name.space.item'])
@@ -379,7 +397,7 @@ class Propel
      *
      * @return mixed The Configuration (array or PropelConfiguration)
      */
-    public static function getConfiguration($type = PropelConfiguration::TYPE_ARRAY)
+    public static function getConfiguration(int $type = PropelConfiguration::TYPE_ARRAY): mixed
     {
         return self::$configuration->getParameters($type);
     }
@@ -394,9 +412,10 @@ class Propel
      * interface.  This interface is based on PEAR::Log, so you can also simply pass
      * a PEAR::Log object to this method.
      *
-     * @param      object The new logger to use. ([PEAR] Log or BasicLogger)
+     * @param object $logger The new logger to use. ([PEAR] Log or BasicLogger) Going to see if SimpleFileLogger is
+     * to be used instead
      */
-    public static function setLogger($logger)
+    public static function setLogger(SimpleFileLogger $logger): void
     {
         self::$logger = $logger;
     }
@@ -407,7 +426,7 @@ class Propel
      *
      * @return bool True if Propel uses logging
      */
-    public static function hasLogger()
+    public static function hasLogger(): bool
     {
         return (self::$logger !== null);
     }
@@ -432,28 +451,20 @@ class Propel
      *
      * @return bool True if the message was logged successfully or no logger was used.
      */
-    public static function log($message, $level = self::LOG_DEBUG)
+    public static function log($message, $level = self::LOG_DEBUG): bool
     {
         if (self::hasLogger()) {
             $logger = self::logger();
-            switch ($level) {
-                case self::LOG_EMERG:
-                    return $logger->log($message, $level);
-                case self::LOG_ALERT:
-                    return $logger->alert($message);
-                case self::LOG_CRIT:
-                    return $logger->crit($message);
-                case self::LOG_ERR:
-                    return $logger->err($message);
-                case self::LOG_WARNING:
-                    return $logger->warning($message);
-                case self::LOG_NOTICE:
-                    return $logger->notice($message);
-                case self::LOG_INFO:
-                    return $logger->info($message);
-                default:
-                    return $logger->debug($message);
-            }
+            return match ($level) {
+                self::LOG_EMERG     => $logger->log($message, $level),
+                self::LOG_ALERT     => $logger->alert($message),
+                self::LOG_CRIT      => $logger->crit($message),
+                self::LOG_ERR       => $logger->err($message),
+                self::LOG_WARNING   => $logger->warning($message),
+                self::LOG_NOTICE    => $logger->notice($message),
+                self::LOG_INFO      => $logger->info($message),
+                default             => $logger->debug($message),
+            };
         }
 
         return true;
@@ -465,13 +476,13 @@ class Propel
      *
      * The database maps are "registered" by the generated map builder classes.
      *
-     * @param      string The name of the database corresponding to the DatabaseMap to retrieve.
+     * @param string|null $name The name of the database corresponding to the DatabaseMap to retrieve.
      *
      * @return DatabaseMap The named <code>DatabaseMap</code>.
      *
      * @throws PropelException - if database map is null or propel was not initialized properly.
      */
-    public static function getDatabaseMap($name = null)
+    public static function getDatabaseMap(string $name = null): DatabaseMap
     {
         if ($name === null) {
             $name = self::getDefaultDB();
@@ -491,10 +502,10 @@ class Propel
     /**
      * Sets the database map object to use for specified datasource.
      *
-     * @param string      $name The datasource name.
+     * @param ?string $name The datasource name.
      * @param DatabaseMap $map  The database map object to use for specified datasource.
      */
-    public static function setDatabaseMap($name, DatabaseMap $map)
+    public static function setDatabaseMap(?string $name, DatabaseMap $map): void
     {
         if ($name === null) {
             $name = self::getDefaultDB();
@@ -507,7 +518,7 @@ class Propel
      *
      * @param boolean $bit True or False
      */
-    public static function setForceMasterConnection($bit)
+    public static function setForceMasterConnection(bool $bit): void
     {
         self::$forceMasterConnection = (bool) $bit;
     }
@@ -517,7 +528,7 @@ class Propel
      *
      * @return boolean
      */
-    public static function getForceMasterConnection()
+    public static function getForceMasterConnection(): bool
     {
         return self::$forceMasterConnection;
     }
@@ -525,13 +536,13 @@ class Propel
     /**
      * Sets a Connection for specified datasource name.
      *
-     * @param string    $name The datasource name for the connection being set.
+     * @param string $name The datasource name for the connection being set.
      * @param PropelPDO $con  The PDO connection.
-     * @param string    $mode Whether this is a READ or WRITE connection (Propel::CONNECTION_READ, Propel::CONNECTION_WRITE)
+     * @param string $mode Whether this is a READ or WRITE connection (Propel::CONNECTION_READ, Propel::CONNECTION_WRITE)
      */
-    public static function setConnection($name, PropelPDO $con, $mode = Propel::CONNECTION_WRITE)
+    public static function setConnection(string $name, PropelPDO $con, string $mode = Propel::CONNECTION_WRITE): void
     {
-        if ($name === null) {
+        if ($name === null) {   //This is evaluated as well, so not needed unless we need to pass ?string
             $name = self::getDefaultDB();
         }
         if ($mode == Propel::CONNECTION_READ) {
@@ -544,14 +555,15 @@ class Propel
     /**
      * Gets an already-opened PDO connection or opens a new one for passed-in db name.
      *
-     * @param string $name The datasource name that is used to look up the DSN from the runtime configuration file.
+     * @param string|null $name The datasource name that is used to look up the DSN from the runtime configuration file.
      * @param string $mode The connection mode (this applies to replication systems).
      *
-     * @return PDO A database connection
+     * @ return PDO A database connection: old
+     * @return PropelPDO as a Database Connection
      *
      * @throws PropelException - if connection cannot be configured or initialized.
      */
-    public static function getConnection($name = null, $mode = Propel::CONNECTION_WRITE)
+    public static function getConnection(?string $name = null, string $mode = Propel::CONNECTION_WRITE): PropelPDO//PDO
     {
         if ($name === null) {
             $name = self::getDefaultDB();
@@ -577,11 +589,11 @@ class Propel
      *
      * @throws PropelException - if connection cannot be configured or initialized.
      */
-    public static function getMasterConnection($name)
+    public static function getMasterConnection(string $name): PDO
     {
         if (!isset(self::$connectionMap[$name]['master'])) {
             // load connection parameter for master connection
-            $conparams = isset(self::$configuration['datasources'][$name]['connection']) ? self::$configuration['datasources'][$name]['connection'] : null;
+            $conparams = self::$configuration['datasources'][$name]['connection'] ?? null;
             if (empty($conparams)) {
                 throw new PropelException('No connection information in your runtime configuration file for datasource [' . $name . ']');
             }
@@ -603,11 +615,11 @@ class Propel
      *
      * @throws PropelException - if connection cannot be configured or initialized.
      */
-    public static function getSlaveConnection($name)
+    public static function getSlaveConnection(string $name): PDO
     {
         if (!isset(self::$connectionMap[$name]['slave'])) {
 
-            $slaveconfigs = isset(self::$configuration['datasources'][$name]['slaves']) ? self::$configuration['datasources'][$name]['slaves'] : null;
+            $slaveconfigs = self::$configuration['datasources'][$name]['slaves'] ?? null;
 
             if (empty($slaveconfigs)) {
                 // no slaves configured for this datasource
@@ -640,7 +652,7 @@ class Propel
     /**
      * Opens a new PDO connection for passed-in db name.
      *
-     * @param array  $conparams    Connection paramters.
+     * @param array $conparams    Connection paramters.
      * @param string $name         Datasource name.
      * @param string $defaultClass The PDO subclass to instantiate if there is no explicit classname
      *                             specified in the connection params (default is Propel::CLASS_PROPEL_PDO)
@@ -649,7 +661,7 @@ class Propel
      *
      * @throws PropelException - if lower-level exception caught when trying to connect.
      */
-    public static function initConnection($conparams, $name, $defaultClass = Propel::CLASS_PROPEL_PDO)
+    public static function initConnection(array $conparams, string $name, string $defaultClass = Propel::CLASS_PROPEL_PDO): PDO
     {
         $adapter = isset($conparams['adapter']) ? DBAdapter::factory($conparams['adapter']) : self::getDB($name);
 
@@ -669,8 +681,8 @@ class Propel
         }
 
         $dsn = $conparams['dsn'];
-        $user = isset($conparams['user']) ? $conparams['user'] : null;
-        $password = isset($conparams['password']) ? $conparams['password'] : null;
+        $user = $conparams['user'] ?? null;
+        $password = $conparams['password'] ?? null;
 
         // load any driver options from the config file
         // driver options are those PDO settings that have to be passed during the connection construction
@@ -716,12 +728,12 @@ class Propel
      *
      * Process the INI file flags to be passed to each connection.
      *
-     * @param      array Where to find the list of constant flags and their new setting.
-     * @param      array Put the data into here
+     * @param array $source Where to find the list of constant flags and their new setting.
+     * @param array $write_to Put the data into here
      *
      * @throws PropelException If invalid options were specified.
      */
-    private static function processDriverOptions($source, &$write_to)
+    private static function processDriverOptions(array $source, array &$write_to): void
     {
         foreach ($source as $option => $optiondata) {
             if (is_string($option) && strpos($option, '::') !== false) {
@@ -749,13 +761,13 @@ class Propel
     /**
      * Returns database adapter for a specific datasource.
      *
-     * @param      string The datasource name.
+     * @param string|null $name The datasource name.
      *
      * @return DBAdapter The corresponding database adapter.
      *
      * @throws PropelException If unable to find DBdapter for specified db.
      */
-    public static function getDB($name = null)
+    public static function getDB(string $name = null): DBAdapter
     {
         if ($name === null) {
             $name = self::getDefaultDB();
@@ -776,10 +788,10 @@ class Propel
     /**
      * Sets a database adapter for specified datasource.
      *
-     * @param string    $name    The datasource name.
+     * @param string|null $name The datasource name.
      * @param DBAdapter $adapter The DBAdapter implementation to use.
      */
-    public static function setDB($name, DBAdapter $adapter)
+    public static function setDB(?string $name, DBAdapter $adapter): void
     {
         if ($name === null) {
             $name = self::getDefaultDB();
@@ -792,7 +804,7 @@ class Propel
      *
      * @return string Name of the default DB
      */
-    public static function getDefaultDB()
+    public static function getDefaultDB(): string
     {
         if (self::$defaultDBName === null) {
             // Determine default database name.
@@ -808,7 +820,7 @@ class Propel
      * This method frees any database connection handles that have been
      * opened by the getConnection() method.
      */
-    public static function close()
+    public static function close(): void
     {
         foreach (self::$connectionMap as $idx => $cons) {
             // Propel::log("Closing connections for " . $idx, Propel::LOG_DEBUG);
@@ -819,11 +831,11 @@ class Propel
     /**
      * Autoload function for loading propel dependencies.
      *
-     * @param      string The class name needing loading.
+     * @ param      string The class name needing loading.
      *
      * @return boolean TRUE if the class was loaded, false otherwise.
      */
-    public static function autoload($className)
+    /*public static function autoload($className)
     {
         if (isset(self::$autoloadMap[$className])) {
             require self::$baseDir . self::$autoloadMap[$className];
@@ -832,17 +844,17 @@ class Propel
         }
 
         return false;
-    }
+    }*/
 
     /**
      * Initialize the base directory for the autoloader.
      * Avoids a call to dirname(__FILE__) each time self::autoload() is called.
      * FIXME put in the constructor if the Propel class ever becomes a singleton
      */
-    public static function initBaseDir()
+    /*public static function initBaseDir()
     {
         self::$baseDir = dirname(__FILE__) . '/';
-    }
+    }*/
 
     /**
      * Include once a file specified in DOT notation and return unqualified classname.
@@ -853,13 +865,13 @@ class Propel
      * classname of a validator in the schema.xml.  This method will attempt to include that
      * class via autoload and then relative to a location on the include_path.
      *
-     * @param string $class dot-path to clas (e.g. path.to.my.ClassName).
+     * @param string $path ($class: this could be a mistake) dot-path to clas (e.g. path.to.my.ClassName).
      *
      * @return string unqualified classname
      *
      * @throws PropelException
      */
-    public static function importClass($path)
+    public static function importClass(string $path): string
     {
         // extract classname
         if (($pos = strrpos($path, '.')) === false) {
@@ -893,7 +905,7 @@ class Propel
      *
      * @param      string The name of the class.
      */
-    public static function setDatabaseMapClass($name)
+    public static function setDatabaseMapClass($name): void
     {
         self::$databaseMapClass = $name;
     }
@@ -904,7 +916,7 @@ class Propel
      * @return boolean true if the method changed the instance pooling state,
      *                 false if it was already disabled
      */
-    public static function disableInstancePooling()
+    public static function disableInstancePooling(): bool
     {
         if (!self::$instancePoolingEnabled) {
             return false;
@@ -920,7 +932,7 @@ class Propel
      * @return boolean true if the method changed the instance pooling state,
      *                 false if it was already enabled
      */
-    public static function enableInstancePooling()
+    public static function enableInstancePooling(): bool
     {
         if (self::$instancePoolingEnabled) {
             return false;
@@ -935,16 +947,16 @@ class Propel
      *
      * @return boolean Whether the pooling is enabled or not.
      */
-    public static function isInstancePoolingEnabled()
+    public static function isInstancePoolingEnabled(): bool
     {
         return self::$instancePoolingEnabled;
     }
 }
 
 // Since the Propel class is not a true singleton, this code cannot go into the __construct()
-Propel::initBaseDir();
-spl_autoload_register(array('Propel', 'autoload'));
+//Propel::initBaseDir();
+//spl_autoload_register(array('Propel', 'autoload'));
 
-if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+/*if (version_compare(PHP_VERSION, '5.3.0', '<')) {
     require_once dirname(__FILE__) . '/../stubs/functions.php';
-}
+}*/

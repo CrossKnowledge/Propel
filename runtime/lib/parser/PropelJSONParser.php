@@ -26,7 +26,7 @@ class PropelJSONParser extends PropelParser
      *
      * @return string Converted data, as a JSON string
      */
-    public function fromArray($array)
+    public function fromArray(array $array): string
     {
         return json_encode($array);
     }
@@ -38,7 +38,7 @@ class PropelJSONParser extends PropelParser
      *
      * @return string Converted data, as a JSON string
      */
-    public function toJSON($array)
+    public function toJSON($array): string
     {
         return $this->fromArray($array);
     }
@@ -46,11 +46,11 @@ class PropelJSONParser extends PropelParser
     /**
      * Converts data from JSON to an associative array.
      *
-     * @param string $data Source data to convert, as a JSON string
+     * @param mixed $data Source data to convert, as a JSON string
      *
      * @return array Converted data
      */
-    public function toArray($data)
+    public function toArray(mixed $data): array
     {
         return json_decode($data, true);
     }
@@ -62,7 +62,7 @@ class PropelJSONParser extends PropelParser
      *
      * @return array Converted data
      */
-    public function fromJSON($data)
+    public function fromJSON(string $data): array
     {
         return $this->toArray($data);
     }

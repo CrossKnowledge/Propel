@@ -9,7 +9,8 @@
  */
 namespace CK\Runtime\Lib\Query;
 
-
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Adapter\DBAdapter;
 /**
  * Data object to describe a join between two tables, for example
  * <pre>
@@ -69,6 +70,7 @@ class Join
      *                            (may contain an alias name)
      * @param string $joinType The type of the join. Valid join types are null (implicit join),
      *                            Criteria::LEFT_JOIN, Criteria::RIGHT_JOIN, and Criteria::INNER_JOIN
+     * @throws PropelException
      */
     public function __construct($leftColumn = null, $rightColumn = null, $joinType = null)
     {
@@ -121,13 +123,13 @@ class Join
      *
      * @throws PropelException
      */
-    public function addConditions($lefts, $rights, $operators = array())
+    public function addConditions(array $lefts, array $rights, array $operators = array())
     {
-        if (count($lefts) != count($rights)) {
-            throw new PropelException("Unable to create join because the left column count isn't equal to the right column count");
+        if (count($lefts) != count($rights) || count($rights) === 0 || count($lefts) === 0) {
+            throw new PropelException("Unable to create join because the left column count isn't equal to the right column count, or one of them has NULL values.");
         }
         foreach ($lefts as $key => $left) {
-            $this->addCondition($left, $rights[$key], isset($operators[$key]) ? $operators[$key] : self::EQUAL);
+            $this->addCondition($left, $rights[$key], $operators[$key] ?? self::EQUAL);
         }
     }
 
@@ -400,11 +402,11 @@ class Join
     }
 
     /**
-     * @return all right columns of the join condition
+     * @return array all right columns of the join condition
      */
-    public function getRightColumns()
+    public function getRightColumns(): array
     {
-        $columns = array();
+        $columns = [];
         foreach ($this->right as $index => $column) {
             $columns[] = $this->getRightColumn($index);
         }
@@ -539,7 +541,7 @@ class Join
             for ($i = 0; $i < $this->count; $i++) {
                 $conditions [] = $this->getLeftColumn($i) . $this->getOperator($i) . $this->getRightColumn($i);
             }
-            $joinCondition = sprintf('(%s)', implode($conditions, ' AND '));
+            $joinCondition = sprintf('(%s)', implode(' AND ', $conditions));
         } else {
             $joinCondition = '';
             $this->getJoinCondition()->appendPsTo($joinCondition, $params);

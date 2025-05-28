@@ -7,10 +7,17 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
+use CK\Generator\Lib\Util\PropelDotGenerator;
+use IOException;
+use NullPointerException;
+use PhingFile;
+/*
 require_once 'task/AbstractPropelDataModelTask.php';
 require_once 'model/AppData.php';
 require_once 'util/PropelDotGenerator.php';
+*/
 
 /**
  * A task to generate Graphviz dot files from Propel datamodel.
@@ -28,12 +35,12 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
      *
      * @var        PhingFile
      */
-    private $sqldbmap;
+    private PhingFile $sqldbmap;
 
     /**
      * Name of the database.
      */
-    private $database;
+    private string $database;
 
     /**
      * Name of the output directory.
@@ -44,8 +51,9 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
      * Set the sqldbmap.
      *
      * @param PhingFile $out The db map.
+     * @throws IOException
      */
-    public function setOutputDirectory(PhingFile $out)
+    public function setOutputDirectory(PhingFile $out): void
     {
         if (!$out->exists()) {
             $out->mkdirs();
@@ -58,7 +66,7 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
      *
      * @param PhingFile $sqldbmap The db map.
      */
-    public function setSqlDbMap(PhingFile $sqldbmap)
+    public function setSqlDbMap(PhingFile $sqldbmap): void
     {
         $this->sqldbmap = $sqldbmap;
     }
@@ -78,7 +86,7 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
      *
      * @param string $database
      */
-    public function setDatabase($database)
+    public function setDatabase(string $database): void
     {
         $this->database = $database;
     }
@@ -88,12 +96,12 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
      *
      * @return string
      */
-    public function getDatabase()
+    public function getDatabase(): string
     {
         return $this->database;
     }
 
-    public function main()
+    public function main(): void
     {
         foreach ($this->getDataModels() as $dataModel) {
             foreach ($dataModel->getDatabases() as $database) {
@@ -106,9 +114,13 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
     /**
      * probably insecure
      */
-    public function writeDot($dotSyntax, PhingFile $outputDir, $baseFilename)
+    public function writeDot($dotSyntax, PhingFile $outputDir, $baseFilename): void
     {
-        $file = new PhingFile($outputDir, $baseFilename . '.schema.dot');
+        try {
+            $file = new PhingFile($outputDir, $baseFilename . '.schema.dot');
+        } catch (IOException|NullPointerException $e) {
+
+        }
         $this->log("Writing dot file to " . $file->getAbsolutePath());
         file_put_contents($file->getAbsolutePath(), $dotSyntax);
     }

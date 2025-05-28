@@ -7,7 +7,8 @@
  *
  * @license    MIT License
  */
-
+namespace CK\Generator\Lib\Exception;
+use Exception;
 /**
  * Class for exceptions thrown during schema parsing
  *

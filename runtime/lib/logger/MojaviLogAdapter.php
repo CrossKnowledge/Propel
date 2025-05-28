@@ -9,7 +9,6 @@
  */
 namespace CK\Runtime\Lib\Logger;
 
-
 /**
  * Mojavi logging adapter for propel
  *
@@ -40,7 +39,7 @@ class MojaviLogAdapter implements BasicLogger
      *
      * @param mixed $message String or Exception object containing the message to log.
      */
-    public function alert($message)
+    public function alert(mixed $message)
     {
         $this->log($message, 'alert');
     }
@@ -50,7 +49,7 @@ class MojaviLogAdapter implements BasicLogger
      *
      * @param mixed $message String or Exception object containing the message to log.
      */
-    public function crit($message)
+    public function crit(mixed $message)
     {
         $this->log($message, 'crit');
     }
@@ -60,7 +59,7 @@ class MojaviLogAdapter implements BasicLogger
      *
      * @param mixed $message String or Exception object containing the message to log.
      */
-    public function err($message)
+    public function err(mixed $message)
     {
         $this->log($message, 'err');
     }
@@ -70,7 +69,7 @@ class MojaviLogAdapter implements BasicLogger
      *
      * @param mixed $message String or Exception object containing the message to log.
      */
-    public function warning($message)
+    public function warning(mixed $message)
     {
         $this->log($message, 'warning');
     }
@@ -80,7 +79,7 @@ class MojaviLogAdapter implements BasicLogger
      *
      * @param mixed $message String or Exception object containing the message to log.
      */
-    public function notice($message)
+    public function notice(mixed $message)
     {
         $this->log($message, 'notice');
     }
@@ -90,7 +89,7 @@ class MojaviLogAdapter implements BasicLogger
      *
      * @param mixed $message String or Exception object containing the message to log.
      */
-    public function info($message)
+    public function info(mixed $message)
     {
         $this->log($message, 'info');
     }
@@ -100,7 +99,7 @@ class MojaviLogAdapter implements BasicLogger
      *
      * @param mixed $message String or Exception object containing the message to log.
      */
-    public function debug($message)
+    public function debug(mixed $message)
     {
         $this->log($message, 'debug');
     }
@@ -108,11 +107,11 @@ class MojaviLogAdapter implements BasicLogger
     /**
      * Primary method to handle logging.
      *
-     * @param mixed   $message  String or Exception object containing the message to log.
-     * @param integer $severity The numeric severity.  Defaults to null so that no
+     * @param mixed $message  String or Exception object containing the message to log.
+     * @param integer|null $severity The numeric severity.  Defaults to null so that no
      *                                assumptions are made about the logging backend.
      */
-    public function log($message, $severity = null)
+    public function log(mixed $message, int $severity = null)
     {
         if (is_null($this->logger)) {
             $this->logger = LogManager::getLogger('propel');

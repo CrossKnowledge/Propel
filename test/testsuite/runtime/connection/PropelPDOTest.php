@@ -8,7 +8,11 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/../../../tools/helpers/bookstore/BookstoreTestBase.php';
+// Use the new bootstrap system instead of direct require
+require_once dirname(__FILE__) . '/../../../bootstrap.php';
+
+// Import the namespaced Propel class
+use CK\Runtime\Lib\Propel;
 
 /**
  * Test for PropelPDO subclass.
@@ -17,7 +21,6 @@ require_once dirname(__FILE__) . '/../../../tools/helpers/bookstore/BookstoreTes
  */
 class PropelPDOTest extends PHPUnit_Framework_TestCase
 {
-
     public function testSetAttribute()
     {
         $con = Propel::getConnection(BookPeer::DATABASE_NAME);

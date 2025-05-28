@@ -7,9 +7,18 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
+use CK\Generator\Lib\Util\PropelMigrationManager;
+use CK\Generator\Lib\Util\PropelSQLParser;
+use CK\Runtime\Lib\Exception\PropelException;
+use Project;
+use PDOException;
+
+/*
 require_once dirname(__FILE__) . '/BasePropelMigrationTask.php';
 require_once dirname(__FILE__) . '/../util/PropelMigrationManager.php';
+*/
 
 /**
  * This Task executes the next migration down
@@ -22,6 +31,7 @@ class PropelMigrationDownTask extends BasePropelMigrationTask
 
     /**
      * Main method builds all the targets for a typical propel project.
+     * @throws PropelException
      */
     public function main()
     {
@@ -67,7 +77,7 @@ class PropelMigrationDownTask extends BasePropelMigrationTask
                     $stmt = $pdo->prepare($statement);
                     $stmt->execute();
                     $res++;
-                } catch (PDOException $e) {
+                } catch (PDOException) { //Removed unused $e
                     $this->log(sprintf('Failed to execute SQL "%s"', $statement), Project::MSG_ERR);
                     // continue
                 }

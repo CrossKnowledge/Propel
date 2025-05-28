@@ -11,7 +11,7 @@
 namespace CK\Generator\Lib\Builder\OM;
 
 use CK\Generator\Lib\Model\IDMethod;
-use CK\Generator\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
 use CK\Generator\Lib\Model\Validator;
 use CK\Generator\Lib\Model\ForeignKey;
 

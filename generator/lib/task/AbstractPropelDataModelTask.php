@@ -7,14 +7,34 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
+
+use CK\Generator\Lib\Config\GeneratorConfig;
+use CK\Generator\Lib\Exception\EngineException;
+use DOMDocument;
+use FileSet;
+use Mapper;
+use NullPointerException;
+use PDO;
+use PhingFile;
+use IOException;
+use BuildException;
+use PDOException;
+use Project;
+use FileSystem;
+use CK\Generator\Lib\Model\AppData;
+use CK\Generator\Lib\Util\PropelSchemaValidator;
+//use XSLTProcessor;
 
 //include_once 'phing/tasks/ext/CapsuleTask.php';
+/*
 require_once 'task/AbstractPropelTask.php';
 include_once 'config/GeneratorConfig.php';
 include_once 'model/AppData.php';
 include_once 'model/Database.php';
 include_once 'builder/util/XmlToAppData.php';
 include_once 'util/PropelSchemaValidator.php';
+*/
 
 /**
  * An abstract base Propel task to perform work related to the XML schema file.
@@ -153,9 +173,9 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
      * Return the data models that have been
      * processed.
      *
-     * @return List data models
+     * @return array List data models
      */
-    public function getDataModels()
+    public function getDataModels(): array
     {
         if (!$this->dataModelsLoaded) {
             $this->loadDataModels();
@@ -167,7 +187,7 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
     /**
      * Return the data model to database name map.
      *
-     * @return Hashtable data model name to database name map.
+     * @ return Hashtable data model name to database name map.
      */
     public function getDataModelDbMap()
     {
@@ -181,9 +201,9 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
     /**
      * Adds a set of xml schema files (nested fileset attribute).
      *
-     * @param      set a Set of xml schema files
+     * @param FileSet $set a Set of xml schema files
      */
-    public function addSchemaFileset(Fileset $set)
+    public function addSchemaFileset(Fileset $set): void
     {
         $this->schemaFilesets[] = $set;
     }
@@ -201,7 +221,7 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
     /**
      * Set the current target database. (e.g. mysql, oracle, ..)
      *
-     * @param   $v target database(s)
+     * @ param   $v target database(s)
      */
     public function setTargetDatabase($v)
     {
@@ -448,7 +468,11 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
             foreach ($dataModelFiles as $dmFilename) {
 
                 $this->log("Processing: " . $dmFilename, Project::MSG_VERBOSE);
-                $xmlFile = new PhingFile($srcDir, $dmFilename);
+                try {
+                    $xmlFile = new PhingFile($srcDir, $dmFilename);
+                } catch (IOException|NullPointerException $e) {
+
+                }
 
                 $dom = new DomDocument('1.0', 'UTF-8');
                 $dom->load($xmlFile->getAbsolutePath());

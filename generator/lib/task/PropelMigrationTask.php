@@ -7,9 +7,18 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
+use CK\Generator\Lib\Util\PropelMigrationManager;
+use CK\Generator\Lib\Util\PropelSQLParser;
+use CK\Runtime\Lib\Exception\PropelException;
+use Project;
+use PDOException;
+
+/*
 require_once dirname(__FILE__) . '/BasePropelMigrationTask.php';
 require_once dirname(__FILE__) . '/../util/PropelMigrationManager.php';
+*/
 
 /**
  * This Task executes the next migrations up
@@ -21,6 +30,7 @@ class PropelMigrationTask extends BasePropelMigrationTask
 {
     /**
      * Main method builds all the targets for a typical propel project.
+     * @throws PropelException
      */
     public function main()
     {

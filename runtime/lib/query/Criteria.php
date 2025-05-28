@@ -9,7 +9,13 @@
  */
 namespace CK\Runtime\Lib\Query;
 
+use CK\Runtime\Lib\Util\PropelConditionalProxy;
+use CK\Runtime\Lib\Propel;
 use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Util\BasePeer;
+use Exception;
+use IteratorAggregate;
+use ReturnTypeWillChange;
 
 /**
  * This is a utility class for holding criteria information for a query.
@@ -31,164 +37,164 @@ class Criteria implements IteratorAggregate
 {
 
     /** Comparison type. */
-    const EQUAL = "=";
+    const string EQUAL = "=";
 
     /** Comparison type. */
-    const NOT_EQUAL = "<>";
+    const string NOT_EQUAL = "<>";
 
     /** Comparison type. */
-    const ALT_NOT_EQUAL = "!=";
+    const string ALT_NOT_EQUAL = "!=";
 
     /** Comparison type. */
-    const GREATER_THAN = ">";
+    const string GREATER_THAN = ">";
 
     /** Comparison type. */
-    const LESS_THAN = "<";
+    const string LESS_THAN = "<";
 
     /** Comparison type. */
-    const GREATER_EQUAL = ">=";
+    const string GREATER_EQUAL = ">=";
 
     /** Comparison type. */
-    const LESS_EQUAL = "<=";
+    const string LESS_EQUAL = "<=";
 
     /** Comparison type. */
-    const LIKE = " LIKE ";
+    const string LIKE = " LIKE ";
 
     /** Comparison type. */
-    const NOT_LIKE = " NOT LIKE ";
+    const string NOT_LIKE = " NOT LIKE ";
 
     /** Comparison for array column types */
-    const CONTAINS_ALL = "CONTAINS_ALL";
+    const string CONTAINS_ALL = "CONTAINS_ALL";
 
     /** Comparison for array column types */
-    const CONTAINS_SOME = "CONTAINS_SOME";
+    const string CONTAINS_SOME = "CONTAINS_SOME";
 
     /** Comparison for array column types */
-    const CONTAINS_NONE = "CONTAINS_NONE";
+    const string CONTAINS_NONE = "CONTAINS_NONE";
 
     /** PostgreSQL comparison type */
-    const ILIKE = " ILIKE ";
+    const string ILIKE = " ILIKE ";
 
     /** PostgreSQL comparison type */
-    const NOT_ILIKE = " NOT ILIKE ";
+    const string NOT_ILIKE = " NOT ILIKE ";
 
     /** Comparison type. */
-    const CUSTOM = "CUSTOM";
+    const string CUSTOM = "CUSTOM";
 
     /** Comparison type */
-    const RAW = "RAW";
+    const string RAW = "RAW";
 
     /** Comparison type for update */
-    const CUSTOM_EQUAL = "CUSTOM_EQUAL";
+    const string CUSTOM_EQUAL = "CUSTOM_EQUAL";
 
     /** Comparison type. */
-    const DISTINCT = "DISTINCT";
+    const string DISTINCT = "DISTINCT";
 
     /** Comparison type. */
-    const IN = " IN ";
+    const string IN = " IN ";
 
     /** Comparison type. */
-    const NOT_IN = " NOT IN ";
+    const string NOT_IN = " NOT IN ";
 
     /** Comparison type. */
-    const ALL = "ALL";
+    const string ALL = "ALL";
 
     /** Comparison type. */
-    const JOIN = "JOIN";
+    const string JOIN = "JOIN";
 
     /** Binary math operator: AND */
-    const BINARY_AND = "&";
+    const string BINARY_AND = "&";
 
     /** Binary math operator: OR */
-    const BINARY_OR = "|";
+    const string BINARY_OR = "|";
 
     /** "Order by" qualifier - ascending */
-    const ASC = "ASC";
+    const string ASC = "ASC";
 
     /** "Order by" qualifier - descending */
-    const DESC = "DESC";
+    const string DESC = "DESC";
 
     /** "IS NULL" null comparison */
-    const ISNULL = " IS NULL ";
+    const string ISNULL = " IS NULL ";
 
     /** "IS NOT NULL" null comparison */
-    const ISNOTNULL = " IS NOT NULL ";
+    const string ISNOTNULL = " IS NOT NULL ";
 
     /** "CURRENT_DATE" ANSI SQL function */
-    const CURRENT_DATE = "CURRENT_DATE";
+    const string CURRENT_DATE = "CURRENT_DATE";
 
     /** "CURRENT_TIME" ANSI SQL function */
-    const CURRENT_TIME = "CURRENT_TIME";
+    const string CURRENT_TIME = "CURRENT_TIME";
 
     /** "CURRENT_TIMESTAMP" ANSI SQL function */
-    const CURRENT_TIMESTAMP = "CURRENT_TIMESTAMP";
+    const string CURRENT_TIMESTAMP = "CURRENT_TIMESTAMP";
 
     /** "LEFT JOIN" SQL statement */
-    const LEFT_JOIN = "LEFT JOIN";
+    const string LEFT_JOIN = "LEFT JOIN";
 
     /** "RIGHT JOIN" SQL statement */
-    const RIGHT_JOIN = "RIGHT JOIN";
+    const string RIGHT_JOIN = "RIGHT JOIN";
 
     /** "INNER JOIN" SQL statement */
-    const INNER_JOIN = "INNER JOIN";
+    const string INNER_JOIN = "INNER JOIN";
 
     /** logical OR operator */
-    const LOGICAL_OR = "OR";
+    const string LOGICAL_OR = "OR";
 
     /** logical AND operator */
-    const LOGICAL_AND = "AND";
+    const string LOGICAL_AND = "AND";
 
-    protected $ignoreCase = false;
-    protected $singleRecord = false;
+    protected bool $ignoreCase = false;
+    protected bool $singleRecord = false;
 
     /**
      * Storage of select data. Collection of column names.
      *
      * @var        array
      */
-    protected $selectColumns = array();
+    protected array $selectColumns = array();
 
     /**
      * Storage of aliased select data. Collection of column names.
      *
      * @var        array
      */
-    protected $asColumns = array();
+    protected array $asColumns = array();
 
     /**
      * Storage of select modifiers data. Collection of modifier names.
      *
      * @var        array
      */
-    protected $selectModifiers = array();
+    protected array $selectModifiers = array();
 
     /**
      * Storage of conditions data. Collection of Criterion objects.
      *
      * @var        Criterion[]
      */
-    protected $map = array();
+    protected array $map = array();
 
     /**
      * Storage of ordering data. Collection of column names.
      *
      * @var        array
      */
-    protected $orderByColumns = array();
+    protected array $orderByColumns = array();
 
     /**
      * Storage of grouping data. Collection of column names.
      *
      * @var        array
      */
-    protected $groupByColumns = array();
+    protected array $groupByColumns = array();
 
     /**
      * Storage of having data.
      *
-     * @var        Criterion
+     * @var        ?Criterion
      */
-    protected $having = null;
+    protected ?Criterion $having = null;
 
     /**
      * Storage of join data. collection of Join objects.
@@ -240,9 +246,9 @@ class Criteria implements IteratorAggregate
     // flag to note that the criteria involves a blob.
     protected $blobFlag = null;
 
-    protected $aliases = array();
+    protected array $aliases = array();
 
-    protected $useTransaction = false;
+    protected bool $useTransaction = false;
 
     /**
      * Storage for Criterions expected to be combined
@@ -282,7 +288,7 @@ class Criteria implements IteratorAggregate
      * Implementing SPL IteratorAggregate interface.  This allows
      * you to foreach () over a Criteria object.
      */
-    public function getIterator()
+    #[ReturnTypeWillChange] public function getIterator(): CriterionIterator
     {
         return new CriterionIterator($this);
     }
@@ -792,7 +798,7 @@ class Criteria implements IteratorAggregate
      * The name of the table must be used implicitly in the column name,
      * so the Column name must be something like 'TABLE.id'.
      *
-     * @param string $critOrColumn The column to run the comparison on, or a Criterion object.
+     * @param string|Criterion $critOrColumn The column to run the comparison on, or a Criterion object.
      * @param mixed  $value
      * @param string $comparison   A String.
      *

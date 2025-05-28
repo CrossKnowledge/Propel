@@ -31,7 +31,7 @@ class PropelColumnComparator
      *
      * @return PropelColumnDiff|boolean return false if the two columns are similar
      */
-    public static function computeDiff(Column $fromColumn, Column $toColumn)
+    public static function computeDiff(Column $fromColumn, Column $toColumn): PropelColumnDiff|bool
     {
         if ($changedProperties = self::compareColumns($fromColumn, $toColumn)) {
             if ($fromColumn->hasPlatform() || $toColumn->hasPlatform()) {
@@ -51,7 +51,7 @@ class PropelColumnComparator
         }
     }
 
-    public static function compareColumns(Column $fromColumn, Column $toColumn)
+    public static function compareColumns(Column $fromColumn, Column $toColumn): array
     {
         $changedProperties = array();
 

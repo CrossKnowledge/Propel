@@ -9,6 +9,16 @@
  */
 namespace CK\Runtime\Lib\Adapter;
 
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Util\PropelDateTime;
+use CK\Runtime\Lib\Map\ColumnMap;
+use CK\Runtime\Lib\Util\PropelColumnTypes;
+use CK\Runtime\Lib\Query\Criteria;
+use CK\Runtime\Lib\Map\DatabaseMap;
+use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Query\ModelCriteria;
+use PDOStatement;
+use PDO;
 
 /**
  * DBAdapter</code> defines the interface for a Propel database adapter.
@@ -34,16 +44,16 @@ namespace CK\Runtime\Lib\Adapter;
  */
 abstract class DBAdapter
 {
-    const ID_METHOD_NONE = 0;
-    const ID_METHOD_AUTOINCREMENT = 1;
-    const ID_METHOD_SEQUENCE = 2;
+    const int ID_METHOD_NONE = 0;
+    const int ID_METHOD_AUTOINCREMENT = 1;
+    const int ID_METHOD_SEQUENCE = 2;
 
     /**
      * Propel driver to Propel adapter map.
      *
      * @var array
      */
-    private static $adapters = array(
+    private static array $adapters = array(
         'mysql'  => 'DBMySQL',
         'mysqli' => 'DBMySQLi',
         'mssql'  => 'DBMSSQL',
@@ -62,16 +72,14 @@ abstract class DBAdapter
      * @param string $driver The name of the Propel driver to create a new adapter instance
      *                            for or a shorter form adapter key.
      *
-     * @throws PropelException If the adapter could not be instantiated.
      * @return DBAdapter       An instance of a Propel database adapter.
+     *@throws PropelException If the adapter could not be instantiated.
      */
-    public static function factory($driver)
+    public static function factory(string $driver): DBAdapter
     {
-        $adapterClass = isset(self::$adapters[$driver]) ? self::$adapters[$driver] : null;
+        $adapterClass = self::$adapters[$driver] ?? null;
         if ($adapterClass !== null) {
-            $a = new $adapterClass();
-
-            return $a;
+            return new $adapterClass();
         } else {
             throw new PropelException("Unsupported Propel driver: " . $driver . ": Check your configuration file");
         }
@@ -84,7 +92,7 @@ abstract class DBAdapter
      *
      * @return array
      */
-    public function prepareParams($settings)
+    public function prepareParams(array $settings): array
     {
         return $settings;
     }
@@ -103,7 +111,7 @@ abstract class DBAdapter
      * @param PDO   $con      A PDO connection instance.
      * @param array $settings An array of settings.
      */
-    public function initConnection(PDO $con, array $settings)
+    public function initConnection(PDO $con, array $settings): void
     {
         if (isset($settings['charset']['value'])) {
             $this->setCharset($con, $settings['charset']['value']);
@@ -123,12 +131,12 @@ abstract class DBAdapter
      * This method is invoked from the default initConnection() method and must
      * be overridden for an RDMBS which does _not_ support this SQL standard.
      *
-     * @see       initConnection()
-     *
      * @param PDO    $con     A $PDO PDO connection instance.
      * @param string $charset The $string charset encoding.
+          *@see       initConnection()
+     *
      */
-    public function setCharset(PDO $con, $charset)
+    public function setCharset(PDO $con, string $charset): void
     {
         $con->exec("SET NAMES '" . $charset . "'");
     }
@@ -140,7 +148,7 @@ abstract class DBAdapter
      *
      * @return string The upper case string.
      */
-    abstract public function toUpperCase($in);
+    abstract public function toUpperCase(string $in): string;
 
     /**
      * Returns the character used to indicate the beginning and end of
@@ -149,7 +157,7 @@ abstract class DBAdapter
      *
      * @return string The text delimiter.
      */
-    public function getStringDelimiter()
+    public function getStringDelimiter(): string
     {
         return '\'';
     }
@@ -161,7 +169,7 @@ abstract class DBAdapter
      *
      * @return string The string in a case that can be ignored.
      */
-    abstract public function ignoreCase($in);
+    abstract public function ignoreCase(string $in): string;
 
     /**
      * This method is used to ignore case in an ORDER BY clause.
@@ -173,7 +181,7 @@ abstract class DBAdapter
      *
      * @return string The string in a case that can be ignored.
      */
-    public function ignoreCaseInOrderBy($in)
+    public function ignoreCaseInOrderBy(string $in): string
     {
         return $this->ignoreCase($in);
     }
@@ -186,18 +194,18 @@ abstract class DBAdapter
      *
      * @return string
      */
-    abstract public function concatString($s1, $s2);
+    abstract public function concatString(string $s1, string $s2): string;
 
     /**
      * Returns SQL which extracts a substring.
      *
-     * @param string  $s   String to extract from.
+     * @param string $s   String to extract from.
      * @param integer $pos Offset to start from.
      * @param integer $len Number of characters to extract.
      *
      * @return string
      */
-    abstract public function subString($s, $pos, $len);
+    abstract public function subString(string $s, int $pos, int $len): string;
 
     /**
      * Returns SQL which calculates the length (in chars) of a string.
@@ -206,7 +214,7 @@ abstract class DBAdapter
      *
      * @return string
      */
-    abstract public function strLength($s);
+    abstract public function strLength(string $s): string;
 
     /**
      * Quotes database objec identifiers (table names, col names, sequences, etc.).
@@ -215,7 +223,7 @@ abstract class DBAdapter
      *
      * @return string The quoted identifier.
      */
-    public function quoteIdentifier($text)
+    public function quoteIdentifier(string $text): string
     {
         return '"' . $text . '"';
     }
@@ -229,7 +237,7 @@ abstract class DBAdapter
      *
      * @return string The quoted table name
      **/
-    public function quoteIdentifierTable($table)
+    public function quoteIdentifierTable(string $table): string
     {
         return implode(" ", array_map(array($this, "quoteIdentifier"), explode(" ", $table)));
     }
@@ -239,7 +247,7 @@ abstract class DBAdapter
      *
      * @return integer One of DBAdapter:ID_METHOD_SEQUENCE, DBAdapter::ID_METHOD_AUTOINCREMENT.
      */
-    protected function getIdMethod()
+    protected function getIdMethod(): int
     {
         return DBAdapter::ID_METHOD_AUTOINCREMENT;
     }
@@ -249,7 +257,7 @@ abstract class DBAdapter
      *
      * @return boolean
      */
-    public function isGetIdBeforeInsert()
+    public function isGetIdBeforeInsert(): bool
     {
         return ($this->getIdMethod() === DBAdapter::ID_METHOD_SEQUENCE);
     }
@@ -259,7 +267,7 @@ abstract class DBAdapter
      *
      * @return boolean
      */
-    public function isGetIdAfterInsert()
+    public function isGetIdAfterInsert(): bool
     {
         return ($this->getIdMethod() === DBAdapter::ID_METHOD_AUTOINCREMENT);
     }
@@ -270,11 +278,11 @@ abstract class DBAdapter
      * Any code modification here must be ported there.
      *
      * @param PDO    $con
-     * @param string $name
+     * @param string|null $name
      *
      * @return mixed
      */
-    public function getId(PDO $con, $name = null)
+    public function getId(PDO $con, string $name = null): mixed
     {
         return $con->lastInsertId($name);
     }
@@ -283,11 +291,12 @@ abstract class DBAdapter
      * Formats a temporal value before binding, given a ColumnMap object.
      *
      * @param mixed $value The temporal value
-     * @param mixed $type  PropelColumnTypes constant, or ColumnMap object
+     * @param mixed $type PropelColumnTypes constant, or ColumnMap object
      *
      * @return string The formatted temporal value
+     * @throws PropelException
      */
-    public function formatTemporalValue($value, $type)
+    public function formatTemporalValue(mixed $value, mixed $type): string
     {
         /** @var $dt PropelDateTime */
         if ($dt = PropelDateTime::newInstance($value)) {
@@ -317,7 +326,7 @@ abstract class DBAdapter
      *
      * @return string
      */
-    public function getTimestampFormatter()
+    public function getTimestampFormatter(): string
     {
         return 'Y-m-d H:i:s';
     }
@@ -327,7 +336,7 @@ abstract class DBAdapter
      *
      * @return string
      */
-    public function getDateFormatter()
+    public function getDateFormatter(): string
     {
         return "Y-m-d";
     }
@@ -337,7 +346,7 @@ abstract class DBAdapter
      *
      * @return string
      */
-    public function getTimeFormatter()
+    public function getTimeFormatter(): string
     {
         return "H:i:s";
     }
@@ -353,7 +362,7 @@ abstract class DBAdapter
      *
      * @return boolean
      */
-    public function useQuoteIdentifier()
+    public function useQuoteIdentifier(): bool
     {
         return false;
     }
@@ -361,40 +370,40 @@ abstract class DBAdapter
     /**
      * Allows manipulation of the query string before PDOStatement is instantiated.
      *
-     * @param string      $sql    The sql statement
+     * @param string $sql    The sql statement
      * @param array       $params array('column' => ..., 'table' => ..., 'value' => ...)
      * @param Criteria    $values
      * @param DatabaseMap $dbMap
      */
-    public function cleanupSQL(&$sql, array &$params, Criteria $values, DatabaseMap $dbMap)
+    public function cleanupSQL(string &$sql, array &$params, Criteria $values, DatabaseMap $dbMap)
     {
     }
 
     /**
      * Modifies the passed-in SQL to add LIMIT and/or OFFSET.
      *
-     * @param string  $sql
+     * @param string $sql
      * @param integer $offset
      * @param integer $limit
      */
-    abstract public function applyLimit(&$sql, $offset, $limit);
+    abstract public function applyLimit(string &$sql, int $offset, int $limit);
 
     /**
      * Gets the SQL string that this adapter uses for getting a random number.
      *
-     * @param mixed $seed (optional) seed value for databases that support this
+     * @param mixed|null $seed (optional) seed value for databases that support this
      */
-    abstract public function random($seed = null);
+    abstract public function random(mixed $seed = null);
 
     /**
      * Returns the "DELETE FROM <table> [AS <alias>]" part of DELETE query.
      *
      * @param Criteria $criteria
-     * @param string   $tableName
+     * @param string $tableName
      *
      * @return string
      */
-    public function getDeleteFromClause($criteria, $tableName)
+    public function getDeleteFromClause(Criteria $criteria, string $tableName): string
     {
         $sql = 'DELETE ';
         if ($queryComment = $criteria->getComment()) {
@@ -421,12 +430,12 @@ abstract class DBAdapter
      * Move from BasePeer to DBAdapter and turn from static to non static
      *
      * @param Criteria $criteria
-     * @param array    $fromClause
-     * @param boolean  $aliasAll
+     * @param array $fromClause
+     * @param boolean $aliasAll
      *
      * @return string
      */
-    public function createSelectSqlPart(Criteria $criteria, &$fromClause, $aliasAll = false)
+    public function createSelectSqlPart(Criteria $criteria, array &$fromClause, bool $aliasAll = false): string
     {
         $selectClause = array();
 
@@ -479,12 +488,10 @@ abstract class DBAdapter
         $queryComment = $criteria->getComment();
 
         // Build the SQL from the arrays we compiled
-        $sql =  "SELECT "
+        return "SELECT "
             . ($queryComment ? '/* ' . $queryComment . ' */ ' : '')
             . ($selectModifiers ? (implode(' ', $selectModifiers) . ' ') : '')
             . implode(", ", $selectClause);
-
-        return $sql;
     }
 
     /**
@@ -498,7 +505,7 @@ abstract class DBAdapter
      *
      * @return Criteria The input, with Select columns replaced by aliases
      */
-    public function turnSelectColumnsToAliases(Criteria $criteria)
+    public function turnSelectColumnsToAliases(Criteria $criteria): Criteria
     {
         $selectColumns = $criteria->getSelectColumns();
         // clearSelectColumns also clears the aliases, so get them too
@@ -545,10 +552,11 @@ abstract class DBAdapter
      * </code>
      *
      * @param PDOStatement $stmt
-     * @param array        $params array('column' => ..., 'table' => ..., 'value' => ...)
-     * @param DatabaseMap  $dbMap
+     * @param array $params array('column' => ..., 'table' => ..., 'value' => ...)
+     * @param DatabaseMap $dbMap
+     * @throws PropelException
      */
-    public function bindValues(PDOStatement $stmt, array $params, DatabaseMap $dbMap)
+    public function bindValues(PDOStatement $stmt, array $params, DatabaseMap $dbMap): void
     {
         $position = 0;
         foreach ($params as $param) {
@@ -561,7 +569,7 @@ abstract class DBAdapter
             }
             $tableName = $param['table'];
             if (null === $tableName) {
-                $type = isset($param['type']) ? $param['type'] : PDO::PARAM_STR;
+                $type = $param['type'] ?? PDO::PARAM_STR;
                 $stmt->bindValue($parameter, $value, $type);
                 continue;
             }
@@ -576,15 +584,16 @@ abstract class DBAdapter
      * Warning: duplicates logic from DefaultPlatform::getColumnBindingPHP().
      * Any code modification here must be ported there.
      *
-     * @param PDOStatement $stmt      The statement to bind
-     * @param string       $parameter Parameter identifier
-     * @param mixed        $value     The value to bind
-     * @param ColumnMap    $cMap      The ColumnMap of the column to bind
-     * @param null|integer $position  The position of the parameter to bind
+     * @param PDOStatement $stmt The statement to bind
+     * @param string $parameter Parameter identifier
+     * @param mixed $value The value to bind
+     * @param ColumnMap $cMap The ColumnMap of the column to bind
+     * @param integer|null $position The position of the parameter to bind
      *
      * @return boolean
+     * @throws PropelException
      */
-    public function bindValue(PDOStatement $stmt, $parameter, $value, ColumnMap $cMap, $position = null)
+    public function bindValue(PDOStatement $stmt, string $parameter, mixed $value, ColumnMap $cMap, int $position = null): bool
     {
         if ($cMap->isTemporal()) {
             $value = $this->formatTemporalValue($value, $cMap);
@@ -601,12 +610,12 @@ abstract class DBAdapter
      * Do Explain Plan for query object or query string
      *
      * @param PropelPDO            $con   propel connection
-     * @param ModelCriteria|string $query query the criteria or the query string
+     * @param string|ModelCriteria $query query the criteria or the query string
      *
-     * @throws PropelException if explain plan is not implemented for adapter
      * @return PDOStatement    A PDO statement executed using the connection, ready to be fetched
+     *@throws PropelException if explain plan is not implemented for adapter
      */
-    public function doExplainPlan(PropelPDO $con, $query)
+    public function doExplainPlan(PropelPDO $con, string|ModelCriteria $query): PDOStatement
     {
         throw new PropelException("Explain plan is not implemented for this adapter");
     }

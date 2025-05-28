@@ -7,6 +7,11 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Util;
+
+use CK\Generator\Lib\Model\AppData;
+use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Model\Table;
 
 /**
  * Service class for validating XML schemas.

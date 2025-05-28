@@ -9,6 +9,7 @@
  */
 namespace CK\Runtime\Lib\Adapter;
 
+use PDO;
 
 /**
  * This adapter  is used when you do not have a database installed.
@@ -28,7 +29,7 @@ class DBNone extends DBAdapter
      * @param PDO   $con
      * @param array $settings
      */
-    public function initConnection(PDO $con, array $settings)
+    public function initConnection(PDO $con, array $settings): void
     {
     }
 
@@ -39,7 +40,7 @@ class DBNone extends DBAdapter
      *
      * @return string The upper case string.
      */
-    public function toUpperCase($in)
+    public function toUpperCase(string $in): string
     {
         return $in;
     }
@@ -51,7 +52,7 @@ class DBNone extends DBAdapter
      *
      * @return string The string in a case that can be ignored.
      */
-    public function ignoreCase($in)
+    public function ignoreCase(string $in): string
     {
         return $in;
     }
@@ -64,7 +65,7 @@ class DBNone extends DBAdapter
      *
      * @return string
      */
-    public function concatString($s1, $s2)
+    public function concatString(string $s1, string $s2): string
     {
         return ($s1 . $s2);
     }
@@ -72,13 +73,13 @@ class DBNone extends DBAdapter
     /**
      * Returns SQL which extracts a substring.
      *
-     * @param string  $s   String to extract from.
+     * @param string $s   String to extract from.
      * @param integer $pos Offset to start from.
      * @param integer $len Number of characters to extract.
      *
      * @return string
      */
-    public function subString($s, $pos, $len)
+    public function subString(string $s, int $pos, int $len): string
     {
         return substr($s, $pos, $len);
     }
@@ -90,7 +91,7 @@ class DBNone extends DBAdapter
      *
      * @return string
      */
-    public function strLength($s)
+    public function strLength(string $s): string
     {
         return strlen($s);
     }
@@ -98,20 +99,20 @@ class DBNone extends DBAdapter
     /**
      * Modifies the passed-in SQL to add LIMIT and/or OFFSET.
      *
-     * @param string  $sql
+     * @param string $sql
      * @param integer $offset
      * @param integer $limit
      */
-    public function applyLimit(&$sql, $offset, $limit)
+    public function applyLimit(string &$sql, int $offset, int $limit)
     {
     }
 
     /**
      * Gets the SQL string that this adapter uses for getting a random number.
      *
-     * @param string $seed (optional) seed value for databases that support this
+     * @param mixed|null $seed (optional) seed value for databases that support this
      */
-    public function random($seed = null)
+    public function random(mixed $seed = null)
     {
     }
 }

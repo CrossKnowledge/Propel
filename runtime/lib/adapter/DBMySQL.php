@@ -10,6 +10,16 @@
 namespace CK\Runtime\Lib\Adapter;
 
 
+use CK\Runtime\Lib\Query\ModelCriteria;
+use CK\Runtime\Lib\Map\ColumnMap;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Propel;
+use CK\Runtime\Lib\Util\BasePeer;
+use PDOException;
+use PDOStatement;
+use PDO;
+
 /**
  * This is used in order to connect to a MySQL database.
  *
@@ -29,7 +39,7 @@ class DBMySQL extends DBAdapter
      *
      * @return string The upper case string.
      */
-    public function toUpperCase($in)
+    public function toUpperCase(string $in): string
     {
         return "UPPER(" . $in . ")";
     }
@@ -41,7 +51,7 @@ class DBMySQL extends DBAdapter
      *
      * @return string The string in a case that can be ignored.
      */
-    public function ignoreCase($in)
+    public function ignoreCase(string $in): string
     {
         return "UPPER(" . $in . ")";
     }
@@ -54,7 +64,7 @@ class DBMySQL extends DBAdapter
      *
      * @return string
      */
-    public function concatString($s1, $s2)
+    public function concatString(string $s1, string $s2): string
     {
         return "CONCAT($s1, $s2)";
     }
@@ -62,13 +72,13 @@ class DBMySQL extends DBAdapter
     /**
      * Returns SQL which extracts a substring.
      *
-     * @param string  $s   String to extract from.
+     * @param string $s   String to extract from.
      * @param integer $pos Offset to start from.
      * @param integer $len Number of characters to extract.
      *
      * @return string
      */
-    public function subString($s, $pos, $len)
+    public function subString(string $s, int $pos, int $len): string
     {
         return "SUBSTRING($s, $pos, $len)";
     }
@@ -80,7 +90,7 @@ class DBMySQL extends DBAdapter
      *
      * @return string
      */
-    public function strLength($s)
+    public function strLength(string $s): string
     {
         return "CHAR_LENGTH($s)";
     }
@@ -93,7 +103,7 @@ class DBMySQL extends DBAdapter
      *
      * @throws PDOException No Statement could be created or executed.
      */
-    public function lockTable(PDO $con, $table)
+    public function lockTable(PDO $con, string $table): void
     {
         $con->exec("LOCK TABLE " . $table . " WRITE");
     }
@@ -106,31 +116,31 @@ class DBMySQL extends DBAdapter
      *
      * @throws PDOException No Statement could be created or executed.
      */
-    public function unlockTable(PDO $con, $table)
+    public function unlockTable(PDO $con, string $table): void
     {
         $statement = $con->exec("UNLOCK TABLES");
     }
 
     /**
-     * @see       DBAdapter::quoteIdentifier()
-     *
      * @param string $text
      *
      * @return string
+     *@see       DBAdapter::quoteIdentifier()
+     *
      */
-    public function quoteIdentifier($text)
+    public function quoteIdentifier(string $text): string
     {
         return '`' . $text . '`';
     }
 
     /**
-     * @see       DBAdapter::quoteIdentifierTable()
-     *
      * @param string $table
      *
      * @return string
+     *@see       DBAdapter::quoteIdentifierTable()
+     *
      */
-    public function quoteIdentifierTable($table)
+    public function quoteIdentifierTable(string $table): string
     {
         // e.g. 'database.table alias' should be escaped as '`database`.`table` `alias`'
         return '`' . strtr($table, array('.' => '`.`', ' ' => '` `')) . '`';
@@ -141,19 +151,19 @@ class DBMySQL extends DBAdapter
      *
      * @return boolean
      */
-    public function useQuoteIdentifier()
+    public function useQuoteIdentifier(): bool
     {
         return true;
     }
 
     /**
-     * @see       DBAdapter::applyLimit()
-     *
      * @param string  $sql
      * @param integer $offset
      * @param integer $limit
+     *@see       DBAdapter::applyLimit()
+     *
      */
-    public function applyLimit(&$sql, $offset, $limit)
+    public function applyLimit(string &$sql, int $offset, int $limit): void
     {
         if ($limit > 0) {
             $sql .= " LIMIT " . ($offset > 0 ? $offset . ", " : "") . $limit;
@@ -163,29 +173,30 @@ class DBMySQL extends DBAdapter
     }
 
     /**
-     * @see       DBAdapter::random()
-     *
-     * @param string $seed
+     * @param mixed|null $seed
      *
      * @return string
+     * @see       DBAdapter::random()
+     *
      */
-    public function random($seed = null)
+    public function random(mixed $seed = null): string
     {
         return 'rand(' . ((int) $seed) . ')';
     }
 
     /**
-     * @see       DBAdapter::bindValue()
-     *
      * @param PDOStatement $stmt
-     * @param string       $parameter
-     * @param mixed        $value
-     * @param ColumnMap    $cMap
-     * @param null|integer $position
+     * @param string $parameter
+     * @param mixed $value
+     * @param ColumnMap $cMap
+     * @param integer|null $position
      *
      * @return boolean
+     * @throws PropelException
+     * @see       DBAdapter::bindValue()
+     *
      */
-    public function bindValue(PDOStatement $stmt, $parameter, $value, ColumnMap $cMap, $position = null)
+    public function bindValue(PDOStatement $stmt, string $parameter, mixed $value, ColumnMap $cMap, int $position = null): bool
     {
         $pdoType = $cMap->getPdoType();
         // FIXME - This is a temporary hack to get around apparent bugs w/ PDO+MYSQL
@@ -210,15 +221,15 @@ class DBMySQL extends DBAdapter
      * Prepare connection parameters.
      * See: http://www.propelorm.org/ticket/1360
      *
-     * @param array $params
+     * @param array $settings
      *
      * @return array
      *
      * @throws PropelException
      */
-    public function prepareParams($params)
+    public function prepareParams(array $settings): array
     {
-        $params = parent::prepareParams($params);
+        $settings = parent::prepareParams($settings);
         // Whitelist based on https://bugs.php.net/bug.php?id=47802
         // And https://bugs.php.net/bug.php?id=47802
         $whitelist = array(
@@ -239,9 +250,9 @@ class DBMySQL extends DBAdapter
             'UTF-8',
         );
 
-        if (isset($params['settings']['charset']['value'])) {
+        if (isset($settings['settings']['charset']['value'])) {
             if (version_compare(PHP_VERSION, '5.3.6', '<')) {
-                $charset = strtoupper($params['settings']['charset']['value']);
+                $charset = strtoupper($settings['settings']['charset']['value']);
 
                 if (!in_array($charset, $whitelist)) {
                     throw new PropelException(<<<EXCEPTION
@@ -252,26 +263,26 @@ EXCEPTION
                 );
                 }
             } else {
-                if (strpos($params['dsn'], ';charset=') === false) {
-                    $params['dsn'] .= ';charset=' . $params['settings']['charset']['value'];
-                    unset($params['settings']['charset']);
+                if (strpos($settings['dsn'], ';charset=') === false) {
+                    $settings['dsn'] .= ';charset=' . $settings['settings']['charset']['value'];
+                    unset($settings['settings']['charset']);
                 }
             }
         }
 
-        return $params;
+        return $settings;
     }
 
     /**
      * Do Explain Plan for query object or query string
      *
      * @param PropelPDO            $con   propel connection
-     * @param ModelCriteria|string $query query the criteria or the query string
+     * @param string|ModelCriteria $query query the criteria or the query string
      *
-     * @throws PropelException
      * @return PDOStatement    A PDO statement executed using the connection, ready to be fetched
+     *@throws PropelException
      */
-    public function doExplainPlan(PropelPDO $con, $query)
+    public function doExplainPlan(PropelPDO $con, string|ModelCriteria $query): PDOStatement
     {
         if ($query instanceof ModelCriteria) {
             $params = array();

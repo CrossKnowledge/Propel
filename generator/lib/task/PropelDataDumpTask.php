@@ -7,6 +7,19 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
+
+
+use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use PDOStatement;
+use DOMDocument;
+use PhingFile;
+use IOException;
+use BuildException;
+use Project;
+use Properties;
+
 
 /**
  * Dumps the content of selected databases to XML data dump file.
@@ -104,9 +117,9 @@ class PropelDataDumpTask extends AbstractPropelDataModelTask
     /**
      * Get the database name to dump
      *
-     * @return The DatabaseName value
+     * @return string The DatabaseName value
      */
-    public function getDatabaseName()
+    public function getDatabaseName(): string
     {
         return $this->databaseName;
     }
@@ -114,9 +127,9 @@ class PropelDataDumpTask extends AbstractPropelDataModelTask
     /**
      * Set the database name
      *
-     * @param   $v The new DatabaseName value
+     * @param string $v The new DatabaseName value
      */
-    public function setDatabaseName($v)
+    public function setDatabaseName(string $v): void
     {
         $this->databaseName = $v;
     }

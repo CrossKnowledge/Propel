@@ -8,7 +8,14 @@
  * @license    MIT License
  */
 
-require_once 'task/AbstractPropelTask.php';
+namespace CK\Generator\Lib\Task;
+
+use CK\Generator\Lib\Config\GeneratorConfig;
+use BuildException;
+use Project;
+use IOException;
+use PhingFile;
+//require_once 'task/AbstractPropelTask.php';
 
 /**
  * This Task lists the migrations yet to be executed
@@ -21,30 +28,30 @@ abstract class BasePropelMigrationTask extends AbstractPropelTask
     /**
      * Destination directory for results of template scripts.
      *
-     * @var        PhingFile
+     * @var        PhingFile|string : we added the string because that's what the code returns as well
      */
-    protected $outputDirectory;
+    protected PhingFile|string $outputDirectory;
 
     /**
      * An initialized GeneratorConfig object containing the converted Phing props.
      *
      * @var        GeneratorConfig
      */
-    protected $generatorConfig;
+    protected GeneratorConfig $generatorConfig;
 
     /**
      * The migration table name
      *
      * @var string
      */
-    protected $migrationTable = 'propel_migration';
+    protected string $migrationTable = 'propel_migration';
 
     /**
      * Set the migration Table name
      *
      * @param string $migrationTable
      */
-    public function setMigrationTable($migrationTable)
+    public function setMigrationTable(string $migrationTable): void
     {
         $this->migrationTable = $migrationTable;
     }
@@ -54,7 +61,7 @@ abstract class BasePropelMigrationTask extends AbstractPropelTask
      *
      * @return string
      */
-    public function getMigrationTable()
+    public function getMigrationTable(): string
     {
         return $this->migrationTable;
     }
@@ -68,7 +75,7 @@ abstract class BasePropelMigrationTask extends AbstractPropelTask
      * @return void
      * @throws BuildException
      */
-    public function setOutputDirectory(PhingFile $outputDirectory)
+    public function setOutputDirectory(PhingFile $outputDirectory): void
     {
         try {
             if (!$outputDirectory->exists()) {
@@ -86,9 +93,9 @@ abstract class BasePropelMigrationTask extends AbstractPropelTask
     /**
      * Get the output directory.
      *
-     * @return string
+     * @return PhingFile|string
      */
-    public function getOutputDirectory()
+    public function getOutputDirectory(): PhingFile|string
     {
         return $this->outputDirectory;
     }
@@ -98,7 +105,7 @@ abstract class BasePropelMigrationTask extends AbstractPropelTask
      *
      * @return GeneratorConfig
      */
-    protected function getGeneratorConfig()
+    protected function getGeneratorConfig(): GeneratorConfig
     {
         if ($this->generatorConfig === null) {
             $this->generatorConfig = new GeneratorConfig();

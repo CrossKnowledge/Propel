@@ -7,8 +7,10 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Exception;
+use BuildException;
 
-require_once 'phing/BuildException.php';
+//require_once 'phing/BuildException.php';
 
 /**
  * The base class of all exceptions thrown by the engine.

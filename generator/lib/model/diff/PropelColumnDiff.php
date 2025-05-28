@@ -22,16 +22,16 @@ use CK\Generator\Lib\Model\Column;
  */
 class PropelColumnDiff
 {
-    protected $changedProperties = array();
-    protected $fromColumn;
-    protected $toColumn;
+    protected array $changedProperties = array();
+    protected Column $fromColumn;
+    protected Column $toColumn;
 
     /**
      * Setter for the changedProperties property
      *
      * @param array $changedProperties
      */
-    public function setChangedProperties($changedProperties)
+    public function setChangedProperties(array $changedProperties): void
     {
         $this->changedProperties = $changedProperties;
     }
@@ -41,7 +41,7 @@ class PropelColumnDiff
      *
      * @return array
      */
-    public function getChangedProperties()
+    public function getChangedProperties(): array
     {
         return $this->changedProperties;
     }
@@ -51,7 +51,7 @@ class PropelColumnDiff
      *
      * @param Column $fromColumn
      */
-    public function setFromColumn(Column $fromColumn)
+    public function setFromColumn(Column $fromColumn): void
     {
         $this->fromColumn = $fromColumn;
     }
@@ -61,7 +61,7 @@ class PropelColumnDiff
      *
      * @return Column
      */
-    public function getFromColumn()
+    public function getFromColumn(): Column
     {
         return $this->fromColumn;
     }
@@ -71,7 +71,7 @@ class PropelColumnDiff
      *
      * @param Column $toColumn
      */
-    public function setToColumn(Column $toColumn)
+    public function setToColumn(Column $toColumn): void
     {
         $this->toColumn = $toColumn;
     }
@@ -81,7 +81,7 @@ class PropelColumnDiff
      *
      * @return Column
      */
-    public function getToColumn()
+    public function getToColumn(): Column
     {
         return $this->toColumn;
     }
@@ -91,7 +91,7 @@ class PropelColumnDiff
      *
      * @return PropelColumnDiff
      */
-    public function getReverseDiff()
+    public function getReverseDiff(): PropelColumnDiff
     {
         $diff = new self();
 

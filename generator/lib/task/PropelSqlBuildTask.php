@@ -7,8 +7,10 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
-require_once 'util/PropelSqlManager.php';
+use CK\Generator\Lib\Util\PropelSqlManager;
+//require_once 'util/PropelSqlManager.php';
 
 /**
  * The new task for building SQL DDL based on the XML datamodel.
@@ -18,7 +20,7 @@ require_once 'util/PropelSqlManager.php';
  */
 class PropelSqlBuildTask extends AbstractPropelDataModelTask
 {
-    public function main()
+    public function main(): void
     {
         $this->validate();
         $this->packageObjectModel = true;

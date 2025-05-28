@@ -9,7 +9,10 @@
  */
 namespace CK\Runtime\Lib\OM;
 
-
+use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Exception\PropelException;
+use IteratorAggregate;
+use Exception;
 /**
  * This interface defines methods that must be implemented by all
  * business objects within the system to handle Node object.
@@ -114,7 +117,7 @@ interface NodeObject extends IteratorAggregate
     /**
      * Sets the children array of the node in the tree
      *
-     * @param Node[] $children array of Propel node object
+     * @param NodeObject[] $children array of Propel node object
      *
      * @return object The current object (for fluent API support)
      */
@@ -123,7 +126,7 @@ interface NodeObject extends IteratorAggregate
     /**
      * Sets the parentNode of the node in the tree
      *
-     * @param Node $parent Propel node object
+     * @param NodeObject $parent Propel node object
      *
      * @return object The current object (for fluent API support)
      */
@@ -132,7 +135,7 @@ interface NodeObject extends IteratorAggregate
     /**
      * Sets the previous sibling of the node in the tree
      *
-     * @param Node $node Propel node object
+     * @param NodeObject $node Propel node object
      *
      * @return object The current object (for fluent API support)
      */
@@ -141,7 +144,7 @@ interface NodeObject extends IteratorAggregate
     /**
      * Sets the next sibling of the node in the tree
      *
-     * @param Node $node Propel node object
+     * @param NodeObject $node Propel node object
      *
      * @return object The current object (for fluent API support)
      */

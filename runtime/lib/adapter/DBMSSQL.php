@@ -9,6 +9,11 @@
  */
 namespace CK\Runtime\Lib\Adapter;
 
+use PDO;
+use CK\Runtime\Lib\Exception\PropelException;
+use Exception;
+use CK\Runtime\Lib\Query\Criteria;
+use CK\Runtime\Lib\Map\DatabaseMap;
 
 /**
  * This is used to connect to a MSSQL database.
@@ -22,12 +27,12 @@ class DBMSSQL extends DBAdapter
     /**
      * MS SQL Server does not support SET NAMES
      *
-     * @see       DBAdapter::setCharset()
-     *
      * @param PDO    $con
      * @param string $charset
+     *@see       DBAdapter::setCharset()
+     *
      */
-    public function setCharset(PDO $con, $charset)
+    public function setCharset(PDO $con, string $charset): void
     {
     }
 
@@ -38,7 +43,7 @@ class DBMSSQL extends DBAdapter
      *
      * @return string The upper case string.
      */
-    public function toUpperCase($in)
+    public function toUpperCase(string $in): string
     {
         return $this->ignoreCase($in);
     }
@@ -50,7 +55,7 @@ class DBMSSQL extends DBAdapter
      *
      * @return string The string in a case that can be ignored.
      */
-    public function ignoreCase($in)
+    public function ignoreCase(string $in): string
     {
         return 'UPPER(' . $in . ')';
     }
@@ -63,7 +68,7 @@ class DBMSSQL extends DBAdapter
      *
      * @return string
      */
-    public function concatString($s1, $s2)
+    public function concatString(string $s1, string $s2): string
     {
         return '(' . $s1 . ' + ' . $s2 . ')';
     }
@@ -71,13 +76,13 @@ class DBMSSQL extends DBAdapter
     /**
      * Returns SQL which extracts a substring.
      *
-     * @param string  $s   String to extract from.
+     * @param string $s   String to extract from.
      * @param integer $pos Offset to start from.
      * @param integer $len Number of characters to extract.
      *
      * @return string
      */
-    public function subString($s, $pos, $len)
+    public function subString(string $s, int $pos, int $len): string
     {
         return 'SUBSTRING(' . $s . ', ' . $pos . ', ' . $len . ')';
     }
@@ -89,44 +94,44 @@ class DBMSSQL extends DBAdapter
      *
      * @return string
      */
-    public function strLength($s)
+    public function strLength(string $s): string
     {
         return 'LEN(' . $s . ')';
     }
 
     /**
-     * @see       DBAdapter::quoteIdentifier()
-     *
      * @param string $text
      *
      * @return string
+     *@see       DBAdapter::quoteIdentifier()
+     *
      */
-    public function quoteIdentifier($text)
+    public function quoteIdentifier(string $text): string
     {
         return '[' . $text . ']';
     }
 
     /**
-     * @see       DBAdapter::quoteIdentifierTable()
-     *
      * @param string $table
      *
      * @return string
+     *@see       DBAdapter::quoteIdentifierTable()
+     *
      */
-    public function quoteIdentifierTable($table)
+    public function quoteIdentifierTable(string $table): string
     {
         // e.g. 'database.table alias' should be escaped as '[database].[table] [alias]'
         return '[' . strtr($table, array('.' => '].[', ' ' => '] [')) . ']';
     }
 
     /**
-     * @see       DBAdapter::random()
-     *
-     * @param string $seed
+     * @param mixed|null $seed
      *
      * @return string
+     * @see       DBAdapter::random()
+     *
      */
-    public function random($seed = null)
+    public function random(mixed $seed = null): string
     {
         return 'RAND(' . ((int) $seed) . ')';
     }
@@ -137,9 +142,6 @@ class DBMSSQL extends DBAdapter
      * This rewrites the $sql query to apply the offset and limit.
      * some of the ORDER BY logic borrowed from Doctrine MsSqlPlatform
      *
-     * @see       DBAdapter::applyLimit()
-     * @author    Benjamin Runnels <kraven@kraven.org>
-     *
      * @param string  $sql
      * @param integer $offset
      * @param integer $limit
@@ -148,8 +150,11 @@ class DBMSSQL extends DBAdapter
      *
      * @throws PropelException
      * @throws Exception
+     *@see       DBAdapter::applyLimit()
+     * @author    Benjamin Runnels <kraven@kraven.org>
+     *
      */
-    public function applyLimit(&$sql, $offset, $limit)
+    public function applyLimit(string &$sql, int $offset, int $limit): void
     {
         // make sure offset and limit are numeric
         if (!is_numeric($offset) || !is_numeric($limit)) {
@@ -289,14 +294,14 @@ class DBMSSQL extends DBAdapter
     }
 
     /**
-     * @see       parent::cleanupSQL()
-     *
      * @param string      $sql
      * @param array       $params
      * @param Criteria    $values
      * @param DatabaseMap $dbMap
+     * @see       parent::cleanupSQL()
+     *
      */
-    public function cleanupSQL(&$sql, array &$params, Criteria $values, DatabaseMap $dbMap)
+    public function cleanupSQL(string &$sql, array &$params, Criteria $values, DatabaseMap $dbMap): void
     {
         $i = 1;
         $paramCols = array();

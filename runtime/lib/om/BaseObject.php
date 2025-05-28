@@ -9,7 +9,11 @@
  */
 namespace CK\Runtime\Lib\OM;
 
-
+use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Exception\PropelException;
+use CK\Runtime\Lib\Propel;
+use CK\Runtime\Lib\Parser\PropelParser;
+use CK\Runtime\Lib\Util\BasePeer;
 /**
  * This class contains attributes and methods that are used by all
  * business objects within the system.
@@ -269,11 +273,11 @@ abstract class BaseObject
      * <code>obj</code> is an instance of <code>BaseObject</code>, delegates to
      * <code>equals(BaseObject)</code>.  Otherwise, returns <code>false</code>.
      *
-     * @param      obj The object to compare to.
+     * @param:      obj The object to compare to.
      *
-     * @return Whether equal to the object specified.
+     * @ return Whether equal to the object specified.
      */
-    public function equals($obj)
+    public function equals($obj): bool
     {
         $thisclass = get_class($this);
         if (is_object($obj) && $obj instanceof $thisclass) {

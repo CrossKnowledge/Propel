@@ -7,8 +7,20 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Task;
 
-require_once 'model/AppData.php';
+use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Model\ForeignKey;
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Platform\MssqlPlatform;
+use CK\Generator\Lib\Platform\OraclePlatform;
+use CK\Generator\Lib\Model\AppData;
+use PhingFile;
+use IOException;
+use Project;
+use BuildException;
+use Properties;
+//require_once 'model/AppData.php';
 
 /**
  * The task for building SQL DDL based on the XML datamodel.
@@ -26,12 +38,12 @@ class PropelSQLTask extends AbstractPropelDataModelTask
      *
      * @var        PhingFile
      */
-    private $sqldbmap;
+    private PhingFile $sqldbmap;
 
     /**
      * Name of the database.
      */
-    private $database;
+    private string $database;
 
     /**
      * Set the sqldbmap.
@@ -123,7 +135,10 @@ class PropelSQLTask extends AbstractPropelDataModelTask
         }
     }
 
-    public function main()
+    /**
+     * @throws IOException
+     */
+    public function main(): void
     {
         $this->validate();
 
@@ -179,7 +194,7 @@ class PropelSQLTask extends AbstractPropelDataModelTask
 
     } // main()
 
-    public function getWarnings(Database $database, PropelPLatformInterface $platform)
+    public function getWarnings(Database $database, PropelPLatformInterface $platform): void
     {
         foreach ($database->getTablesForSql() as $table) {
             foreach ($table->getForeignKeys() as $fk) {
@@ -226,7 +241,7 @@ class PropelSQLTask extends AbstractPropelDataModelTask
      *
      * @return array The packaged datamodels
      */
-    protected function packageDataModels()
+    protected function packageDataModels(): array
     {
         static $packagedDataModels;
 
@@ -258,7 +273,7 @@ class PropelSQLTask extends AbstractPropelDataModelTask
         return $packagedDataModels;
     }
 
-    protected function cloneDatabase($db)
+    protected function cloneDatabase($db): Database
     {
         $attributes = array (
             'name' => $db->getName(),

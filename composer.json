@@ -13,22 +13,24 @@
     "email": "aboubakr.ouahabi@innowise.com"
   }],
   "autoload": {
-      "classmap": [
-        "runtime/lib",
-        "generator/lib"
-      ],
     "psr-4": {
-      "CK\\Generator\\": "generator/",
-      "CK\\Runtime\\": "runtime/"
-    }
+      "CK\\Generator\\Lib\\": "generator/lib/",
+      "CK\\Runtime\\Lib\\": "runtime/lib/"
+    },
+    "classmap": ["runtime/lib", "generator/lib"]
   },
-  "include-path": ["runtime/lib", "generator/lib"],
   "require": {
     "php": "^8.3",
     "phing/phing": "~2.4",
     "ext-pdo": "*",
     "ext-pdo_mysql": "*",
-    "ext-zip": "*"
+    "ext-zip": "*",
+    "ext-dom": "*",
+    "ext-mbstring": "*",
+    "ext-ctype": "*",
+    "ext-posix": "*",
+    "ext-simplexml": "*",
+    "ext-iconv": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.6"
