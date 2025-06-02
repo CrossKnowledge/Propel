@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /*
  *	$Id$
@@ -10,10 +11,15 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/builder/util/XmlToAppData.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../generator/lib/config/GeneratorConfig.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../generator/lib/platform/DefaultPlatform.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../generator/lib/platform/MysqlPlatform.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../tools/helpers/DummyPlatforms.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for Table model class
@@ -21,7 +27,7 @@ require_once dirname(__FILE__) . '/../../../tools/helpers/DummyPlatforms.php';
  * @author     Martin Poeschl (mpoeschl@marmot.at)
  * @package    generator.model
  */
-class TableTest extends PHPUnit_Framework_TestCase
+class TableTest extends TestCase
 {
 
     /**

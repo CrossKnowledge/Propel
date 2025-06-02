@@ -29,7 +29,7 @@ require_once dirname(__FILE__) . '/../../../../../generator/lib/util/PropelQuick
  */
 class GeneratedObjectTest extends BookstoreTestBase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         require_once dirname(__FILE__) . '/../../../../tools/helpers/bookstore/behavior/TestAuthor.php';

@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,16 +10,17 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/config/GeneratorConfig.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author	William Durand <william.durand1@gmail.com>
  * @package	propel.generator.config
  */
-class GeneratorConfigTest extends PHPUnit_Framework_TestCase
+class GeneratorConfigTest extends TestCase
 {
     protected $pathToFixtureFiles;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->pathToFixtureFiles = dirname(__FILE__) . '/../../../fixtures/generator/config';
     }
@@ -26,6 +28,7 @@ class GeneratorConfigTest extends PHPUnit_Framework_TestCase
     public function testGetClassnameWithClass()
     {
         $file = $this->pathToFixtureFiles . '/Foobar.php';
+use PHPUnit\Framework\TestCase;
 
         if (!file_exists($file)) {
             $this->markTestSkipped();
@@ -43,6 +46,7 @@ class GeneratorConfigTest extends PHPUnit_Framework_TestCase
     public function testGetClassnameWithClassAndNamespace()
     {
         $file = $this->pathToFixtureFiles . '/FoobarWithNS.php';
+use PHPUnit\Framework\TestCase;
 
         if (!file_exists($file)) {
             $this->markTestSkipped();

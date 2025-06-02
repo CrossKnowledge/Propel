@@ -10,6 +10,8 @@
 
 namespace CK\Generator\Lib\Behavior\Archivable;
 
+use CK\Generator\Lib\Builder\OM\PHP5ObjectBuilder;
+use Exception;
 /**
  *
  * Keeps tracks of an ActiveRecord object, even after deletion
@@ -110,8 +112,9 @@ class ArchivableBehaviorObjectBuilderModifier
      * the query class to enable or disable archiveOnDelete.
      *
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
-    public function preDelete($builder)
+    public function preDelete($builder): ?string
     {
         if ($this->behavior->isArchiveOnDelete()) {
             return $this->behavior->renderTemplate('objectPreDelete', array(
@@ -119,10 +122,12 @@ class ArchivableBehaviorObjectBuilderModifier
                 'isAddHooks'     => $builder->getGeneratorConfig()->getBuildProperty('addHooks'),
             ));
         }
+        return null;
     }
 
     /**
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
     public function objectMethods($builder)
     {
@@ -151,8 +156,9 @@ class ArchivableBehaviorObjectBuilderModifier
 
     /**
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
-    public function addGetArchive($builder)
+    public function addGetArchive($builder): string
     {
         return $this->behavior->renderTemplate('objectGetArchive', array(
             'archiveTablePhpName'   => $this->behavior->getArchiveTablePhpName($builder),
@@ -162,8 +168,9 @@ class ArchivableBehaviorObjectBuilderModifier
 
     /**
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
-    public function addArchive($builder)
+    public function addArchive($builder): string
     {
         return $this->behavior->renderTemplate('objectArchive', array(
             'archiveTablePhpName'   => $this->behavior->getArchiveTablePhpName($builder),
@@ -176,8 +183,9 @@ class ArchivableBehaviorObjectBuilderModifier
     /**
      *
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
-    public function addRestoreFromArchive($builder)
+    public function addRestoreFromArchive($builder): string
     {
         return $this->behavior->renderTemplate('objectRestoreFromArchive', array(
             'objectClassname' => $this->builder->getObjectClassname(),
@@ -190,8 +198,9 @@ class ArchivableBehaviorObjectBuilderModifier
      * and therefore cannot be used. Besides, the way autoincremented PKs are handled should be explicit.
      *
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
-    public function addPopulateFromArchive($builder)
+    public function addPopulateFromArchive($builder): string
     {
         return $this->behavior->renderTemplate('objectPopulateFromArchive', array(
             'archiveTablePhpName' => $this->behavior->getArchiveTablePhpName($builder),
@@ -211,7 +220,7 @@ class ArchivableBehaviorObjectBuilderModifier
      *
      * @return boolean
      */
-    public function fakeAutoIncrementPrimaryKeyForConcreteInheritance()
+    public function fakeAutoIncrementPrimaryKeyForConcreteInheritance(): bool
     {
         if ($this->table->hasBehavior('concrete_inheritance')) {
             $concrete_inheritance_behavior = $this->table->getBehavior('concrete_inheritance');
@@ -233,8 +242,9 @@ class ArchivableBehaviorObjectBuilderModifier
 
     /**
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
-    public function addSaveWithoutArchive($builder)
+    public function addSaveWithoutArchive($builder): string
     {
         return $this->behavior->renderTemplate('objectSaveWithoutArchive', array(
             'objectClassname'   => $this->builder->getObjectClassname(),
@@ -245,6 +255,7 @@ class ArchivableBehaviorObjectBuilderModifier
 
     /**
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
     public function addDeleteWithoutArchive($builder)
     {

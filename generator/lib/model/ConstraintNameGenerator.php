@@ -8,6 +8,8 @@
  * @license    MIT License
  */
 namespace CK\Generator\Lib\Model;
+
+use CK\Generator\Lib\Exception\EngineException;
 /**
  * A <code>NameGenerator</code> implementation for table-specific
  * constraints.  Conforms to the maximum column name length for the
@@ -23,7 +25,7 @@ class ConstraintNameGenerator implements NameGenerator
     /**
      * Conditional compilation flag.
      */
-    const DEBUG = false;
+    const bool DEBUG = false;
 
     /**
      * First element of <code>inputs</code> should be of type {@link Database}, second
@@ -35,13 +37,13 @@ class ConstraintNameGenerator implements NameGenerator
      * @see        NameGenerator
      * @throws EngineException
      */
-    public function generateName($inputs)
+    public function generateName(array $inputs): string
     {
         /* @var $db Database */
         $db = $inputs[0];
         $name = $inputs[1];
         $namePostfix = $inputs[2];
-        $constraintNbr = (string) $inputs[3];
+        $constraintNbr = $inputs[3];
 
         // Calculate maximum RDBMS-specific column character limit.
         $maxBodyLength = -1;

@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,15 +10,19 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/platform/DefaultPlatform.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../generator/lib/model/Column.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../generator/lib/util/PropelQuickBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  *
  * @package    generator.platform
  */
-class DefaultPlatformTest extends PHPUnit_Framework_TestCase
+class DefaultPlatformTest extends TestCase
 {
     protected $platform;
 
@@ -35,7 +40,7 @@ class DefaultPlatformTest extends PHPUnit_Framework_TestCase
         return $this->platform;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->platform = null;
     }

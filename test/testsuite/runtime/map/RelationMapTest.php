@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,9 +10,13 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/map/DatabaseMap.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/map/RelationMap.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/map/ColumnMap.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/map/TableMap.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for RelationMap.
@@ -20,11 +25,11 @@ require_once dirname(__FILE__) . '/../../../../runtime/lib/map/TableMap.php';
  * @version    $Id$
  * @package    runtime.map
  */
-class RelationMapTest extends PHPUnit_Framework_TestCase
+class RelationMapTest extends TestCase
 {
   protected $databaseMap, $relationName, $rmap;
 
-  protected function setUp()
+  protected function setUp(): void
   {
     parent::setUp();
     $this->databaseMap = new DatabaseMap('foodb');

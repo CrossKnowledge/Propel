@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,10 +10,15 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/builder/om/PHP5ObjectBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/platform/MysqlPlatform.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/model/Table.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/model/Column.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/model/ColumnDefaultValue.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for PHP5ObjectBuilder.
@@ -21,11 +27,11 @@ require_once dirname(__FILE__) . '/../../../../../generator/lib/model/ColumnDefa
  * @version    $Id$
  * @package    generator.builder.om
  */
-class PHP5ObjectBuilderTest extends PHPUnit_Framework_TestCase
+class PHP5ObjectBuilderTest extends TestCase
 {
     protected $builder;
 
-    public function setUp()
+    public function setUp(): void
     {
         $builder = new TestablePHP5ObjectBuilder(new Table('Foo'));
         $builder->setPlatform(new MysqlPlatform());

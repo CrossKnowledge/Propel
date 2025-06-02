@@ -13,6 +13,8 @@ namespace CK\Generator\Lib\Builder\OM;
 use CK\Generator\Lib\Model\ForeignKey;
 use CK\Generator\Lib\Model\Column;
 use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Exception\EngineException;
+use Exception;
 
 //require_once dirname(__FILE__) . '/PeerBuilder.php';
 //require_once dirname(__FILE__) . '/ClassTools.php';
@@ -565,6 +567,7 @@ abstract class " . $this->getClassname() . $extendingPeerClass . "
      * Adds methods for ENUM columns.
      *
      * @param string &$script The script will be modified in this method.
+     * @throws Exception
      */
     protected function addEnumMethods(&$script)
     {
@@ -2169,7 +2172,7 @@ abstract class " . $this->getClassname() . $extendingPeerClass . "
      *
      * @see        PeerBuilder::addSelectMethods()
      */
-    protected function addSelectMethods(&$script)
+    protected function addSelectMethods(&$script): void
     {
         $table = $this->getTable();
 

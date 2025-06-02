@@ -1,7 +1,9 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /*
  *	$Id: TableTest.php 1891 2010-08-09 15:03:18Z francois $
+use PHPUnit\Framework\TestCase;
  * This file is part of the Propel package.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,17 +12,20 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/model/diff/PropelTableComparator.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/model/diff/PropelTableDiff.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/platform/MysqlPlatform.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Column methods of the PropelTableComparator service class.
  *
  * @package    generator.model.diff
  */
-class PropelTableColumnComparatorTest extends PHPUnit_Framework_TestCase
+class PropelTableColumnComparatorTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->platform = new MysqlPlatform();
     }

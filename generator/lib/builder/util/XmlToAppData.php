@@ -7,9 +7,17 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Builder\Util;
 
-require_once dirname(__FILE__) . '/../../model/AppData.php';
-require_once dirname(__FILE__) . '/../../exception/SchemaException.php';
+use AllowDynamicProperties;
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Model\AppData;
+use CK\Generator\Lib\Config\GeneratorConfigInterface;
+use CK\Generator\Lib\Exception\SchemaException;
+use Exception;
+
+//require_once dirname(__FILE__) . '/../../model/AppData.php';
+//require_once dirname(__FILE__) . '/../../exception/SchemaException.php';
 
 /**
  * A class that is used to parse an input xml schema file and creates an AppData
@@ -23,12 +31,12 @@ require_once dirname(__FILE__) . '/../../exception/SchemaException.php';
  * @version    $Revision$
  * @package    propel.generator.builder.util
  */
-class XmlToAppData
+#[AllowDynamicProperties] class XmlToAppData
 {
     /** enables debug output */
-    const DEBUG = false;
+    const bool DEBUG = false;
 
-    private $app;
+    private AppData $app;
     private $currDB;
     private $currTable;
     private $currColumn;
@@ -86,13 +94,14 @@ class XmlToAppData
      *
      * @param string $xmlFile The input file to parse.
      *
-     * @return AppData populated by <code>xmlFile</code>.
+     * @return AppData|null populated by <code>xmlFile</code>.
+     * @throws Exception
      */
-    public function parseFile($xmlFile)
+    public function parseFile(string $xmlFile): ?AppData
     {
         // we don't want infinite recursion
         if ($this->isAlreadyParsed($xmlFile)) {
-            return;
+            return null;
         }
 
         return $this->parseString(file_get_contents($xmlFile), $xmlFile);
@@ -103,16 +112,16 @@ class XmlToAppData
      * populated AppData structure.
      *
      * @param string $xmlString The input string to parse.
-     * @param string $xmlFile   The input file name.
+     * @param string|null $xmlFile   The input file name.
      *
-     * @return AppData   populated by <code>xmlFile</code>.
+     * @return AppData|null   populated by <code>xmlFile</code>.
      * @throws Exception
      */
-    public function parseString($xmlString, $xmlFile = null)
+    public function parseString(string $xmlString, string $xmlFile = null): ?AppData
     {
         // we don't want infinite recursion
         if ($this->isAlreadyParsed($xmlFile)) {
-            return;
+            return null;
         }
         // store current schema file path
         $this->schemasTagsStack[$xmlFile] = array();
@@ -146,8 +155,9 @@ class XmlToAppData
      * @param string $attributes The specified or defaulted attributes
      *
      * @throws SchemaException
+     * @throws Exception
      */
-    public function startElement($parser, $name, $attributes)
+    public function startElement(string $parser, string $name, string|array $attributes): void
     {
         $parentTag = $this->peekCurrentSchemaTag();
 
@@ -156,7 +166,10 @@ class XmlToAppData
             switch ($name) {
                 case "database":
                     if ($this->isExternalSchema()) {
-                        $this->currentPackage = @$attributes["package"];
+                        //$this->currentPackage = @$attributes["package"];    //This is an illegal string offset! This is a call to a fatal error.
+                        //A better code to make sure this doesn't break the code, since the "@" won't be of much help
+                        $this->currentPackage = $attributes["package"] ?? null;
+
                         if ($this->currentPackage === null) {
                             $this->currentPackage = $this->defaultPackage;
                         }
@@ -344,6 +357,9 @@ class XmlToAppData
         $this->pushCurrentSchemaTag($name);
     }
 
+    /**
+     * @throws SchemaException
+     */
     public function _throwInvalidTagException($parser, $tag_name)
     {
         $location = '';
@@ -360,10 +376,10 @@ class XmlToAppData
     /**
      * Handles closing elements of the xml file.
      *
-     * @param      uri
-     * @param      localName The local name (without prefix), or the empty string if
+     * @ param      uri
+     * @ param      localName The local name (without prefix), or the empty string if
      *         Namespace processing is not being performed.
-     * @param      rawName The qualified name (with prefix), or the empty string if
+     * @ param      rawName The qualified name (with prefix), or the empty string if
      *         qualified names are not available.
      */
     public function endElement($parser, $name)

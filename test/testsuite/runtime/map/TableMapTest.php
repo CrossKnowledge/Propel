@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,10 +10,15 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/map/ColumnMap.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/map/RelationMap.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/map/TableMap.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/map/DatabaseMap.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/exception/PropelException.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for TableMap.
@@ -21,11 +27,11 @@ require_once dirname(__FILE__) . '/../../../../runtime/lib/exception/PropelExcep
  * @version    $Id$
  * @package    runtime.map
  */
-class TableMapTest extends PHPUnit_Framework_TestCase
+class TableMapTest extends TestCase
 {
   protected $databaseMap;
 
-  protected function setUp()
+  protected function setUp(): void
   {
     parent::setUp();
     $this->databaseMap = new DatabaseMap('foodb');
@@ -33,7 +39,7 @@ class TableMapTest extends PHPUnit_Framework_TestCase
     $this->tmap = new TableMap($this->tableName, $this->databaseMap);
   }
 
-  protected function tearDown()
+  protected function tearDown(): void
   {
     // nothing to do for now
     parent::tearDown();
@@ -56,6 +62,7 @@ class TableMapTest extends PHPUnit_Framework_TestCase
   {
     $tmap = new TableMap();
     $properties = array('name', 'phpName', 'className', 'package');
+use PHPUnit\Framework\TestCase;
     foreach ($properties as $property) {
       $getter = 'get' . ucfirst($property);
       $setter = 'set' . ucfirst($property);
@@ -95,6 +102,7 @@ class TableMapTest extends PHPUnit_Framework_TestCase
   {
     $column = $this->tmap->addColumn('BAR_BAZ', 'BarBaz', 'INTEGER');
     $this->assertEquals($column, $this->tmap->getColumnByPhpName('BarBaz'), 'getColumnByPhpName() returns a ColumnMap according to a column phpName');
+use PHPUnit\Framework\TestCase;
     try {
       $this->tmap->getColumn('Foo');
       $this->fail('getColumnByPhpName() throws an exception when called on an inexistent column');

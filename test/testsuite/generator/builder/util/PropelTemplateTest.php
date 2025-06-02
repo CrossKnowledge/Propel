@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,6 +10,7 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/builder/util/PropelTemplate.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for PropelTemplate class
@@ -16,12 +18,13 @@ require_once dirname(__FILE__) . '/../../../../../generator/lib/builder/util/Pro
  * @version    $Revision$
  * @package    generator.builder.util
  */
-class PropelTemplateTest extends PHPUnit_Framework_TestCase
+class PropelTemplateTest extends TestCase
 {
     public function testRenderStringNoParam()
     {
         $t = new PropelTemplate();
         $t->setTemplate('Hello, <?php echo 1 + 2 ?>');
+use PHPUnit\Framework\TestCase;
         $res = $t->render();
         $this->assertEquals('Hello, 3', $res);
     }
@@ -30,6 +33,7 @@ class PropelTemplateTest extends PHPUnit_Framework_TestCase
     {
         $t = new PropelTemplate();
         $t->setTemplate('Hello, <?php echo $name ?>');
+use PHPUnit\Framework\TestCase;
         $res = $t->render(array('name' => 'John'));
         $this->assertEquals('Hello, John', $res);
     }
@@ -39,6 +43,7 @@ class PropelTemplateTest extends PHPUnit_Framework_TestCase
         $time = time();
         $t = new PropelTemplate();
         $t->setTemplate('Hello, <?php echo $name ?>, it is <?php echo $time ?> to go!');
+use PHPUnit\Framework\TestCase;
         $res = $t->render(array('name' => 'John', 'time' => $time));
         $this->assertEquals('Hello, John, it is ' . $time . ' to go!', $res);
     }
@@ -47,6 +52,7 @@ class PropelTemplateTest extends PHPUnit_Framework_TestCase
     {
         $t = new PropelTemplate();
         $t->setTemplateFile(dirname(__FILE__).'/template.php');
+use PHPUnit\Framework\TestCase;
         $res = $t->render(array('name' => 'John'));
         $this->assertEquals('Hello, John', $res);
     }

@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,15 +10,17 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/om/BaseObject.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for BaseObject.
  *
  * @author     François Zaninotto
  * @version    $Id: BaseObjectTest.php 1347 2009-12-03 21:06:36Z francois $
+use PHPUnit\Framework\TestCase;
  * @package    runtime.om
  */
-class BaseObjectTest extends PHPUnit_Framework_TestCase
+class BaseObjectTest extends TestCase
 {
     public function testGetVirtualColumns()
     {

@@ -12,6 +12,9 @@ namespace CK\Generator\Lib\Builder\OM;
 
 use CK\Generator\Lib\Builder\DataModelBuilder;
 use CK\Generator\Lib\Model\Column;
+use CK\Generator\Lib\Model\ForeignKey;
+use CK\Generator\Lib\Model\Table;
+use Exception;
 
 //require_once dirname(__FILE__) . '/../DataModelBuilder.php';
 
@@ -255,7 +258,7 @@ abstract class OMBuilder extends DataModelBuilder
         }
     }
 
-    public function getUseStatements($ignoredNamespace = null)
+    public function getUseStatements($ignoredNamespace = null): string
     {
         $script = '';
         $declaredClasses = $this->declaredClasses;
@@ -280,7 +283,7 @@ abstract class OMBuilder extends DataModelBuilder
      * @return string (e.g. 'MyPeer')
      * @see        StubPeerBuilder::getClassname()
      */
-    public function getPeerClassname()
+    public function getPeerClassname(): string
     {
         return $this->getStubPeerBuilder()->getClassname();
     }
@@ -293,7 +296,7 @@ abstract class OMBuilder extends DataModelBuilder
      * @return string (e.g. 'Myquery')
      * @see        StubQueryBuilder::getClassname()
      */
-    public function getQueryClassname()
+    public function getQueryClassname(): string
     {
         return $this->getStubQueryBuilder()->getClassname();
     }
@@ -306,7 +309,7 @@ abstract class OMBuilder extends DataModelBuilder
      * @return string (e.g. 'My')
      * @see        StubPeerBuilder::getClassname()
      */
-    public function getObjectClassname()
+    public function getObjectClassname(): string
     {
         return $this->getStubObjectBuilder()->getClassname();
     }
@@ -321,7 +324,7 @@ abstract class OMBuilder extends DataModelBuilder
      *
      * @throws Exception
      */
-    public function getColumnConstant($col, $classname = null)
+    public function getColumnConstant($col, $classname = null): string
     {
         if ($col === null) {
             $e = new Exception("No col specified.");
@@ -347,7 +350,7 @@ abstract class OMBuilder extends DataModelBuilder
      *
      * @return string
      */
-    public function getBasePeer(Table $table)
+    public function getBasePeer(Table $table): string
     {
         $class = $table->getBasePeer();
         if ($class === null) {
@@ -363,7 +366,7 @@ abstract class OMBuilder extends DataModelBuilder
      * @deprecated use ForeignKey::getForeignTable() instead
      * @return Table
      */
-    protected function getForeignTable(ForeignKey $fk)
+    protected function getForeignTable(ForeignKey $fk): Table
     {
         return $this->getTable()->getDatabase()->getTable($fk->getForeignTableName());
     }
@@ -377,7 +380,7 @@ abstract class OMBuilder extends DataModelBuilder
      *
      * @return string
      */
-    protected function getJoinType(ForeignKey $fk)
+    protected function getJoinType(ForeignKey $fk): string
     {
         if ($defaultJoin = $fk->getDefaultJoin()) {
             return "'" . $defaultJoin . "'";
@@ -395,12 +398,13 @@ abstract class OMBuilder extends DataModelBuilder
      * The difference between this method and the getRefFKPhpNameAffix() method is that in this method the
      * classname in the affix is the foreign table classname.
      *
-     * @param ForeignKey $fk     The local FK that we need a name for.
-     * @param boolean    $plural Whether the php name should be plural (e.g. initRelatedObjs() vs. addRelatedObj()
+     * @param ForeignKey $fk The local FK that we need a name for.
+     * @param boolean $plural Whether the php name should be plural (e.g. initRelatedObjs() vs. addRelatedObj()
      *
      * @return string
+     * @throws Exception
      */
-    public function getFKPhpNameAffix(ForeignKey $fk, $plural = false)
+    public function getFKPhpNameAffix(ForeignKey $fk, $plural = false): string
     {
         if ($fk->getPhpName()) {
             if ($plural) {
@@ -429,7 +433,7 @@ abstract class OMBuilder extends DataModelBuilder
      *
      * @throws Exception
      */
-    protected static function getRelatedBySuffix(ForeignKey $fk)
+    protected static function getRelatedBySuffix(ForeignKey $fk): string
     {
         $relCol = '';
         foreach ($fk->getLocalForeignMapping() as $localColumnName => $foreignColumnName) {
@@ -459,10 +463,11 @@ abstract class OMBuilder extends DataModelBuilder
      * The difference between this method and the getFKPhpNameAffix() method is that in this method the
      * classname in the affix is the classname of the local fkey table.
      *
-     * @param ForeignKey $fk     The referrer FK that we need a name for.
-     * @param boolean    $plural Whether the php name should be plural (e.g. initRelatedObjs() vs. addRelatedObj()
+     * @param ForeignKey $fk The referrer FK that we need a name for.
+     * @param boolean $plural Whether the php name should be plural (e.g. initRelatedObjs() vs. addRelatedObj()
      *
      * @return string
+     * @throws Exception
      */
     public function getRefFKPhpNameAffix(ForeignKey $fk, $plural = false)
     {
@@ -482,6 +487,9 @@ abstract class OMBuilder extends DataModelBuilder
         }
     }
 
+    /**
+     * @throws Exception
+     */
     protected static function getRefRelatedBySuffix(ForeignKey $fk)
     {
         $relCol = '';
@@ -580,7 +588,7 @@ abstract class OMBuilder extends DataModelBuilder
      * @param string $contentName The name of the content as called from one of this class methods, e.g. "parentClassname"
      * @param string $modifier    The name of the modifier object providing the method in the behavior
      */
-    public function getBehaviorContentBase($contentName, $modifier)
+    public function getBehaviorContentBase(string $contentName, string $modifier)
     {
         $modifierGetter = 'get' . $modifier;
         foreach ($this->getTable()->getBehaviors() as $behavior) {
@@ -594,7 +602,7 @@ abstract class OMBuilder extends DataModelBuilder
     /**
      * Most of the code comes from the PHP-CS-Fixer project
      */
-    private function clean($content)
+    private function clean($content): array|string
     {
         // trailing whitespaces
         $content = preg_replace('/[ \t]*$/m', '', $content);
@@ -629,7 +637,7 @@ abstract class OMBuilder extends DataModelBuilder
         return $content;
     }
 
-    public function fixTrailingWhitespaces($matches)
+    public function fixTrailingWhitespaces($matches): array|string
     {
         return str_replace("\t", '    ', $matches[0]);
     }

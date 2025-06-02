@@ -1,51 +1,32 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-if [ -z "$PROPEL_GEN_HOME" ] ; then
-    # try to find Propel
-    if [ -d /opt/propel/generator ] ; then
-        PROPEL_GEN_HOME=/opt/propel/generator
-    fi
+# Determine the absolute path to the script and generator root
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+PROPEL_GEN_HOME="$( cd -P "$( dirname "$SOURCE" )/.." >/dev/null 2>&1 && pwd )"
 
-    if [ -d "${HOME}/opt/propel/generator" ] ; then
-        PROPEL_GEN_HOME="${HOME}/opt/propel/generator"
-    fi
+BUILD_XML="$PROPEL_GEN_HOME/build-propel.xml"
+PHING_BIN="$PROPEL_GEN_HOME/../vendor/bin/phing"
 
-    if [ -d "/usr/local/propel/generator" ] ; then
-        PROPEL_GEN_HOME="/usr/local/propel/generator"
-    fi
-
-    if [ -d "${HOME}/usr/propel/generator" ] ; then
-        PROPEL_GEN_HOME="${HOME}/usr/propel/generator"
-    fi
-
-    ## resolve links - the script name may be a link to phing's home
-    SOURCE="${BASH_SOURCE[0]}"
-    PRG="$( dirname "$SOURCE" )"
-    while [ -h "$SOURCE" ]
-    do
-        SOURCE="$(readlink "$SOURCE")"
-        [[ $SOURCE != /* ]] && SOURCE="$PRG/$SOURCE"
-        PRG="$( cd -P "$( dirname "$SOURCE"  )" && pwd )"
-    done
-    PRG="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-    if [ -d "`dirname $PRG`" ] ; then
-        PROPEL_GEN_HOME="`dirname $PRG`"
-    fi
-
-    export PROPEL_GEN_HOME
+if [ ! -f "$BUILD_XML" ]; then
+  echo "❌ Could not find build.xml at $BUILD_XML"
+  exit 1
 fi
 
-if [ -f "$PROPEL_GEN_HOME/bin/phing.php" ] ; then
-    export PHING_COMMAND="$PROPEL_GEN_HOME/bin/phing.php"
+if [ ! -x "$PHING_BIN" ]; then
+  echo "❌ Phing binary not found or not executable at $PHING_BIN"
+  exit 1
 fi
 
-if [ -z "$PHING_COMMAND" ] ; then
-    export PHING_COMMAND="phing"
+PROJECT_DIR="$1"
+TARGET="$2"
+#shift 2
+if [ -n "${PROJECT_DIR:-}" ] && [ -n "${TARGET:-}" ]; then
+    shift 2
 fi
 
-if [ $# = 1 ] ; then
-    "$PHING_COMMAND" -f "$PROPEL_GEN_HOME/build.xml" -Dusing.propel-gen=true -Dproject.dir=$saveddir $*
-else
-    "$PHING_COMMAND" -f "$PROPEL_GEN_HOME/build.xml" -Dusing.propel-gen=true -Dproject.dir=$*
-fi
+"$PHING_BIN" -f "$BUILD_XML" -Dusing.propel-gen=true -Dproject.dir="$PROJECT_DIR" -Dtarget="$TARGET" "$@"

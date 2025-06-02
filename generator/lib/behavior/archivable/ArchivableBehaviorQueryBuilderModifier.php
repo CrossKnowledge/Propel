@@ -10,6 +10,9 @@
 
 namespace CK\Generator\Lib\Behavior\Archivable;
 
+use CK\Generator\Lib\Builder\OM\QueryBuilder;
+use Exception;
+
 /**
  * Keeps tracks of an ActiveRecord object, even after deletion
  *
@@ -92,8 +95,9 @@ if (\$this->archiveOnUpdate) {
      * @param QueryBuilder $builder
      *
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
-    public function queryMethods(QueryBuilder $builder)
+    public function queryMethods(QueryBuilder $builder): string
     {
         $script = '';
         $script .= $this->addArchive($builder);
@@ -111,8 +115,9 @@ if (\$this->archiveOnUpdate) {
 
     /**
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
-    protected function addArchive(QueryBuilder $builder)
+    protected function addArchive(QueryBuilder $builder): string
     {
         return $this->behavior->renderTemplate('queryArchive', array(
             'archiveTablePhpName' => $this->behavior->getArchiveTablePhpName($builder),
@@ -130,8 +135,9 @@ if (\$this->archiveOnUpdate) {
 
     /**
      * @return string the PHP code to be added to the builder
+     * @throws Exception
      */
-    public function addUpdateWithoutArchive(QueryBuilder $builder)
+    public function addUpdateWithoutArchive(QueryBuilder $builder): string
     {
         return $this->behavior->renderTemplate('queryUpdateWithoutArchive');
     }

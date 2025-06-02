@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,6 +10,7 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/model/PhpNameGenerator.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for PhpNameGenerator
@@ -17,9 +19,10 @@ require_once dirname(__FILE__) . '/../../../../generator/lib/model/PhpNameGenera
  * @version    $Revision$
  * @package    generator.model
  */
-class PhpNameGeneratorTest extends PHPUnit_Framework_TestCase
+class PhpNameGeneratorTest extends TestCase
 {
     public static function phpnameMethodDataProvider()
+use PHPUnit\Framework\TestCase;
     {
         return array(
             array('foo', 'Foo'),
@@ -35,11 +38,13 @@ class PhpNameGeneratorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider phpnameMethodDataProvider
+use PHPUnit\Framework\TestCase;
      */
     public function testPhpnameMethod($input, $output)
     {
         $generator = new TestablePhpNameGenerator();
         $this->assertEquals($output, $generator->phpnameMethod($input));
+use PHPUnit\Framework\TestCase;
     }
 
     public static function underscoreMethodDataProvider()
@@ -70,8 +75,10 @@ class PhpNameGeneratorTest extends PHPUnit_Framework_TestCase
 class TestablePhpNameGenerator extends PhpNameGenerator
 {
     public function phpnameMethod($schemaName)
+use PHPUnit\Framework\TestCase;
     {
         return parent::phpnameMethod($schemaName);
+use PHPUnit\Framework\TestCase;
     }
 
     public function underscoreMethod($schemaName)

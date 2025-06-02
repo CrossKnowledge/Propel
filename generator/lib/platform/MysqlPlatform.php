@@ -9,8 +9,21 @@
  */
 
 namespace CK\Generator\Lib\Platform;
+
 use CK\Generator\Lib\Model\Column;
 use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\Domain;
+use CK\Generator\Lib\Model\PropelTypes;
+use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Config\GeneratorConfigInterface;
+use CK\Generator\Lib\Model\Index;
+use CK\Generator\Lib\Model\Unique;
+use CK\Generator\Lib\Model\ForeignKey;
+use CK\Generator\Lib\Exception\EngineException;
+use CK\Generator\Lib\Model\Diff\PropelDatabaseDiff;
+use CK\Generator\Lib\Model\Diff\PropelColumnDiff;
+use PDO;
+
 
 //require_once dirname(__FILE__) . '/DefaultPlatform.php';
 
@@ -54,7 +67,7 @@ class MysqlPlatform extends DefaultPlatform
         $this->setSchemaDomainMapping(new Domain(PropelTypes::ENUM, "TINYINT"));
     }
 
-    public function setGeneratorConfig(GeneratorConfigInterface $generatorConfig)
+    public function setGeneratorConfig(GeneratorConfigInterface $generatorConfig): void
     {
         if ($defaultTableEngine = $generatorConfig->getBuildProperty('mysqlTableType')) {
             $this->defaultTableEngine = $defaultTableEngine;
@@ -104,7 +117,7 @@ class MysqlPlatform extends DefaultPlatform
         return $this->defaultTableEngine;
     }
 
-    public function getAutoIncrement()
+    public function getAutoIncrement(): string
     {
         return "AUTO_INCREMENT";
     }
@@ -114,12 +127,12 @@ class MysqlPlatform extends DefaultPlatform
         return 64;
     }
 
-    public function supportsNativeDeleteTrigger()
+    public function supportsNativeDeleteTrigger(): bool
     {
         return strtolower($this->getDefaultTableEngine()) == 'innodb';
     }
 
-    public function supportsForeignKeys(Table $table)
+    public function supportsForeignKeys(Table $table): bool
     {
         $vendorSpecific = $table->getVendorInfoForType('mysql');
         if ($vendorSpecific->hasParameter('Type')) {
@@ -594,7 +607,7 @@ RENAME TABLE %s TO %s;
      *
      * @return string
      */
-    public function getRemoveColumnDDL(Column $column)
+    public function getRemoveColumnDDL(Column $column): string
     {
         $pattern = "
 ALTER TABLE %s DROP %s;
@@ -611,7 +624,7 @@ ALTER TABLE %s DROP %s;
      *
      * @return string
      */
-    public function getRenameColumnDDL($fromColumn, $toColumn)
+    public function getRenameColumnDDL($fromColumn, $toColumn): string
     {
         return $this->getChangeColumnDDL($fromColumn, $toColumn);
     }

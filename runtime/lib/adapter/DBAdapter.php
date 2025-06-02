@@ -54,15 +54,15 @@ abstract class DBAdapter
      * @var array
      */
     private static array $adapters = array(
-        'mysql'  => 'DBMySQL',
-        'mysqli' => 'DBMySQLi',
-        'mssql'  => 'DBMSSQL',
-        'sqlsrv' => 'DBSQLSRV',
-        'oracle' => 'DBOracle',
-        'oci'    => 'DBOracle',
-        'pgsql'  => 'DBPostgres',
-        'sqlite' => 'DBSQLite',
-        ''       => 'DBNone',
+        'mysql'  => 'CK\Runtime\Lib\Adapter\DBMySQL',
+        'mysqli' => 'CK\Runtime\Lib\Adapter\DBMySQLi',
+        'mssql'  => 'CK\Runtime\Lib\Adapter\DBMSSQL',
+        'sqlsrv' => 'CK\Runtime\Lib\Adapter\DBSQLSRV',
+        'oracle' => 'CK\Runtime\Lib\Adapter\DBOracle',
+        'oci'    => 'CK\Runtime\Lib\Adapter\DBOracle',
+        'pgsql'  => 'CK\Runtime\Lib\Adapter\DBPostgres',
+        'sqlite' => 'CK\Runtime\Lib\Adapter\DBSQLite',
+        ''       => 'CK\Runtime\Lib\Adapter\DBNone',
     );
 
     /**

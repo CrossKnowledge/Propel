@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,21 +10,24 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__) . '/../../../fixtures/bookstore/build/classes'));
 Propel::init(dirname(__FILE__) . '/../../../fixtures/bookstore/build/conf/bookstore-conf.php');
+use PHPUnit\Framework\TestCase;
 include_once dirname(__FILE__) . '/CmsDataPopulator.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Base class contains some methods shared by subclass test cases.
  */
-abstract class CmsTestBase extends PHPUnit_Framework_TestCase
+abstract class CmsTestBase extends TestCase
 {
     protected $con;
 
     /**
      * This is run before each unit test; it populates the database.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->con = Propel::getConnection(PagePeer::DATABASE_NAME);
@@ -35,7 +39,7 @@ abstract class CmsTestBase extends PHPUnit_Framework_TestCase
     /**
      * This is run after each unit test.  It empties the database.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         CmsDataPopulator::depopulate($this->con);
         $this->con->commit();

@@ -14,7 +14,8 @@ use CK\Generator\Lib\Model\Column;
 use CK\Generator\Lib\Model\PropelTypes;
 use CK\Generator\Lib\Platform\OraclePlatform;
 use CK\Generator\Lib\Model\ForeignKey;
-use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Exception\EngineException;
+use Exception;
 
 //require_once dirname(__FILE__) . '/PHP5ObjectBuilder.php';
 
@@ -46,11 +47,12 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
      * Adds the lazy loader method.
      *
      * @param string &$script The script will be modified in this method.
-     * @param Column $col     The current column.
+     * @param Column $col The current column.
      *
+     * @throws Exception
      * @see        parent::addColumnAccessors()
      */
-    protected function addLazyLoader(&$script, Column $col)
+    protected function addLazyLoader(&$script, Column $col): void
     {
         $this->addLazyLoaderComment($script, $col);
         $this->addLazyLoaderOpen($script, $col);
@@ -66,7 +68,7 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
      *
      * @see        addLazyLoader()
      **/
-    protected function addLazyLoaderComment(&$script, Column $col)
+    protected function addLazyLoaderComment(&$script, Column $col): void
     {
         $clo = strtolower($col->getName());
 
@@ -104,8 +106,9 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
      * Adds the function body for the lazy loader method
      *
      * @param string &$script The script will be modified in this method.
-     * @param Column $col     The current column.
+     * @param Column $col The current column.
      *
+     * @throws Exception
      * @see        addLazyLoader()
      **/
     protected function addLazyLoaderBody(&$script, Column $col)
@@ -218,6 +221,7 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
      *
      * @param string &$script The script will be modified in this method.
      *
+     * @throws Exception
      * @see        addBuildPkeyCriteria()
      **/
     protected function addBuildPkeyCriteriaBody(&$script)
@@ -388,6 +392,7 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
      * Adds a reload() method to re-fetch the data for this object from the database.
      *
      * @param string &$script The script will be modified in this method.
+     * @throws Exception
      */
     protected function addReload(&$script)
     {
@@ -477,8 +482,9 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
      * @param ForeignKey $fk
      *
      * @return string
+     * @throws Exception
      */
-    protected function getRefFKLastCriteriaVarName(ForeignKey $fk)
+    protected function getRefFKLastCriteriaVarName(ForeignKey $fk): string
     {
         return 'last' . $this->getRefFKPhpNameAffix($fk, $plural = false) . 'Criteria';
     }
@@ -487,6 +493,7 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
      * Adds the accessor (getter) method for getting an fkey related object.
      *
      * @param string &$script The script will be modified in this method.
+     * @throws Exception
      */
     protected function addFKAccessor(&$script, ForeignKey $fk)
     {
@@ -598,6 +605,7 @@ class PHP5ObjectNoCollectionBuilder extends PHP5ObjectBuilder
      * @param string &$script The script will be modified in this method.
      *
      * @throws EngineException
+     * @throws Exception
      */
     protected function addRefFKGetJoinMethods(&$script, ForeignKey $refFK)
     {

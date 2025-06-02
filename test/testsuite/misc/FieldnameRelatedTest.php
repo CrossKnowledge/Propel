@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -27,17 +28,22 @@
  * @author     Sven Fuchs <svenfuchs@artweb-design.de>
  * @package    misc
  */
-class FieldnameRelatedTest extends PHPUnit_Framework_TestCase
+class FieldnameRelatedTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         require_once dirname(__FILE__) . '/../../fixtures/bookstore/build/classes/bookstore/map/BookTableMap.php';
+use PHPUnit\Framework\TestCase;
         require_once dirname(__FILE__) . '/../../fixtures/bookstore/build/classes/bookstore/om/BaseBookPeer.php';
+use PHPUnit\Framework\TestCase;
         require_once dirname(__FILE__) . '/../../fixtures/bookstore/build/classes/bookstore/BookPeer.php';
+use PHPUnit\Framework\TestCase;
         require_once dirname(__FILE__) . '/../../fixtures/bookstore/build/classes/bookstore/om/BaseBook.php';
+use PHPUnit\Framework\TestCase;
         require_once dirname(__FILE__) . '/../../fixtures/bookstore/build/classes/bookstore/Book.php';
+use PHPUnit\Framework\TestCase;
     }
 
     /**

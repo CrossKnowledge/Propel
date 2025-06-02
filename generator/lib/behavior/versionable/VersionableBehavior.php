@@ -28,7 +28,7 @@ use CK\Generator\Lib\Model\ForeignKey;
 class VersionableBehavior extends Behavior
 {
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'version_column' => 'version',
         'version_table'  => '',
         'log_created_at' => 'false',
@@ -46,7 +46,7 @@ class VersionableBehavior extends Behavior
 
     protected $objectBuilderModifier, $queryBuilderModifier, $peerBuilderModifier;
 
-    protected $tableModificationOrder = 80;
+    protected int $tableModificationOrder = 80;
 
     public function modifyDatabase()
     {

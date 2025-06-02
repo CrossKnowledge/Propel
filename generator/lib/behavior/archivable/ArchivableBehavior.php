@@ -27,7 +27,7 @@ use CK\Generator\Lib\Model\Column;
 class ArchivableBehavior extends Behavior
 {
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'archive_table'       => '',
         'archive_phpname'     => NULL,
         'archive_class'       => '',
@@ -187,7 +187,7 @@ class ArchivableBehavior extends Behavior
         return $this->getParameter('archive_on_delete') == 'true';
     }
 
-    public function getObjectBuilderModifier()
+    public function getObjectBuilderModifier(): static
     {
         if (is_null($this->objectBuilderModifier)) {
             $this->objectBuilderModifier = new ArchivableBehaviorObjectBuilderModifier($this);
@@ -196,7 +196,7 @@ class ArchivableBehavior extends Behavior
         return $this->objectBuilderModifier;
     }
 
-    public function getQueryBuilderModifier()
+    public function getQueryBuilderModifier(): static
     {
         if (is_null($this->queryBuilderModifier)) {
             $this->queryBuilderModifier = new ArchivableBehaviorQueryBuilderModifier($this);

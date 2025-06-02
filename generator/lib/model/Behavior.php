@@ -11,6 +11,13 @@
 namespace CK\Generator\Lib\Model;
 
 use CK\Generator\Lib\Builder\Util\PropelTemplate;
+use CK\Runtime\Lib\Map\ColumnMap;
+use DOMException;
+use Exception;
+use ReflectionObject;
+use DOMNode;
+use DOMDocument;
+use InvalidArgumentException;
 
 //require_once dirname(__FILE__) . '/Index.php';
 //require_once dirname(__FILE__) . '/../builder/util/PropelTemplate.php';
@@ -25,21 +32,21 @@ use CK\Generator\Lib\Builder\Util\PropelTemplate;
 class Behavior extends XMLElement
 {
 
-    protected $table;
-    protected $database;
-    protected $name;
-    protected $parameters = array();
-    protected $isTableModified = false;
-    protected $dirname;
-    protected $additionalBuilders = array();
-    protected $tableModificationOrder = 50;
+    protected Table $table;
+    protected Database $database;
+    protected string $name;
+    protected array $parameters = [];
+    protected bool $isTableModified = false;
+    protected string $dirname;
+    protected array $additionalBuilders = [];
+    protected int $tableModificationOrder = 50;
 
     /**
      * Sets the name of the Behavior
      *
      * @param string $name the name of the behavior
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -49,7 +56,7 @@ class Behavior extends XMLElement
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -59,7 +66,7 @@ class Behavior extends XMLElement
      *
      * @param Table $table the table this behavior is applied to
      */
-    public function setTable(Table $table)
+    public function setTable(Table $table): void
     {
         $this->table = $table;
     }
@@ -69,7 +76,7 @@ class Behavior extends XMLElement
      *
      * @return Table
      */
-    public function getTable()
+    public function getTable(): Table
     {
         return $this->table;
     }
@@ -79,7 +86,7 @@ class Behavior extends XMLElement
      *
      * @param Database $database the database this behavior is applied to
      */
-    public function setDatabase(Database $database)
+    public function setDatabase(Database $database): void
     {
         $this->database = $database;
     }
@@ -89,7 +96,7 @@ class Behavior extends XMLElement
      *
      * @return Database
      */
-    public function getDatabase()
+    public function getDatabase(): Database
     {
         return $this->database;
     }
@@ -100,7 +107,7 @@ class Behavior extends XMLElement
      *
      * @param array $attribute
      */
-    public function addParameter($attribute)
+    public function addParameter($attribute): void
     {
         $attribute = array_change_key_case($attribute, CASE_LOWER);
         $this->parameters[$attribute['name']] = $attribute['value'];
@@ -112,7 +119,7 @@ class Behavior extends XMLElement
      *
      * @param array $parameters
      */
-    public function setParameters($parameters)
+    public function setParameters(array $parameters): void
     {
         $this->parameters = $parameters;
     }
@@ -122,7 +129,7 @@ class Behavior extends XMLElement
      *
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
@@ -142,7 +149,7 @@ class Behavior extends XMLElement
      *
      * @param $tableModificationOrder integer
      */
-    public function setTableModificationOrder($tableModificationOrder)
+    public function setTableModificationOrder(int $tableModificationOrder): void
     {
         $this->tableModificationOrder = $tableModificationOrder;
     }
@@ -153,7 +160,7 @@ class Behavior extends XMLElement
      *
      * @return integer
      */
-    public function getTableModificationOrder()
+    public function getTableModificationOrder(): int
     {
         return $this->tableModificationOrder;
     }
@@ -183,7 +190,7 @@ class Behavior extends XMLElement
     {
     }
 
-    public function setTableModified($bool)
+    public function setTableModified($bool): void
     {
         $this->isTableModified = $bool;
     }
@@ -197,15 +204,16 @@ class Behavior extends XMLElement
      * Use Propel's simple templating system to render a PHP file
      * using variables passed as arguments.
      *
-     * @param string $filename    The template file name, relative to the behavior's dirname
-     * @param array  $vars        An associative array of arguments to be rendered
+     * @param string $filename The template file name, relative to the behavior's dirname
+     * @param array $vars An associative array of arguments to be rendered
      * @param string $templateDir The name of the template subdirectory
      *
      * @return string The rendered template
      *
      * @throws InvalidArgumentException
+     * @throws Exception
      */
-    public function renderTemplate($filename, $vars = array(), $templateDir = '/templates/')
+    public function renderTemplate(string $filename, array $vars = [], string $templateDir = '/templates/'): string
     {
         $filePath = $this->getDirname() . $templateDir . $filename;
         if (!file_exists($filePath)) {
@@ -264,9 +272,10 @@ class Behavior extends XMLElement
     }
 
     /**
+     * @throws DOMException
      * @see       parent::appendXml(DOMNode)
      */
-    public function appendXml(DOMNode $node)
+    public function appendXml(DOMNode $node): void
     {
         $doc = ($node instanceof DOMDocument) ? $node : $node->ownerDocument;
 
@@ -280,32 +289,32 @@ class Behavior extends XMLElement
         }
     }
 
-    public function getTableModifier()
+    public function getTableModifier(): static
     {
         return $this;
     }
 
-    public function getObjectBuilderModifier()
+    public function getObjectBuilderModifier(): static
     {
         return $this;
     }
 
-    public function getQueryBuilderModifier()
+    public function getQueryBuilderModifier(): static
     {
         return $this;
     }
 
-    public function getPeerBuilderModifier()
+    public function getPeerBuilderModifier(): static
     {
         return $this;
     }
 
-    public function getTableMapBuilderModifier()
+    public function getTableMapBuilderModifier(): static
     {
         return $this;
     }
 
-    public function hasAdditionalBuilders()
+    public function hasAdditionalBuilders(): bool
     {
         return !empty($this->additionalBuilders);
     }

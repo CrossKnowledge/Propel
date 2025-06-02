@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,16 +10,18 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/util/PropelQuickBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the generated Object classes for lazy load columns.
  *
  * @package    generator.builder.om
  */
-class GeneratedObjectLazyLoadTest extends PHPUnit_Framework_TestCase
+class GeneratedObjectLazyLoadTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         if (!class_exists('LazyLoadActiveRecord')) {
             $schema = <<<EOF

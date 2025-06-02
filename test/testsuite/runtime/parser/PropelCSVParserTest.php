@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,7 +10,9 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/parser/PropelParser.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/parser/PropelCSVParser.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for PropelCSVParser class
@@ -17,7 +20,7 @@ require_once dirname(__FILE__) . '/../../../../runtime/lib/parser/PropelCSVParse
  * @author     Francois Zaninotto
  * @package    runtime.parser
  */
-class PropelCSVParserTest extends PHPUnit_Framework_TestCase
+class PropelCSVParserTest extends TestCase
 {
     public static function arrayCsvConversionDataProvider()
     {

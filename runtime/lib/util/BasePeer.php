@@ -81,7 +81,7 @@ class BasePeer
      * num type
      * simply the numerical array index, e.g. 4
      */
-    const TYPE_NUM = 'num';
+    const string TYPE_NUM = 'num';
 
     public static function getFieldnames($classname, $type = self::TYPE_PHPNAME)
     {
@@ -570,13 +570,14 @@ class BasePeer
     /**
      * Applies any validators that were defined in the schema to the specified columns.
      *
-     * @param string $dbName    The name of the database
+     * @param string $dbName The name of the database
      * @param string $tableName The name of the table
-     * @param array  $columns   Array of column names as key and column values as value.
+     * @param array $columns Array of column names as key and column values as value.
      *
      * @return ValidationFailed[]|bool A list of validation failures, true if valid.
+     * @throws PropelException
      */
-    public static function doValidate($dbName, $tableName, $columns)
+    public static function doValidate(string $dbName, string $tableName, array $columns): bool|array
     {
         $dbMap = Propel::getDatabaseMap($dbName);
         $tableMap = $dbMap->getTable($tableName);

@@ -10,6 +10,7 @@
 
 namespace CK\Generator\Lib\Model;
 
+use PDO;
 /**
  * A class that maps PropelTypes to PHP native types, PDO types (and Creole types).
  *
@@ -260,6 +261,7 @@ class PropelTypes
     /**
      * Returns the PDO type ('PDO::PARAM_*' constant) name.
      *
+     * @param $type
      * @return string
      */
     public static function getPdoTypeString($type): string
@@ -291,7 +293,7 @@ class PropelTypes
      *
      * @return string[]
      */
-    public static function getPropelTypes()
+    public static function getPropelTypes(): array
     {
         return array_keys(self::$propelTypeToCreoleTypeMap);
     }
@@ -339,7 +341,7 @@ class PropelTypes
      *
      * @return boolean True if values for the type need to be quoted.
      */
-    public static function isBooleanType($type)
+    public static function isBooleanType(string $type): bool
     {
         return in_array($type, self::$BOOLEAN_TYPES);
     }

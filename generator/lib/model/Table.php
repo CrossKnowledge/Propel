@@ -10,8 +10,15 @@
 
 namespace CK\Generator\Lib\Model;
 
+use CK\Generator\Lib\Exception\EngineException;
+use CK\Generator\Lib\Platform\MysqlPlatform;
+use CK\Generator\Lib\Config\GeneratorConfig;
+use DOMNode;
+use DomDocument;
+use BuildException;
+
 //require_once dirname(__FILE__) . '/ScopedElement.php';
-require_once dirname(__FILE__) . '/../exception/EngineException.php';
+//require_once dirname(__FILE__) . '/../exception/EngineException.php';
 //require_once dirname(__FILE__) . '/IDMethod.php';
 //require_once dirname(__FILE__) . '/NameFactory.php';
 //require_once dirname(__FILE__) . '/Column.php';
@@ -370,13 +377,13 @@ class Table extends ScopedElement implements IDMethod
     /**
      * get a build property for the database this table belongs to
      *
-     * @param string $key key of the build property
+     * @param mixed $name key of the build property
      *
      * @return string value of the property
      */
-    public function getBuildProperty($key)
+    public function getBuildProperty(mixed $name)
     {
-        return $this->getDatabase() ? $this->getDatabase()->getBuildProperty($key) : '';
+        return $this->getDatabase() ? $this->getDatabase()->getBuildProperty($name) : '';
     }
 
     /**
@@ -639,10 +646,10 @@ class Table extends ScopedElement implements IDMethod
     /**
      * Macro to a constraint name.
      *
-     * @param     nameType constraint type
-     * @param     nbr unique number for this constraint type
+     * @ param     nameType constraint type
+     * @ param     nbr unique number for this constraint type
      *
-     * @return unique          name for constraint
+     * @return Unique          name for constraint
      * @throws EngineException
      */
     private function acquireConstraintName($nameType, $nbr)
@@ -659,7 +666,7 @@ class Table extends ScopedElement implements IDMethod
     /**
      * Gets the value of base class for classes produced from this table.
      *
-     * @return The base class for classes produced from this table.
+     * @ return The base class for classes produced from this table.
      */
     public function getBaseClass()
     {
@@ -675,7 +682,7 @@ class Table extends ScopedElement implements IDMethod
     /**
      * Set the value of baseClass.
      *
-     * @param     v    Value to assign to baseClass.
+     * @ param     v    Value to assign to baseClass.
      */
     public function setBaseClass($v)
     {
@@ -1670,12 +1677,12 @@ class Table extends ScopedElement implements IDMethod
     /**
      * Return the column with the specified name.
      *
-     * @param string  $name            The name of the column (e.g. 'my_column')
+     * @param string $name The name of the column (e.g. 'my_column')
      * @param boolean $caseInsensitive Whether the check is case insensitive. False by default.
      *
-     * @return Column a Column object or null if it doesn't exist
+     * @return Column|null a Column object or null if it doesn't exist
      */
-    public function getColumn($name, $caseInsensitive = false)
+    public function getColumn($name, bool $caseInsensitive = false): ?Column
     {
         if ($this->hasColumn($name, $caseInsensitive)) {
             if ($caseInsensitive) {

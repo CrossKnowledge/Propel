@@ -10,6 +10,9 @@
 namespace CK\Generator\Lib\Model;
 
 //require_once dirname(__FILE__) . '/XMLElement.php';
+use DOMDocument;
+use DOMException;
+
 require_once dirname(__FILE__) . '/../exception/EngineException.php';
 
 /**
@@ -27,21 +30,21 @@ class VendorInfo extends XMLElement
      *
      * @var        string
      */
-    private $type;
+    private ?string $type;
 
     /**
      * Vendor parameters.
      *
      * @var        array
      */
-    private $parameters = array();
+    private array $parameters = [];
 
     /**
      * Creates a new VendorInfo instance.
      *
-     * @param string $type RDBMS type (optional)
+     * @param string|null $type RDBMS type (optional)
      */
-    public function __construct($type = null)
+    public function __construct(string $type = null)
     {
         $this->type = $type;
     }
@@ -51,7 +54,7 @@ class VendorInfo extends XMLElement
      *
      * @see        parent::loadFromXML()
      */
-    protected function setupObject()
+    protected function setupObject(): void
     {
         $this->type = $this->getAttribute("type");
     }
@@ -93,7 +96,7 @@ class VendorInfo extends XMLElement
      * @param string $name
      * @param mixed  $value The value for the parameter.
      */
-    public function setParameter($name, $value)
+    public function setParameter(string $name, mixed $value): void
     {
         $this->parameters[$name] = $value;
     }
@@ -121,7 +124,7 @@ class VendorInfo extends XMLElement
      *
      * @return bool
      */
-    public function hasParameter($name)
+    public function hasParameter(string $name): bool
     {
         return isset($this->parameters[$name]);
     }
@@ -141,7 +144,7 @@ class VendorInfo extends XMLElement
      *
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
@@ -151,7 +154,7 @@ class VendorInfo extends XMLElement
      *
      * @return boolean
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return empty($this->parameters);
     }
@@ -163,7 +166,7 @@ class VendorInfo extends XMLElement
      *
      * @return VendorInfo new object with merged parameters
      */
-    public function getMergedVendorInfo(VendorInfo $merge)
+    public function getMergedVendorInfo(VendorInfo $merge): VendorInfo
     {
         $newParams = array_merge($this->getParameters(), $merge->getParameters());
         $newInfo = new VendorInfo($this->getType());
@@ -173,9 +176,10 @@ class VendorInfo extends XMLElement
     }
 
     /**
+     * @throws DOMException
      * @see        XMLElement::appendXml(DOMNode)
      */
-    public function appendXml(DOMNode $node)
+    public function appendXml(mixed $node)
     {
         $doc = ($node instanceof DOMDocument) ? $node : $node->ownerDocument;
 

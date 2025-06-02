@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,11 +10,12 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/model/XMLElement.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author William Durand <william.durand1@gmail.com>
  */
-class XMLElementTest extends PHPUnit_Framework_TestCase
+class XMLElementTest extends TestCase
 {
     /**
      * @dataProvider providerForGetDefaultValueForArray

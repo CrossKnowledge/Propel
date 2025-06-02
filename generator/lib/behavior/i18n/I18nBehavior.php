@@ -13,6 +13,7 @@ namespace CK\Generator\Lib\Behavior\I18nBehavior;
 use CK\Generator\Lib\Model\Behavior;
 use CK\Generator\Lib\Model\ForeignKey;
 use CK\Generator\Lib\Model\PropelTypes;
+use CK\Generator\Lib\Exception\EngineException;
 
 //require_once dirname(__FILE__) . '/I18nBehaviorObjectBuilderModifier.php';
 //require_once dirname(__FILE__) . '/I18nBehaviorQueryBuilderModifier.php';
@@ -30,7 +31,7 @@ class I18nBehavior extends Behavior
     const DEFAULT_LOCALE = 'en_US';
 
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'i18n_table'    => '%TABLE%_i18n',
         'i18n_phpname'  => '%PHPNAME%I18n',
         'i18n_columns'  => '',
@@ -40,7 +41,7 @@ class I18nBehavior extends Behavior
         'locale_alias'  => '',
     );
 
-    protected $tableModificationOrder = 70;
+    protected int $tableModificationOrder = 70;
 
     protected
         $objectBuilderModifier,
@@ -259,7 +260,7 @@ class I18nBehavior extends Behavior
         ));
     }
 
-    public function getObjectBuilderModifier()
+    public function getObjectBuilderModifier(): static
     {
         if (is_null($this->objectBuilderModifier)) {
             $this->objectBuilderModifier = new I18nBehaviorObjectBuilderModifier($this);
@@ -268,7 +269,7 @@ class I18nBehavior extends Behavior
         return $this->objectBuilderModifier;
     }
 
-    public function getQueryBuilderModifier()
+    public function getQueryBuilderModifier(): static
     {
         if (is_null($this->queryBuilderModifier)) {
             $this->queryBuilderModifier = new I18nBehaviorQueryBuilderModifier($this);
@@ -277,7 +278,7 @@ class I18nBehavior extends Behavior
         return $this->queryBuilderModifier;
     }
 
-    public function getPeerBuilderModifier()
+    public function getPeerBuilderModifier(): static
     {
         if (is_null($this->peerBuilderModifier)) {
             $this->peerBuilderModifier = new I18nBehaviorPeerBuilderModifier($this);

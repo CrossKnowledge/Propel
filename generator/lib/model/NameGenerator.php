@@ -10,6 +10,7 @@
 
 namespace CK\Generator\Lib\Model;
 
+use CK\Generator\Lib\Exception\EngineException;
 /**
  * The generic interface to a name generation algorithm.
  *
@@ -26,7 +27,7 @@ interface NameGenerator
      * The character used by most implementations as the separator
      * between name elements.
      */
-    const STD_SEPARATOR_CHAR = '_';
+    const string STD_SEPARATOR_CHAR = '_';
 
     /**
      * Traditional method for converting schema table and column names
@@ -36,7 +37,7 @@ interface NameGenerator
      *
      * @see        PhpNameGenerator::underscoreMethod()
      */
-    const CONV_METHOD_UNDERSCORE = "underscore";
+    const string CONV_METHOD_UNDERSCORE = "underscore";
 
     /**
      * Heavier method for converting schema table and column names
@@ -47,7 +48,7 @@ interface NameGenerator
      * constants define how names for columns and tales in the
      * database schema will be converted to PHP source names.
      */
-    const CONV_METHOD_CLEAN = "clean";
+    const string CONV_METHOD_CLEAN = "clean";
 
     /**
      * Similar to {@link #CONV_METHOD_UNDERSCORE} except nothing is
@@ -55,13 +56,13 @@ interface NameGenerator
      *
      * @see        PhpNameGenerator::phpnameMethod()
      */
-    const CONV_METHOD_PHPNAME = "phpname";
+    const string CONV_METHOD_PHPNAME = "phpname";
 
     /**
      * Specifies no modification when converting from a schema column
      * or table name to a PHP name.
      */
-    const CONV_METHOD_NOCHANGE = "nochange";
+    const string CONV_METHOD_NOCHANGE = "nochange";
 
     /**
      * Given a list of <code>String</code> objects, implements an
@@ -72,5 +73,5 @@ interface NameGenerator
      * @return string          The generated name.
      * @throws EngineException
      */
-    public function generateName($inputs);
+    public function generateName(array $inputs): string;
 }

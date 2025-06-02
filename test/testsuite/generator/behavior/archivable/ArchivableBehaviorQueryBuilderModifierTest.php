@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /*
  *	$Id$
@@ -10,8 +11,11 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/util/PropelQuickBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/behavior/archivable/ArchivableBehavior.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for ArchivableBehavior class
@@ -20,9 +24,9 @@ require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
  * @version    $Revision$
  * @package    generator.behavior.archivable
  */
-class ArchivableBehaviorQueryBuilderModifierTest extends PHPUnit_Framework_TestCase
+class ArchivableBehaviorQueryBuilderModifierTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         if (!class_exists('ArchivableTest100')) {
             $schema = <<<EOF

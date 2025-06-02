@@ -7,8 +7,10 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Builder\Util;
 
-require_once dirname(__FILE__) . '/Pluralizer.php';
+use CK\Propel\Generator\Lib\Builder\Util\Pluralizer;
+//require_once dirname(__FILE__) . '/Pluralizer.php';
 
 /**
  * Standard replacement English pluralizer class. Based on the links below
@@ -23,7 +25,7 @@ require_once dirname(__FILE__) . '/Pluralizer.php';
  */
 class StandardEnglishPluralizer implements Pluralizer
 {
-    protected $_plural = array(
+    protected array $_plural = array(
         '(matr|vert|ind)(ix|ex)' => '\1ices',
         '(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|vir)us' => '\1i',
         '(buffal|tomat)o' => '\1oes',
@@ -74,7 +76,7 @@ class StandardEnglishPluralizer implements Pluralizer
         'life' => 'lives'
     );
 
-    protected $_irregular = array(
+    protected array $_irregular = array(
         'leaf'   => 'leaves',
         'loaf'   => 'loaves',
         'move'   => 'moves',
@@ -95,7 +97,7 @@ class StandardEnglishPluralizer implements Pluralizer
         'alias' => 'aliases',
     );
 
-    private $_uncountable = array(
+    private array $_uncountable = array(
         'sheep',
         'fish',
         'deer',
@@ -116,7 +118,7 @@ class StandardEnglishPluralizer implements Pluralizer
      *
      * @return string The plural form of $root (e.g. Authors).
      */
-    public function getPluralForm($root)
+    public function getPluralForm(string $root): string
     {
         // save some time in the case that singular and plural are the same
         if (in_array(strtolower($root), $this->_uncountable)) {

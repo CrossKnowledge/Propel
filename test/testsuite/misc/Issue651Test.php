@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class Issue651Test extends PHPUnit_Framework_TestCase
+class Issue651Test extends TestCase
 {
 
     public function testIndex()

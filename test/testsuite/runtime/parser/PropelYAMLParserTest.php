@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,7 +10,9 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/parser/PropelParser.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/parser/PropelYAMLParser.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for PropelYAMLParser class
@@ -17,7 +20,7 @@ require_once dirname(__FILE__) . '/../../../../runtime/lib/parser/PropelYAMLPars
  * @author     Francois Zaninotto
  * @package    runtime.parser
  */
-class PropelYAMLParserTest extends PHPUnit_Framework_TestCase
+class PropelYAMLParserTest extends TestCase
 {
     public static function arrayYAMLConversionDataProvider()
     {

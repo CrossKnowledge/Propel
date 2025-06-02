@@ -7,8 +7,8 @@
  *
  * @license    MIT License
  */
-
-require_once 'builder/sql/DataSQLBuilder.php';
+namespace CK\Generator\Lib\Builder\Sql;
+//require_once 'builder/sql/DataSQLBuilder.php';
 
 /**
  * MySQL class for building data dump SQL.

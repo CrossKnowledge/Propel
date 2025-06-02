@@ -396,6 +396,7 @@ class Propel
      *                 - PropelConfiguration::TYPE_OBJECT: return the configuration as a PropelConfiguration instance
      *
      * @return mixed The Configuration (array or PropelConfiguration)
+     * @throws PropelException
      */
     public static function getConfiguration(int $type = PropelConfiguration::TYPE_ARRAY): mixed
     {
@@ -520,7 +521,7 @@ class Propel
      */
     public static function setForceMasterConnection(bool $bit): void
     {
-        self::$forceMasterConnection = (bool) $bit;
+        self::$forceMasterConnection = $bit;
     }
 
     /**
@@ -559,11 +560,11 @@ class Propel
      * @param string $mode The connection mode (this applies to replication systems).
      *
      * @ return PDO A database connection: old
-     * @return PropelPDO as a Database Connection
+     * @return PropelPDO|PDO as a Database Connection
      *
      * @throws PropelException - if connection cannot be configured or initialized.
      */
-    public static function getConnection(?string $name = null, string $mode = Propel::CONNECTION_WRITE): PropelPDO//PDO
+    public static function getConnection(?string $name = null, string $mode = Propel::CONNECTION_WRITE): PropelPDO|PDO
     {
         if ($name === null) {
             $name = self::getDefaultDB();
@@ -741,10 +742,12 @@ class Propel
             } elseif (is_string($option)) {
                 $key = 'PropelPDO::' . $option;
             }
-            if (!defined($key)) {
-                throw new PropelException("Invalid PDO option/attribute name specified: " . $key);
+
+            if (!isset($key) || !is_string($key) || !defined($key)) {
+                throw new PropelException("Invalid PDO option/attribute name specified: " . (isset($key) ? (string)$key : '[undefined]'));
             }
             $key = constant($key);
+
 
             $value = $optiondata['value'];
             if (is_string($value) && strpos($value, '::') !== false) {
@@ -903,9 +906,9 @@ class Propel
      * you can change the whole TableMap-Model, but keep its
      * functionality for Criteria.
      *
-     * @param      string The name of the class.
+     * @param string $name The name of the class.
      */
-    public static function setDatabaseMapClass($name): void
+    public static function setDatabaseMapClass(string $name): void
     {
         self::$databaseMapClass = $name;
     }

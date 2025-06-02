@@ -12,6 +12,7 @@ namespace CK\Generator\Lib\Builder\OM;
 
 use CK\Generator\Lib\Model\PropelTypes;
 use DateTime;
+use Exception;
 
 //require_once dirname(__FILE__) . '/OMBuilder.php';
 
@@ -32,12 +33,12 @@ class QueryBuilder extends OMBuilder
      *
      * @return string
      */
-    public function getPackage()
+    public function getPackage(): string
     {
         return parent::getPackage() . ".om";
     }
 
-    public function getNamespace()
+    public function getNamespace(): ?string
     {
         if ($namespace = parent::getNamespace()) {
             if ($this->getGeneratorConfig() && $omns = $this->getGeneratorConfig()->getBuildProperty('namespaceOm')) {
@@ -46,6 +47,7 @@ class QueryBuilder extends OMBuilder
                 return $namespace;
             }
         }
+        return null;
     }
 
     /**
@@ -53,7 +55,7 @@ class QueryBuilder extends OMBuilder
      *
      * @return string
      */
-    public function getUnprefixedClassname()
+    public function getUnprefixedClassname(): string
     {
         return $this->getBuildProperty('basePrefix') . $this->getStubQueryBuilder()->getUnprefixedClassname();
     }
@@ -71,8 +73,9 @@ class QueryBuilder extends OMBuilder
      * Adds class phpdoc comment and opening of class.
      *
      * @param string &$script The script will be modified in this method.
+     * @throws Exception
      */
-    protected function addClassOpen(&$script)
+    protected function addClassOpen(string &$script): void
     {
         $table = $this->getTable();
         $tableName = $table->getName();
@@ -586,7 +589,7 @@ abstract class " . $this->getClassname() . " extends " . $parentClass . "
      *
      * @param string &$script The script will be modified in this method.
      */
-    protected function addFindPkComplex(&$script)
+    protected function addFindPkComplex(&$script): void
     {
         $table = $this->getTable();
         $pks = $table->getPrimaryKey();
@@ -619,7 +622,7 @@ abstract class " . $this->getClassname() . " extends " . $parentClass . "
      *
      * @param string &$script The script will be modified in this method.
      */
-    protected function addFindPks(&$script)
+    protected function addFindPks(string &$script): void
     {
         $this->declareClasses('PropelPDO', 'Propel');
         $table = $this->getTable();
@@ -664,6 +667,7 @@ abstract class " . $this->getClassname() . " extends " . $parentClass . "
      * Adds the filterByPrimaryKey method for this object.
      *
      * @param string &$script The script will be modified in this method.
+     * @throws Exception
      */
     protected function addFilterByPrimaryKey(&$script)
     {
@@ -708,6 +712,7 @@ abstract class " . $this->getClassname() . " extends " . $parentClass . "
      * Adds the filterByPrimaryKey method for this object.
      *
      * @param string &$script The script will be modified in this method.
+     * @throws Exception
      */
     protected function addFilterByPrimaryKeys(&$script)
     {
@@ -764,8 +769,9 @@ abstract class " . $this->getClassname() . " extends " . $parentClass . "
      * Adds the filterByCol method for this object.
      *
      * @param string &$script The script will be modified in this method.
+     * @throws Exception
      */
-    protected function addFilterByCol(&$script, $col)
+    protected function addFilterByCol(string &$script, $col): void
     {
         $colPhpName = $col->getPhpName();
         $colName = $col->getName();
@@ -1077,8 +1083,9 @@ abstract class " . $this->getClassname() . " extends " . $parentClass . "
      * Adds the filterByRefFk method for this object.
      *
      * @param string &$script The script will be modified in this method.
+     * @throws Exception
      */
-    protected function addFilterByRefFk(&$script, $fk)
+    protected function addFilterByRefFk(&$script, $fk): void
     {
         $this->declareClasses('PropelObjectCollection', 'PropelCollection', 'PropelException');
         $table = $this->getTable();
@@ -1137,8 +1144,9 @@ abstract class " . $this->getClassname() . " extends " . $parentClass . "
      * Adds the joinFk method for this object.
      *
      * @param string &$script The script will be modified in this method.
+     * @throws Exception
      */
-    protected function addJoinFk(&$script, $fk)
+    protected function addJoinFk(string &$script, $fk): void
     {
         $table = $this->getTable();
         $queryClass = $this->getStubQueryBuilder()->getClassname();

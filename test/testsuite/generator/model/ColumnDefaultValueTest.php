@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,6 +10,7 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/model/ColumnDefaultValue.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for ColumnDefaultValue class.
@@ -16,7 +18,7 @@ require_once dirname(__FILE__) . '/../../../../generator/lib/model/ColumnDefault
  * @version    $Revision$
  * @package    generator.model
  */
-class ColumnDefaultValueTest extends PHPUnit_Framework_TestCase
+class ColumnDefaultValueTest extends TestCase
 {
     public function equalsProvider()
     {

@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,17 +10,19 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/util/PropelPHPParser.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  *
  * @package    generator.util
  */
-class PropelPHPParserTest extends PHPUnit_Framework_TestCase
+class PropelPHPParserTest extends TestCase
 {
     public function basicClassCodeProvider()
     {
         $code = <<<EOF
 <?php
+use PHPUnit\Framework\TestCase;
 class Foo
 {
     public function bar1()
@@ -167,6 +170,7 @@ EOF;
         $parser->removeMethod('bar1');
         $expected = <<<EOF
 <?php
+use PHPUnit\Framework\TestCase;
 class Foo
 {
 
@@ -237,6 +241,7 @@ EOF;
         $parser->replaceMethod('bar1', $newCode);
         $expected = <<<EOF
 <?php
+use PHPUnit\Framework\TestCase;
 class Foo
 {
     public function bar1prime()

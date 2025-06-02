@@ -12,8 +12,12 @@ namespace CK\Generator\Lib\Model;
 
 //require_once dirname(__FILE__) . '/XMLElement.php';
 use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Exception\EngineException;
+use DOMNode;
+use DOMDocument;
+use Exception;
 
-require_once dirname(__FILE__) . '/../exception/EngineException.php';
+//require_once dirname(__FILE__) . '/../exception/EngineException.php';
 //require_once dirname(__FILE__) . '/PropelTypes.php';
 //require_once dirname(__FILE__) . '/Inheritance.php';
 //require_once dirname(__FILE__) . '/Domain.php';
@@ -55,33 +59,33 @@ class Column extends XMLElement
      *
      * @var string
      */
-    private $peerName;
+    private string $peerName;
 
     /**
      * Native PHP type (scalar or class name)
      *
      * @var string "string", "boolean", "int", "double"
      */
-    private $phpType;
+    private string $phpType;
 
     /**
      * @var Table
      */
-    private $parentTable;
+    private Table $parentTable;
 
-    private $position;
-    private $isPrimaryKey = false;
-    private $isNodeKey = false;
+    private int $position;
+    private bool $isPrimaryKey = false;
+    private bool $isNodeKey = false;
     private $nodeKeySep;
-    private $isNestedSetLeftKey = false;
-    private $isNestedSetRightKey = false;
-    private $isTreeScopeKey = false;
-    private $isUnique = false;
-    private $isAutoIncrement = false;
-    private $isLazyLoad = false;
+    private bool $isNestedSetLeftKey = false;
+    private bool $isNestedSetRightKey = false;
+    private bool $isTreeScopeKey = false;
+    private bool $isUnique = false;
+    private bool $isAutoIncrement = false;
+    private bool $isLazyLoad = false;
     private $defaultValue;
-    private $referrers;
-    private $isPrimaryString = false;
+    private array $referrers;
+    private bool $isPrimaryString = false;
 
     // only one type is supported currently, which assumes the
     // column either contains the classnames or a key to
@@ -349,9 +353,9 @@ class Column extends XMLElement
     /**
      * Set the description for the Table
      *
-     * @param       newDescription description for the Table
+     * @param  ?string $newDescription newDescription description for the Table
      */
-    public function setDescription($newDescription)
+    public function setDescription(?string $newDescription): void
     {
         $this->description = $newDescription;
     }
@@ -1324,7 +1328,7 @@ class Column extends XMLElement
      * @return boolean
      * @see         PropelTypes::isPhpPrimitiveType()
      */
-    public function isPhpPrimitiveType()
+    public function isPhpPrimitiveType(): bool
     {
         return PropelTypes::isPhpPrimitiveType($this->getPhpType());
     }
@@ -1354,9 +1358,9 @@ class Column extends XMLElement
     /**
      * Get the platform/adapter impl.
      *
-     * @return \CK\Generator\Lib\Model\PropelPlatformInterface
+     * @return PropelPlatformInterface
      */
-    public function getPlatform(): \CK\Generator\Lib\Model\PropelPlatformInterface
+    public function getPlatform(): PropelPlatformInterface
     {
         return $this->getTable()->getDatabase()->getPlatform();
     }

@@ -109,7 +109,7 @@ class NameFactoryTest extends BaseTestCase
     }
 
     /** Sets up the Propel model. */
-    public function setUp()
+    public function setUp(): void
     {
         $appData = new AppData(new MysqlPlatform());
         $this->database = new Database();

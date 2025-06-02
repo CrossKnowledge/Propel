@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,7 +10,9 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/config/PropelConfiguration.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/config/PropelConfigurationIterator.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for PropelConfiguration class
@@ -17,7 +20,7 @@ require_once dirname(__FILE__) . '/../../../../runtime/lib/config/PropelConfigur
  * @author     Francois Zaninotto
  * @package    runtime.config
  */
-class PropelConfigurationTest extends PHPUnit_Framework_TestCase
+class PropelConfigurationTest extends TestCase
 {
     public static function configurationProvider()
     {

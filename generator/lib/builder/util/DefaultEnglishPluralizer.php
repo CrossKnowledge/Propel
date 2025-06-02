@@ -7,8 +7,10 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Builder\Util;
 
-require_once dirname(__FILE__) . '/Pluralizer.php';
+use CK\Propel\Generator\Lib\Builder\Util\Pluralizer;
+//require_once dirname(__FILE__) . '/Pluralizer.php';
 
 /**
  * The default English pluralizer class.
@@ -27,7 +29,7 @@ class DefaultEnglishPluralizer implements Pluralizer
      *
      * @return string The plural form of $root (e.g. Authors).
      */
-    public function getPluralForm($root)
+    public function getPluralForm(string $root): string
     {
         return $root . 's';
     }

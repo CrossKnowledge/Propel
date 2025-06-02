@@ -1,9 +1,15 @@
 <?php
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/util/PropelQuickBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../runtime/lib/adapter/DBAdapter.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../runtime/lib/adapter/DBSQLite.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../runtime/lib/connection/PropelPDO.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 /**
  * This file is part of the Propel package.
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +24,7 @@ require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
  * @author Boban Acimovic <boban.acimovic@gmail.com>
  * @package generator.builder.om
  */
-class GeneratedObjectConstantNameTest extends PHPUnit_Framework_TestCase
+class GeneratedObjectConstantNameTest extends TestCase
 {
     /**
      * Test normal string as single inheritance key
@@ -28,6 +34,7 @@ class GeneratedObjectConstantNameTest extends PHPUnit_Framework_TestCase
         $schema = <<<XML
 <database name="constant_name_test" namespace="ConstantNameTest1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
   <table name="radcheck" phpName="UserCheck">
+use PHPUnit\Framework\TestCase;
     <column name="id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="attribute" type="VARCHAR" size="64" required="true" inheritance="single">
       <inheritance key="Expiration" class="UserCheckExpiration" extends="UserCheck"/>
@@ -47,6 +54,7 @@ XML;
         $schema = <<<XML
 <database name="constant_name_test" namespace="ConstantNameTest2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
   <table name="radcheck" phpName="UserCheck2">
+use PHPUnit\Framework\TestCase;
     <column name="id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="attribute" type="VARCHAR" size="64" required="true" inheritance="single">
       <inheritance key="Calling-Station-Id" class="UserCheckMacAddress" extends="UserCheck2"/>
@@ -66,6 +74,7 @@ XML;
         $schema = <<<XML
 <database name="constant_name_test" namespace="ConstantNameTest3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
   <table name="radcheck" phpName="UserCheck3">
+use PHPUnit\Framework\TestCase;
     <column name="id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="attribute" type="VARCHAR" size="64" required="true" inheritance="single">
       <inheritance key="Key.-_:*" class="UserCheckMacAddress" extends="UserCheck3"/>

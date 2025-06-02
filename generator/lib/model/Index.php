@@ -10,8 +10,13 @@
 
 namespace CK\Generator\Lib\Model;
 
+
+use CK\Generator\Lib\Exception\EngineException;
+use DOMException;
+use DOMNode;
+use DOMDocument;
 //require_once dirname(__FILE__) . '/XMLElement.php';
-require_once dirname(__FILE__) . '/../exception/EngineException.php';
+//require_once dirname(__FILE__) . '/../exception/EngineException.php';
 
 /**
  * Information about indices of a table.
@@ -32,25 +37,25 @@ class Index extends XMLElement
     /**
      * @var Table
      */
-    private $parentTable;
+    private Table $parentTable;
 
     /** @var string[] */
-    private $indexColumns;
+    private array $indexColumns;
 
     /** @var int[] */
-    private $indexColumnSizes = array();
+    private array $indexColumnSizes = array();
 
     /**
      * Creates a new Index instance.
      *
-     * @param string $name
+     * @param string|null $name
      */
-    public function __construct($name = null)
+    public function __construct(string $name = null)
     {
         $this->indexName = $name;
     }
 
-    private function createName()
+    private function createName(): void
     {
         $table = $this->getTable();
         $inputs = array();
@@ -319,9 +324,10 @@ class Index extends XMLElement
     }
 
     /**
+     * @throws DOMException
      * @see        XMLElement::appendXml(DOMNode)
      */
-    public function appendXml(DOMNode $node)
+    public function appendXml(DOMNode $node): void
     {
         $doc = ($node instanceof DOMDocument) ? $node : $node->ownerDocument;
 

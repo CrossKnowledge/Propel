@@ -15,6 +15,9 @@ use CK\Generator\Lib\Model\Unique;
 use CK\Generator\Lib\Platform\PgsqlPlatform;
 use CK\Generator\Lib\Platform\MssqlPlatform;
 use CK\Generator\Lib\Platform\OraclePlatform;
+use CK\Generator\Lib\Builder\OM\PHP5ObjectBuilder;
+use CK\Generator\Lib\Builder\OM\QueryBuilder;
+use Exception;
 //use QueryBuilder;
 
 /**
@@ -28,7 +31,7 @@ use CK\Generator\Lib\Platform\OraclePlatform;
 class SluggableBehavior extends Behavior
 {
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'add_cleanup'     => 'true',
         'slug_column'     => 'slug',
         'slug_pattern'    => '',
@@ -85,6 +88,7 @@ class SluggableBehavior extends Behavior
      * Add code in ObjectBuilder::preSave
      *
      * @return string The code to put at the hook
+     * @throws Exception
      */
     public function preSave(PHP5ObjectBuilder $builder)
     {

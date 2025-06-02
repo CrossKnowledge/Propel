@@ -32,6 +32,11 @@
     <property file="${propel.home}/default.properties"/>
 
     <!--
+      Load the bootstrap file AFTER properties are set
+    -->
+    <php expression="require_once '${propel.home}/lib/bootstrap.php';"/>
+
+    <!--
       Do forward declarations of all of our tasks to
       centralize them and clean up the targets.
     -->
@@ -211,7 +216,7 @@
             <schemafileset dir="${propel.schema.dir}"
                            includes="${propel.schema.sql.includes}"
                            excludes="${propel.schema.sql.excludes}"
-                    />
+            />
         </propel-sql>
     </target>
 
@@ -265,7 +270,7 @@
                 url="${propel.database.buildUrl}"
                 userId="${propel.database.user}"
                 password="${propel.database.password}"
-                />
+        />
     </target>
 
     <!-- ================================================================ -->
@@ -293,7 +298,7 @@
                 samePhpName="${propel.samePhpName}"
                 addVendorInfo="${propel.addVendorInfo}"
                 addValidators="${propel.addValidators}"
-                />
+        />
 
     </target>
 
@@ -335,7 +340,7 @@
             <schemafileset dir="${propel.schema.dir}"
                            includes="${propel.schema.sql.includes}"
                            excludes="${propel.schema.sql.excludes}"
-                    />
+            />
         </propel-sql-diff>
     </target>
 
@@ -459,7 +464,7 @@
             <schemafileset dir="${propel.schema.dir}"
                            includes="${propel.schema.datadtd.includes}"
                            excludes="${propel.schema.datadtd.excludes}"
-                    />
+            />
         </propel-data-sql>
     </target>
 
@@ -493,7 +498,7 @@
             <schemafileset dir="${propel.schema.dir}"
                            includes="${propel.schema.datadtd.includes}"
                            excludes="${propel.schema.datadtd.excludes}"
-                    />
+            />
         </propel-data-dump>
     </target>
 
@@ -545,7 +550,7 @@
             <schemafileset dir="${propel.schema.dir}"
                            includes="${propel.schema.om.includes}"
                            excludes="${propel.schema.om.excludes}"
-                    />
+            />
         </propel-om>
     </target>
 
@@ -576,7 +581,7 @@
             <schemafileset dir="${propel.schema.dir}"
                            includes="${propel.schema.sql.includes}"
                            excludes="${propel.schema.sql.excludes}"
-                    />
+            />
         </propel-convert-conf>
 
     </target>
@@ -621,7 +626,7 @@
             <schemafileset dir="${propel.schema.dir}"
                            includes="${propel.schema.sql.includes}"
                            excludes="${propel.schema.sql.excludes}"
-                    />
+            />
         </propel-graphviz>
     </target>
 
@@ -634,11 +639,11 @@
                           validate="${propel.schema.validate}"
                           xsd="${propel.schema.xsd.file}"
                           xsl="${propel.schema.xsl.file}"
-                >
+        >
             <schemafileset dir="${propel.schema.dir}"
                            includes="${propel.schema.sql.includes}"
                            excludes="${propel.schema.sql.excludes}"
-                    />
+            />
         </propel-build-sql>
     </target>
 

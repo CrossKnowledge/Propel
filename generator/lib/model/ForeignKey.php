@@ -10,6 +10,10 @@
 
 namespace CK\Generator\Lib\Model;
 
+use DOMException;
+use DOMNode;
+use DOMDocument;
+
 //require_once dirname(__FILE__) . '/XMLElement.php';
 
 /**
@@ -576,7 +580,7 @@ class ForeignKey extends XMLElement
      *
      * @return boolean
      */
-    public function isLocalColumnsRequired()
+    public function isLocalColumnsRequired(): bool
     {
         foreach ($this->getLocalColumns() as $columnName) {
             if (!$this->getTable()->getColumn($columnName)->isNotNull()) {
@@ -592,7 +596,7 @@ class ForeignKey extends XMLElement
      *
      * @return boolean Returns true if all columns inside this foreign key are primary keys of the foreign table
      */
-    public function isForeignPrimaryKey()
+    public function isForeignPrimaryKey(): bool
     {
         $lfmap = $this->getLocalForeignMapping();
         $foreignTable = $this->getForeignTable();
@@ -615,7 +619,7 @@ class ForeignKey extends XMLElement
      *
      * @return boolean True if there is at least one column that is a primary key of the foreign table
      */
-    public function isAtLeastOneForeignPrimaryKey()
+    public function isAtLeastOneForeignPrimaryKey(): bool
     {
         $cols = $this->getForeignPrimaryKeys();
 
@@ -627,7 +631,7 @@ class ForeignKey extends XMLElement
      *
      * @return array Column[]
      */
-    public function getForeignPrimaryKeys()
+    public function getForeignPrimaryKeys(): array
     {
 
         $lfmap = $this->getLocalForeignMapping();
@@ -653,7 +657,7 @@ class ForeignKey extends XMLElement
      *
      * @return Boolean
      */
-    public function isComposite()
+    public function isComposite(): bool
     {
         return count($this->getLocalColumns()) > 1;
     }
@@ -663,7 +667,7 @@ class ForeignKey extends XMLElement
      *
      * @return boolean True if all local columns are at the same time a primary key
      */
-    public function isLocalPrimaryKey()
+    public function isLocalPrimaryKey(): bool
     {
         $localCols = $this->getLocalColumns();
 
@@ -682,7 +686,7 @@ class ForeignKey extends XMLElement
      *
      * @return boolean True if there is at least one column that is a primary key
      */
-    public function isAtLeastOneLocalPrimaryKey()
+    public function isAtLeastOneLocalPrimaryKey(): bool
     {
         $localCols = $this->getLocalColumnObjects();
 
@@ -700,7 +704,7 @@ class ForeignKey extends XMLElement
      *
      * @param boolean $v Value to assign to skipSql.
      */
-    public function setSkipSql($v)
+    public function setSkipSql($v): void
     {
         $this->skipSql = $v;
     }
@@ -727,7 +731,7 @@ class ForeignKey extends XMLElement
      * @return boolean
      * @link       http://propel.phpdb.org/trac/ticket/549
      */
-    public function isMatchedByInverseFK()
+    public function isMatchedByInverseFK(): bool
     {
         return (bool) $this->getInverseFK();
     }
@@ -750,11 +754,11 @@ class ForeignKey extends XMLElement
      * Get the other foreign keys starting on the same table
      * Used in many-to-many relationships
      *
-     * @return ForeignKey
+     * @return ForeignKey|array
      */
-    public function getOtherFks()
+    public function getOtherFks(): ForeignKey|array
     {
-        $fks = array();
+        $fks = [];
         foreach ($this->getTable()->getForeignKeys() as $fk) {
             if ($fk !== $this) {
                 $fks[] = $fk;
@@ -765,9 +769,10 @@ class ForeignKey extends XMLElement
     }
 
     /**
+     * @throws DOMException
      * @see        XMLElement::appendXml(DOMNode)
      */
-    public function appendXml(DOMNode $node)
+    public function appendXml(DOMNode $node): void
     {
         $doc = ($node instanceof DOMDocument) ? $node : $node->ownerDocument;
 

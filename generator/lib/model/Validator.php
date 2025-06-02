@@ -10,8 +10,13 @@
 
 namespace CK\Generator\Lib\Model;
 
+
+use DOMException;
+use DOMNode;
+use DOMDocument;
+
 //require_once dirname(__FILE__) . '/XMLElement.php';
-require_once dirname(__FILE__) . '/../exception/EngineException.php';
+//require_once dirname(__FILE__) . '/../exception/EngineException.php';
 //require_once dirname(__FILE__) . '/PropelTypes.php';
 //require_once dirname(__FILE__) . '/Rule.php';
 
@@ -25,43 +30,43 @@ require_once dirname(__FILE__) . '/../exception/EngineException.php';
 class Validator extends XMLElement
 {
 
-    const TRANSLATE_NONE = "none";
-    const TRANSLATE_GETTEXT = "gettext";
+    const string TRANSLATE_NONE = "none";
+    const string TRANSLATE_GETTEXT = "gettext";
 
     /**
      * The column this validator applies to.
      *
      * @var        Column
      */
-    private $column;
+    private Column $column;
 
     /**
      * The rules for the validation.
      *
      * @var        array Rule[]
      */
-    private $ruleList = array();
+    private array $ruleList = [];
 
     /**
      * The translation mode.
      *
      * @var        string
      */
-    private $translate;
+    private string $translate;
 
     /**
      * Parent table.
      *
      * @var        Table
      */
-    private $table;
+    private Table $table;
 
     /**
      * Sets up the Validator object based on the attributes that were passed to loadFromXML().
      *
      * @see        parent::loadFromXML()
      */
-    protected function setupObject()
+    protected function setupObject(): void
     {
         $this->column = $this->getTable()->getColumn($this->getAttribute("column"));
         $this->translate = $this->getAttribute("translate", $this->getTable()->getDatabase()->getDefaultTranslateMethod());;
@@ -77,7 +82,7 @@ class Validator extends XMLElement
      *
      * @return Rule The added Rule.
      */
-    public function addRule($data)
+    public function addRule(mixed $data): Rule
     {
         if ($data instanceof Rule) {
             $rule = $data; // alias
@@ -99,7 +104,7 @@ class Validator extends XMLElement
      *
      * @return array Rule[]
      */
-    public function getRules()
+    public function getRules(): array
     {
         return $this->ruleList;
     }
@@ -109,7 +114,7 @@ class Validator extends XMLElement
      *
      * @return string
      */
-    public function getColumnName()
+    public function getColumnName(): string
     {
         return $this->column->getName();
     }
@@ -121,7 +126,7 @@ class Validator extends XMLElement
      *
      * @see        Table::addValidator()
      */
-    public function setColumn(Column $column)
+    public function setColumn(Column $column): void
     {
         $this->column = $column;
     }
@@ -131,7 +136,7 @@ class Validator extends XMLElement
      *
      * @return Column
      */
-    public function getColumn()
+    public function getColumn(): Column
     {
         return $this->column;
     }
@@ -141,7 +146,7 @@ class Validator extends XMLElement
      *
      * @param Table $table
      */
-    public function setTable(Table $table)
+    public function setTable(Table $table): void
     {
         $this->table = $table;
     }
@@ -151,7 +156,7 @@ class Validator extends XMLElement
      *
      * @return Table
      */
-    public function getTable()
+    public function getTable(): Table
     {
         return $this->table;
     }
@@ -162,7 +167,7 @@ class Validator extends XMLElement
      *
      * @param string $method Translation method ("gettext", "none").
      */
-    public function setTranslate($method)
+    public function setTranslate(string $method): void
     {
         $this->translate = $method;
     }
@@ -173,12 +178,13 @@ class Validator extends XMLElement
      *
      * @return string Translation method ("gettext", "none").
      */
-    public function getTranslate()
+    public function getTranslate(): string
     {
         return $this->translate;
     }
 
     /**
+     * @throws DOMException
      * @see        XMLElement::appendXml(DOMNode)
      */
     public function appendXml(DOMNode $node)

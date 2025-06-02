@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -10,37 +11,44 @@
 
 /**
  * Tests for changed php names in relations.
+use PHPUnit\Framework\TestCase;
  *
  * @author Toni Uebernickel <tuebernickel@gmail.com>
  * @package generator.builder.om
  */
-class GeneratedObjectPhpNameTest extends PHPUnit_Framework_TestCase
+class GeneratedObjectPhpNameTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         if (!class_exists('PhpNameTest\Page')) {
             $schema = <<<XML
 <database name="php_name_test" namespace="PhpNameTest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
+use PHPUnit\Framework\TestCase;
     <table name="php_name_test_page" phpName="Page">
+use PHPUnit\Framework\TestCase;
         <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER" />
         <column name="title" type="VARCHAR" size="100" primaryString="true" />
     </table>
 
     <table name="php_name_test_author" phpName="Author">
+use PHPUnit\Framework\TestCase;
         <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER" />
         <column name="name" type="VARCHAR" size="100" primaryString="true" />
     </table>
 
     <table name="php_name_test_author_page" phpName="AuthorPage" isCrossRef="true">
+use PHPUnit\Framework\TestCase;
         <column name="author_id" required="true" primaryKey="true" autoIncrement="false" type="INTEGER" />
         <column name="page_id" required="true" primaryKey="true" autoIncrement="false" type="INTEGER" />
 
         <foreign-key foreignTable="php_name_test_author">
+use PHPUnit\Framework\TestCase;
             <reference local="author_id" foreign="id" />
         </foreign-key>
         <foreign-key foreignTable="php_name_test_page" refPhpName="Writer">
+use PHPUnit\Framework\TestCase;
             <reference local="page_id" foreign="id" />
         </foreign-key>
     </table>

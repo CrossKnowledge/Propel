@@ -23,7 +23,7 @@ use CK\Generator\Lib\Model\Behavior;
 #[AllowDynamicProperties] class QueryCacheBehavior extends Behavior
 {
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'backend'     => 'apc',
         'lifetime'    => 3600,
     );

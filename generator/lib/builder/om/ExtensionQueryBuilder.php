@@ -29,7 +29,7 @@ class ExtensionQueryBuilder extends OMBuilder
      *
      * @return string
      */
-    public function getUnprefixedClassname()
+    public function getUnprefixedClassname(): string
     {
         return $this->getTable()->getPhpName() . 'Query';
     }
@@ -39,7 +39,7 @@ class ExtensionQueryBuilder extends OMBuilder
      *
      * @param string &$script The script will be modified in this method.
      */
-    protected function addIncludes(&$script)
+    protected function addIncludes(&$script): void
     {
         $requiredClassFilePath = $this->getQueryBuilder()->getClassFilePath();
 
@@ -53,7 +53,7 @@ require '" . $requiredClassFilePath . "';
      *
      * @param string &$script The script will be modified in this method.
      */
-    protected function addClassOpen(&$script)
+    protected function addClassOpen(string &$script): void
     {
         $table = $this->getTable();
         $this->declareClassFromBuilder($this->getQueryBuilder());
@@ -109,7 +109,7 @@ class " . $this->getClassname() . " extends $baseClassname
      *
      * @param string &$script The script will be modified in this method.
      */
-    protected function addClassClose(&$script)
+    protected function addClassClose(string &$script): void
     {
         $script .= "
 }

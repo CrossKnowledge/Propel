@@ -30,7 +30,7 @@ use CK\Generator\Lib\Model\ForeignKey;
 class SortableBehavior extends Behavior
 {
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'rank_column'  => 'sortable_rank',
         'use_scope'    => 'false',
         'scope_column' => '',

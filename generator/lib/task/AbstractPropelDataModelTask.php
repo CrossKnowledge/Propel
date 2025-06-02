@@ -24,6 +24,9 @@ use Project;
 use FileSystem;
 use CK\Generator\Lib\Model\AppData;
 use CK\Generator\Lib\Util\PropelSchemaValidator;
+use XSLTProcessor;
+use XmlToAppData;
+
 //use XSLTProcessor;
 
 //include_once 'phing/tasks/ext/CapsuleTask.php';

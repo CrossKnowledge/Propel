@@ -22,7 +22,7 @@ use CK\Generator\Lib\Model\Behavior;
 class TimestampableBehavior extends Behavior
 {
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'create_column'      => 'created_at',
         'update_column'      => 'updated_at',
         'disable_updated_at' => 'false',

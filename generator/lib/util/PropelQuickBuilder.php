@@ -17,7 +17,7 @@ use CK\Runtime\Lib\Adapter\DBSQLite;
 use CK\Runtime\Lib\Connection\PropelPDO;
 use CK\Runtime\Lib\Propel;
 use CK\Generator\Lib\Model\Table;
-//use XmlToAppData;
+use XmlToAppData;
 use PDOStatement;
 use PDO;
 

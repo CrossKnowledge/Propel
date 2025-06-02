@@ -12,6 +12,8 @@ namespace CK\Generator\Lib\Task;
 
 use CK\Generator\Lib\Model\Database;
 use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use CK\Runtime\Lib\Exception\PropelException;
+use Exception;
 use PDOStatement;
 use DOMDocument;
 use PhingFile;
@@ -19,6 +21,7 @@ use IOException;
 use BuildException;
 use Project;
 use Properties;
+use PDOException;
 
 
 /**
@@ -46,11 +49,12 @@ class PropelDataDumpTask extends AbstractPropelDataModelTask
      * The database name may be optionally specified in the XML if you only want
      * to dump the contents of one database.
      */
-    private $databaseName;
+    private string $databaseName;
 
     /**
      * Database URL used for Propel connection.
      * This is a PEAR-compatible (loosely) DSN URL.
+     * Note: PEAR is OBSOLETE
      */
     private $databaseUrl;
 
@@ -137,7 +141,7 @@ class PropelDataDumpTask extends AbstractPropelDataModelTask
     /**
      * Get the database url
      *
-     * @return The DatabaseUrl value
+     * @ return The DatabaseUrl value
      */
     public function getDatabaseUrl()
     {
@@ -298,9 +302,15 @@ class PropelDataDumpTask extends AbstractPropelDataModelTask
 
                         $doc = $this->createXMLDoc($database);
                         $doc->save($outFile->getAbsolutePath());
-                    } catch (SQLException $se) {
-                        $this->log("SQLException while connecting to DB: " . $se->getMessage(), Project::MSG_ERR);
-                        throw new BuildException($se);
+                    } catch (PDOException $e) {
+                        $this->log("PDO exception while connecting to DB: " . $e->getMessage(), Project::MSG_ERR);
+                        throw new BuildException($e);
+                    } catch (PropelException $e) {
+                        $this->log("Propel exception while connecting to DB: " . $e->getMessage(), Project::MSG_ERR);
+                        throw new BuildException($e);
+                    } catch (Exception $e) {
+                        $this->log("General exception while connecting to DB: " . $e->getMessage(), Project::MSG_ERR);
+                        throw new BuildException($e);
                     }
                 } // if databaseName && database->getName == databaseName
             } // foreach database

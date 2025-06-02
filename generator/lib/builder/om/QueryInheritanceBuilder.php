@@ -11,6 +11,7 @@
 namespace CK\Generator\Lib\Builder\OM;
 
 use CK\Generator\Lib\Model\Inheritance;
+use BuildException;
 
 //require_once dirname(__FILE__) . '/OMBuilder.php';
 //require_once dirname(__FILE__) . '/ClassTools.php';

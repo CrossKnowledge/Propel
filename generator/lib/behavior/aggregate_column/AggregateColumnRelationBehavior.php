@@ -11,6 +11,7 @@
 namespace CK\Generator\Lib\Behavior;
 
 use CK\Generator\Lib\Model\Behavior;
+use Exception;
 
 //require_once 'AggregateColumnRelationBehavior.php';
 
@@ -25,7 +26,7 @@ class AggregateColumnRelationBehavior extends Behavior
 {
 
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'foreign_table' => '',
         'update_method' => '',
     );
@@ -113,6 +114,9 @@ class AggregateColumnRelationBehavior extends Behavior
         return "\$this->updateRelated{$relationName}s(\$con);";
     }
 
+    /**
+     * @throws Exception
+     */
     public function queryMethods($builder)
     {
         $script = '';
@@ -122,7 +126,10 @@ class AggregateColumnRelationBehavior extends Behavior
         return $script;
     }
 
-    protected function addQueryFindRelated($builder)
+    /**
+     * @throws Exception
+     */
+    protected function addQueryFindRelated($builder): string
     {
         $foreignKey = $this->getForeignKey();
         $foreignQueryBuilder = $builder->getNewStubQueryBuilder($foreignKey->getForeignTable());
@@ -138,7 +145,10 @@ class AggregateColumnRelationBehavior extends Behavior
         ));
     }
 
-    protected function addQueryUpdateRelated($builder)
+    /**
+     * @throws Exception
+     */
+    protected function addQueryUpdateRelated($builder): string
     {
         $relationName = $this->getRelationName($builder);
 

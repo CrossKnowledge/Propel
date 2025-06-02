@@ -9,7 +9,17 @@
  */
 
 namespace CK\Generator\Lib\Platform;
+
 use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\PropelTypes;
+use CK\Generator\Lib\Model\Domain;
+use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Model\IDMethod;
+use CK\Generator\Lib\Model\Unique;
+use CK\Generator\Lib\Model\ForeignKey;
+use CK\Generator\Lib\Model\Index;
+use CK\Generator\Lib\Exception\EngineException;
+
 //require_once dirname(__FILE__) . '/DefaultPlatform.php';
 
 /**
@@ -27,7 +37,7 @@ class OraclePlatform extends DefaultPlatform
     /**
      * Initializes db specific domain mapping.
      */
-    protected function initialize()
+    protected function initialize(): void
     {
         parent::initialize();
         $this->schemaDomainMap[PropelTypes::BOOLEAN] = new Domain(PropelTypes::BOOLEAN_EMU, "NUMBER", "1", "0");
@@ -54,27 +64,27 @@ class OraclePlatform extends DefaultPlatform
         $this->setSchemaDomainMapping(new Domain(PropelTypes::ENUM, "NUMBER", "3", "0"));
     }
 
-    public function getMaxColumnNameLength()
+    public function getMaxColumnNameLength(): int
     {
         return 30;
     }
 
-    public function getNativeIdMethod()
+    public function getNativeIdMethod(): string
     {
         return PropelPlatformInterface::SEQUENCE;
     }
 
-    public function getAutoIncrement()
+    public function getAutoIncrement(): string
     {
         return "";
     }
 
-    public function supportsNativeDeleteTrigger()
+    public function supportsNativeDeleteTrigger(): bool
     {
         return true;
     }
 
-    public function getBeginDDL()
+    public function getBeginDDL(): string
     {
         return "
 ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD';
@@ -82,7 +92,7 @@ ALTER SESSION SET NLS_TIMESTAMP_FORMAT='YYYY-MM-DD HH24:MI:SS';
 ";
     }
 
-    public function getAddTablesDDL(Database $database)
+    public function getAddTablesDDL(Database $database): string
     {
         $ret = $this->getBeginDDL();
         foreach ($database->getTablesForSql() as $table) {
@@ -103,7 +113,7 @@ ALTER SESSION SET NLS_TIMESTAMP_FORMAT='YYYY-MM-DD HH24:MI:SS';
         return $ret;
     }
 
-    public function getAddTableDDL(Table $table)
+    public function getAddTableDDL(Table $table): string
     {
         $tableDescription = $table->hasDescription() ? $this->getCommentLineDDL($table->getDescription()) : '';
 
@@ -160,7 +170,7 @@ CREATE SEQUENCE %s
         }
     }
 
-    public function getDropTableDDL(Table $table)
+    public function getDropTableDDL(Table $table): string
     {
         $ret = "
 DROP TABLE " . $this->quoteIdentifier($table->getName()) . " CASCADE CONSTRAINTS;
@@ -174,7 +184,7 @@ DROP SEQUENCE " . $this->quoteIdentifier($this->getSequenceName($table)) . ";
         return $ret;
     }
 
-    public function getPrimaryKeyName(Table $table)
+    public function getPrimaryKeyName(Table $table): string
     {
         $tableName = $table->getName();
         // pk constraint name must be 30 chars at most
@@ -196,7 +206,7 @@ DROP SEQUENCE " . $this->quoteIdentifier($this->getSequenceName($table)) . ";
         }
     }
 
-    public function getUniqueDDL(Unique $unique)
+    public function getUniqueDDL(Unique $unique): string
     {
         return sprintf('CONSTRAINT %s UNIQUE (%s)',
             $this->quoteIdentifier($unique->getName()),
@@ -230,17 +240,17 @@ DROP SEQUENCE " . $this->quoteIdentifier($this->getSequenceName($table)) . ";
      *
      * @return boolean
      */
-    public function hasStreamBlobImpl()
+    public function hasStreamBlobImpl(): bool
     {
         return true;
     }
 
-    public function quoteIdentifier($text)
+    public function quoteIdentifier($text): string
     {
         return $text;
     }
 
-    public function getTimestampFormatter()
+    public function getTimestampFormatter(): string
     {
         return 'Y-m-d H:i:s';
     }
@@ -251,7 +261,7 @@ DROP SEQUENCE " . $this->quoteIdentifier($this->getSequenceName($table)) . ";
      *             one fell swoop.
      * @see        Platform::supportsSchemas()
      */
-    public function supportsSchemas()
+    public function supportsSchemas(): bool
     {
         return false;
     }
@@ -259,12 +269,12 @@ DROP SEQUENCE " . $this->quoteIdentifier($this->getSequenceName($table)) . ";
     /**
      * Generate oracle block storage
      *
-     * @param Table|Index $object       object with vendor parameters
-     * @param bool        $isPrimaryKey is a primary key vendor part
+     * @param Index|Table $object       object with vendor parameters
+     * @param bool $isPrimaryKey is a primary key vendor part
      *
      * @return string oracle vendor sql part
      */
-    public function generateBlockStorage($object, $isPrimaryKey = false)
+    public function generateBlockStorage(Table|Index $object, bool $isPrimaryKey = false): string
     {
         $vendorSpecific = $object->getVendorInfoForType('oracle');
         if ($vendorSpecific->isEmpty()) {
@@ -347,7 +357,7 @@ CREATE %sINDEX %s ON %s (%s)%s;
      * Warning: duplicates logic from DBOracle::bindValue().
      * Any code modification here must be ported there.
      */
-    public function getColumnBindingPHP($column, $identifier, $columnValueAccessor, $tab = "			")
+    public function getColumnBindingPHP($column, $identifier, $columnValueAccessor, $tab = "			"): array|string|null
     {
         if ($column->getPDOType() == PropelTypes::CLOB_EMU) {
             return sprintf(
@@ -387,12 +397,12 @@ CREATE %sINDEX %s ON %s (%s)%s;
         return preg_replace('/^/m', $tab, $script);
     }
 
-    public function getDefaultFKOnDeleteBehavior()
+    public function getDefaultFKOnDeleteBehavior(): string
     {
         return ForeignKey::NOACTION;
     }
 
-    public function getDefaultFKOnUpdateBehavior()
+    public function getDefaultFKOnUpdateBehavior(): string
     {
         return ForeignKey::NOACTION;
     }

@@ -19,6 +19,8 @@ namespace CK\Generator\Lib\Platform;
  * @version    $Revision$
  * @package    propel.generator.platform
  */
+
+namespace CK\Generator\Lib\Platform;
 class SqlsrvPlatform extends MssqlPlatform
 {
     /**

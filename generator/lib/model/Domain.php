@@ -10,6 +10,11 @@
 
 namespace CK\Generator\Lib\Model;
 
+use CK\Generator\Lib\Exception\EngineException;
+use DOMException;
+use DOMNode;
+use DOMDocument;
+
 //require_once dirname(__FILE__) . '/XMLElement.php';
 
 /**
@@ -317,9 +322,9 @@ class Domain extends XMLElement
     }
 
     /**
-     * @return string Returns the sqlType.
+     * @return string|null Returns the sqlType.
      */
-    public function getSqlType()
+    public function getSqlType(): ?string
     {
         return $this->sqlType;
     }
@@ -350,7 +355,7 @@ class Domain extends XMLElement
      * @return string Size and scale or an empty String if there are no values
      *         available.
      */
-    public function printSize()
+    public function printSize(): string
     {
         if ($this->size !== null && $this->scale !== null) {
             return '(' . $this->size . ',' . $this->scale . ')';
@@ -362,9 +367,10 @@ class Domain extends XMLElement
     }
 
     /**
+     * @throws DOMException
      * @see        XMLElement::appendXml(DOMNode)
      */
-    public function appendXml(DOMNode $node)
+    public function appendXml(DOMNode $node): void
     {
         $doc = ($node instanceof DOMDocument) ? $node : $node->ownerDocument;
 

@@ -12,6 +12,15 @@ namespace CK\Generator\Lib\Platform;
 
 use CK\Generator\Lib\Model\Column;
 use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\Domain;
+use CK\Generator\Lib\Model\PropelTypes;
+use CK\Generator\Lib\Model\IDMethod;
+use CK\Generator\Lib\Model\Unique;
+use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Model\Diff\PropelColumnDiff;
+use CK\Generator\Lib\Model\Index;
+use CK\Generator\Lib\Exception\EngineException;
+
 
 //require_once dirname(__FILE__) . '/DefaultPlatform.php';
 
@@ -203,7 +212,7 @@ SET search_path TO public;
         }
     }
 
-    public function getAddTablesDDL(Database $database)
+    public function getAddTablesDDL(Database $database): string
     {
         $ret = $this->getBeginDDL();
         $ret .= $this->getAddSchemasDDL($database);

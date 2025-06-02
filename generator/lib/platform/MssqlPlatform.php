@@ -12,6 +12,8 @@ namespace CK\Generator\Lib\Platform;
 
 use CK\Generator\Lib\Model\Domain;
 use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\PropelTypes;
+use CK\Generator\Lib\Model\ForeignKey;
 
 //require_once dirname(__FILE__) . '/DefaultPlatform.php';
 //require_once dirname(__FILE__) . '/../model/Domain.php';
@@ -63,12 +65,12 @@ class MssqlPlatform extends DefaultPlatform
         return ($notNull ? "NOT NULL" : "NULL");
     }
 
-    public function supportsNativeDeleteTrigger()
+    public function supportsNativeDeleteTrigger(): bool
     {
         return true;
     }
 
-    public function supportsInsertNullPk()
+    public function supportsInsertNullPk(): bool
     {
         return false;
     }
@@ -170,22 +172,22 @@ END
     /**
      * @see        Platform::supportsSchemas()
      */
-    public function supportsSchemas()
+    public function supportsSchemas(): bool
     {
         return true;
     }
 
-    public function hasSize($sqlType)
+    public function hasSize($sqlType): bool
     {
         return !("INT" == $sqlType || "TEXT" == $sqlType);
     }
 
-    public function quoteIdentifier($text)
+    public function quoteIdentifier($text): string
     {
         return $this->isIdentifierQuotingEnabled ? '[' . strtr($text, array('.' => '].[')) . ']' : $text;
     }
 
-    public function getTimestampFormatter()
+    public function getTimestampFormatter(): string
     {
         return 'Y-m-d H:i:s';
     }

@@ -29,7 +29,7 @@ use CK\Generator\Lib\Model\ForeignKey;
 class ConcreteInheritanceBehavior extends Behavior
 {
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'extends'             => '',
         'descendant_column'   => 'descendant_class',
         'copy_data_to_parent' => 'true',

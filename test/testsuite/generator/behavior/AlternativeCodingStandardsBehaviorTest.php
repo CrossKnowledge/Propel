@@ -1,16 +1,23 @@
 <?php
 
+use CK\Generator\Lib\Behavior\AlternativeCodingStandardsBehavior;
+use PHPUnit\Framework\TestCase;
+
 /*
  *	$Id: TimestampableBehaviorTest.php 2035 2010-11-14 17:54:27Z francois $
+use PHPUnit\Framework\TestCase;
  * This file is part of the Propel package.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * @license    MIT License
  */
+//use PHPUnit\Framework\TestCase;
 
-require_once dirname(__FILE__) . '/../../../../generator/lib/model/Behavior.php';
-require_once dirname(__FILE__) . '/../../../../generator/lib/behavior/AlternativeCodingStandardsBehavior.php';
+//require_once dirname(__FILE__) . '/../../../../generator/lib/model/Behavior.php';
+
+//require_once dirname(__FILE__) . '/../../../../generator/lib/behavior/AlternativeCodingStandardsBehavior.php';
+
 
 /**
  * Tests for TimestampableBehavior class
@@ -19,7 +26,7 @@ require_once dirname(__FILE__) . '/../../../../generator/lib/behavior/Alternativ
  * @version    $Revision$
  * @package    generator.behavior
  */
-class AlternativeCodingStandardsBehaviorTest extends PHPUnit_Framework_TestCase
+class AlternativeCodingStandardsBehaviorTest extends TestCase
 {
     public function convertBracketsNewlineDataProvider()
     {

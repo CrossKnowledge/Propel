@@ -10,7 +10,9 @@
 
 namespace CK\Generator\Lib\Model;
 
-require_once dirname(__FILE__) . '/../exception/EngineException.php';
+use CK\Generator\Lib\Exception\EngineException;
+
+//require_once dirname(__FILE__) . '/../exception/EngineException.php';
 //require_once dirname(__FILE__) . '/NameGenerator.php';
 //require_once dirname(__FILE__) . '/PhpNameGenerator.php';
 //require_once dirname(__FILE__) . '/ConstraintNameGenerator.php';
@@ -29,12 +31,12 @@ class NameFactory
     /**
      * The class name of the PHP name generator.
      */
-    const PHP_GENERATOR = 'PhpNameGenerator';
+    const string PHP_GENERATOR = 'PhpNameGenerator';
 
     /**
      * The fully qualified class name of the constraint name generator.
      */
-    const CONSTRAINT_GENERATOR = 'ConstraintNameGenerator';
+    const string CONSTRAINT_GENERATOR = 'ConstraintNameGenerator';
 
     /**
      * The single instance of this class.
@@ -45,7 +47,7 @@ class NameFactory
      * The cache of <code>NameGenerator</code> algorithms in use for
      * name generation, keyed by fully qualified class name.
      */
-    private static $algorithms = array();
+    private static array $algorithms = [];
 
     /**
      * Factory method which retrieves an instance of the named generator.
@@ -53,7 +55,7 @@ class NameFactory
      * @param string $name The fully qualified class name of the name
      * generation algorithm to retrieve.
      */
-    protected static function getAlgorithm($name)
+    protected static function getAlgorithm(string $name)
     {
         if (!isset(self::$algorithms[$name])) {
             self::$algorithms[$name] = new $name();
@@ -73,7 +75,7 @@ class NameFactory
      * @return string          The generated name.
      * @throws EngineException
      */
-    public static function generateName($algorithmName, $inputs)
+    public static function generateName(string $algorithmName, array $inputs): string
     {
         $algorithm = self::getAlgorithm($algorithmName);
 

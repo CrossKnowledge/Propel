@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+# Reset Propel tests fixtures
+# 2011 - William Durand <william.durand1@gmail.com>
+
+CURRENT=`pwd`
+
+function rebuild
+{
+    local dir=$1
+
+    echo "[ $dir ]"
+
+    # Check if build.properties exists
+    if [ ! -f "$FIXTURES_DIR/$dir/build.properties" ] ; then
+        echo "  -> Skipping (no build.properties)"
+        return
+    fi
+
+    # Clean build directory
+    if [ -d "$FIXTURES_DIR/$dir/build" ] ; then
+        rm -rf "$FIXTURES_DIR/$dir/build"
+    fi
+
+    # First generate SQL files (this creates sqldb.map)
+    echo "  -> Generating SQL..."
+    $ROOT/generator/bin/propel-gen "$FIXTURES_DIR/$dir" sql > /dev/null 2>&1
+    if [ $? -ne 0 ] ; then
+        echo "  -> SQL generation failed, trying main target..."
+        $ROOT/generator/bin/propel-gen "$FIXTURES_DIR/$dir" main > /dev/null 2>&1
+    fi
+
+    # Then insert SQL if sqldb.map exists
+    if [ -f "$FIXTURES_DIR/$dir/build/sql/sqldb.map" ] ; then
+        echo "  -> Inserting SQL..."
+        $ROOT/generator/bin/propel-gen "$FIXTURES_DIR/$dir" insert-sql > /dev/null 2>&1
+    else
+        echo "  -> No sqldb.map found, skipping insert-sql"
+    fi
+}
+
+ROOT_DIR=""
+FIXTURES_DIR=""
+
+if [ -d "$CURRENT/fixtures" ] ; then
+    ROOT=".."
+    FIXTURES_DIR="$CURRENT/fixtures"
+elif [ -d "$CURRENT/test/fixtures" ] ; then
+    ROOT="."
+    FIXTURES_DIR="$CURRENT/test/fixtures"
+else
+    echo "ERROR: No 'test/fixtures/' directory found !"
+    exit 1
+fi
+
+echo "Resetting test fixtures..."
+echo "=========================="
+
+DIRS=`ls $FIXTURES_DIR`
+
+for dir in $DIRS ; do
+    if [ -d "$FIXTURES_DIR/$dir" ] && [ "$dir" != "reverse" ] ; then
+        rebuild $dir
+    fi
+done
+
+# Special case for reverse fixtures
+echo ""
+echo "Processing reverse fixtures..."
+echo "============================="
+
+if [ -d "$FIXTURES_DIR/reverse" ] ; then
+    REVERSE_DIRS=`ls $FIXTURES_DIR/reverse`
+
+    for dir in $REVERSE_DIRS ; do
+        if [ -f "$FIXTURES_DIR/reverse/$dir/build.properties" ] ; then
+            echo "[ reverse/$dir ]"
+            echo "  -> Inserting SQL..."
+            $ROOT/generator/bin/propel-gen "$FIXTURES_DIR/reverse/$dir" insert-sql > /dev/null 2>&1
+        fi
+    done
+fi
+
+echo ""
+echo "Fixture reset complete!"

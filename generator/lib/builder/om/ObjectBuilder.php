@@ -182,7 +182,7 @@ abstract class ObjectBuilder extends OMBuilder
         return $this->getBuildProperty('addValidateMethod');
     }
 
-    protected function hasDefaultValues()
+    protected function hasDefaultValues(): bool
     {
         foreach ($this->getTable()->getColumns() as $col) {
             if ($col->getDefaultValue() !== null) {
@@ -211,9 +211,12 @@ abstract class ObjectBuilder extends OMBuilder
      * @param string $hookName The name of the hook as called from one of this class methods, e.g. "preSave"
      * @param string &$script  The script will be modified in this method.
      */
-    public function applyBehaviorModifier($hookName, &$script, $tab = "		")
+    public function applyBehaviorModifier(string $hookName, string &$script, $tab = "		")
     {
-        return $this->applyBehaviorModifierBase($hookName, 'ObjectBuilderModifier', $script, $tab);
+        //The applyBehaviorModifierBase() is of type "Void", as it modifies the $script by reference, so in case we still want to return it, then we do it in 2 steps
+        //return $this->applyBehaviorModifierBase($hookName, 'ObjectBuilderModifier', $script, $tab);
+        $this->applyBehaviorModifierBase($hookName, 'ObjectBuilderModifier', $script, $tab);
+        return $script;
     }
 
     /**

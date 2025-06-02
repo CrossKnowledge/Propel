@@ -2,8 +2,21 @@ FROM php:8.3-cli
 
 # Install system packages and PHP extensions with cleanup
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git unzip zlib1g-dev libzip-dev tree \
-    && docker-php-ext-install zip pdo pdo_mysql \
+    git \
+    unzip \
+    zlib1g-dev \
+    libzip-dev \
+    tree \
+    libpq-dev \
+    libsqlite3-dev \
+    libxslt1-dev \
+    && docker-php-ext-install \
+        zip \
+        pdo \
+        pdo_mysql \
+        pdo_pgsql \
+        pdo_sqlite \
+        xsl \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Copy Composer binary from official Composer image
@@ -12,6 +25,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Set working directory and copy app code
 WORKDIR /var/www
 COPY . .
+
 # Install PHP dependencies
 RUN if [ -f "composer.json" ]; then \
         composer install --no-interaction --no-progress --prefer-dist; \

@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,14 +10,17 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/util/PropelSchemaValidator.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../generator/lib/util/PropelQuickBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../generator/lib/model/AppData.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  *
  * @package    generator.util
  */
-class SchemaValidatorTest extends PHPUnit_Framework_TestCase
+class SchemaValidatorTest extends TestCase
 {
 
     private $xsdFile = 'generator/resources/xsd/database.xsd';
@@ -87,6 +91,7 @@ EOF;
         $validator = new PropelSchemaValidator($appData);
         $this->assertFalse($validator->validate());
         $this->assertContains('Table "bar" declares a phpName already used in another table', $validator->getErrors());
+use PHPUnit\Framework\TestCase;
     }
 
     public function testValidateReturnsTrueWhenTwoTablesHaveSamePhpNameInDifferentNamespaces()
@@ -180,6 +185,7 @@ EOF;
         $validator = new PropelSchemaValidator($appData);
         $this->assertFalse($validator->validate());
         $this->assertContains('Column "bar" declares a phpName already used in table "foo_table"', $validator->getErrors());
+use PHPUnit\Framework\TestCase;
     }
 
 }

@@ -11,17 +11,16 @@ namespace CK\Generator\Lib\Config;
 
 use PDO;
 use BuildException;
-use CK\Generator\Lib\Platform;
 use Phing;
 use CK\Generator\Lib\Platform\PropelPlatformInterface;
 use CK\Generator\Lib\Model\Table;
 use CK\Generator\Lib\Builder\DataModelBuilder;
 use CK\Propel\Generator\Lib\Builder\Util\Pluralizer;
-use SchemaParser;
+use CK\Generator\Lib\Lib\Reverse\SchemaParser;
 
 //require_once dirname(__FILE__) . '/GeneratorConfigInterface.php';
 // Phing dependencies
-require_once 'phing/Phing.php';
+//require_once 'phing/Phing.php';
 
 /**
  * A class that holds build properties and provide a class loading mechanism for the generator.
@@ -37,17 +36,17 @@ class GeneratorConfig implements GeneratorConfigInterface
      *
      * @var        array
      */
-    private $buildProperties = array();
+    private array $buildProperties = [];
 
-    protected $buildConnections = null;
+    protected mixed $buildConnections = null;
     protected $defaultBuildConnection = null;
 
     /**
      * Construct a new GeneratorConfig.
      *
-     * @param mixed $props Array or Iterator
+     * @param mixed|null $props Array or Iterator
      */
-    public function __construct($props = null)
+    public function __construct(mixed $props = null)
     {
         if ($props) {
             $this->setBuildProperties($props);
@@ -59,7 +58,7 @@ class GeneratorConfig implements GeneratorConfigInterface
      *
      * @return array
      */
-    public function getBuildProperties()
+    public function getBuildProperties(): array
     {
         return $this->buildProperties;
     }
@@ -72,7 +71,7 @@ class GeneratorConfig implements GeneratorConfigInterface
      *
      * @param mixed $props Array or Iterator
      */
-    public function setBuildProperties($props)
+    public function setBuildProperties(mixed $props): void
     {
         $this->buildProperties = array();
 
@@ -97,18 +96,18 @@ class GeneratorConfig implements GeneratorConfigInterface
      *
      * @return mixed
      */
-    public function getBuildProperty($name)
+    public function getBuildProperty(string $name): mixed
     {
-        return isset($this->buildProperties[$name]) ? $this->buildProperties[$name] : null;
+        return $this->buildProperties[$name] ?? null;
     }
 
     /**
      * Sets a specific propel (renamed) property from the build.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function setBuildProperty($name, $value)
+    public function setBuildProperty(string $name, mixed $value)
     {
         $this->buildProperties[$name] = $value;
     }
@@ -231,7 +230,7 @@ class GeneratorConfig implements GeneratorConfigInterface
      *
      * @return DataModelBuilder
      */
-    public function getConfiguredBuilder(Table $table, $type, $cache = true)
+    public function getConfiguredBuilder(Table $table, string $type): DataModelBuilder
     {
         $classname = $this->getBuilderClassname($type);
         $builder = new $classname($table);
@@ -245,7 +244,7 @@ class GeneratorConfig implements GeneratorConfigInterface
      *
      * @return Pluralizer
      */
-    public function getConfiguredPluralizer()
+    public function getConfiguredPluralizer(): Pluralizer
     {
         $classname = $this->getBuilderClassname('pluralizer');
         $pluralizer = new $classname();
@@ -258,9 +257,9 @@ class GeneratorConfig implements GeneratorConfigInterface
      *
      * @param string $name a behavior name
      *
-     * @return string a behavior class name
+     * @return false|string a behavior class name
      */
-    public function getConfiguredBehavior($name)
+    public function getConfiguredBehavior($name): false|string
     {
         $propname = 'behavior' . ucfirst(strtolower($name)) . 'Class';
         try {
@@ -273,7 +272,7 @@ class GeneratorConfig implements GeneratorConfigInterface
         return $ret;
     }
 
-    public function setBuildConnections($buildConnections)
+    public function setBuildConnections($buildConnections): void
     {
         $this->buildConnections = $buildConnections;
     }

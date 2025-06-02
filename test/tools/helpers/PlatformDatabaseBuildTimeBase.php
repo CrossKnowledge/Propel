@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class PlatformDatabaseBuildTimeBase extends PHPUnit_Framework_TestCase
+class PlatformDatabaseBuildTimeBase extends TestCase
 {
 
     /**
@@ -23,7 +24,7 @@ class PlatformDatabaseBuildTimeBase extends PHPUnit_Framework_TestCase
      */
     public $con;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (Propel::isInit()) {
             $this->oldPropelConfiguration = Propel::getConfiguration();
@@ -33,8 +34,10 @@ class PlatformDatabaseBuildTimeBase extends PHPUnit_Framework_TestCase
         $xmlDom->load(dirname(__FILE__) . '/../../fixtures/reverse/mysql/runtime-conf.xml');
         $xml = simplexml_load_string($xmlDom->saveXML());
         $phpconf = PlatformDatabaseBuildTimeBaseTask::simpleXmlToArray($xml);
+use PHPUnit\Framework\TestCase;
 
         Propel::setConfiguration($phpconf);
+use PHPUnit\Framework\TestCase;
         Propel::initialize();
         $this->con = Propel::getConnection('reverse-bookstore');
 
@@ -51,7 +54,7 @@ class PlatformDatabaseBuildTimeBase extends PHPUnit_Framework_TestCase
         $this->parser->parse($this->database);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->oldPropelConfiguration) {
             Propel::setConfiguration($this->oldPropelConfiguration);

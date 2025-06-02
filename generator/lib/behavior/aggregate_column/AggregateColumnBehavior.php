@@ -10,6 +10,7 @@
 namespace CK\Generator\Lib\Behavior;
 
 use CK\Generator\Lib\Model\Behavior;
+use Exception;
 use InvalidArgumentException;
 
 
@@ -26,7 +27,7 @@ class AggregateColumnBehavior extends Behavior
 {
 
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'name'           => null,
         'expression'     => null,
         'condition'      => null,
@@ -64,6 +65,9 @@ class AggregateColumnBehavior extends Behavior
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function objectMethods($builder)
     {
         if (!$foreignTableName = $this->getParameter('foreign_table')) {
@@ -76,7 +80,10 @@ class AggregateColumnBehavior extends Behavior
         return $script;
     }
 
-    protected function addObjectCompute()
+    /**
+     * @throws Exception
+     */
+    protected function addObjectCompute(): string
     {
         $conditions = array();
         if ($this->getParameter('condition')) {
@@ -106,6 +113,9 @@ class AggregateColumnBehavior extends Behavior
         ));
     }
 
+    /**
+     * @throws Exception
+     */
     protected function addObjectUpdate()
     {
         return $this->renderTemplate('objectUpdate', array(
@@ -113,7 +123,10 @@ class AggregateColumnBehavior extends Behavior
         ));
     }
 
-    public function postSave($builder)
+    /**
+     * @throws Exception
+     */
+    public function postSave($builder): string
     {
         return $this->renderTemplate('objectPostSave', array(
                 'column'     => $this->getColumn(),

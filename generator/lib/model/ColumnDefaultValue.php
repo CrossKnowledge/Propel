@@ -20,26 +20,26 @@ namespace CK\Generator\Lib\Model;
 class ColumnDefaultValue
 {
 
-    const TYPE_VALUE = "value";
-    const TYPE_EXPR = "expr";
+    const string TYPE_VALUE = "value";
+    const string TYPE_EXPR = "expr";
 
     /**
      * @var        string The default value, as specified in the schema.
      */
-    private $value;
+    private string $value;
 
     /**
      * @var        string The type of value represented by this object (DefaultValue::TYPE_VALUE or DefaultValue::TYPE_EXPR).
      */
-    private $type = ColumnDefaultValue::TYPE_VALUE;
+    private string $type = ColumnDefaultValue::TYPE_VALUE;
 
     /**
      * Creates a new DefaultValue object.
      *
      * @param string $value The default value, as specified in the schema.
-     * @param string $type  The type of default value (DefaultValue::TYPE_VALUE or DefaultValue::TYPE_EXPR)
+     * @param string|null $type  The type of default value (DefaultValue::TYPE_VALUE or DefaultValue::TYPE_EXPR)
      */
-    public function __construct($value, $type = null)
+    public function __construct(string $value, string $type = null)
     {
         $this->setValue($value);
         if ($type !== null) {
@@ -50,7 +50,7 @@ class ColumnDefaultValue
     /**
      * @return string The type of default value (DefaultValue::TYPE_VALUE or DefaultValue::TYPE_EXPR)
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -58,7 +58,7 @@ class ColumnDefaultValue
     /**
      * @param string $type The type of default value (DefaultValue::TYPE_VALUE or DefaultValue::TYPE_EXPR)
      */
-    public function setType($type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -68,7 +68,7 @@ class ColumnDefaultValue
      *
      * @return boolean Whether value this object holds is an expression.
      */
-    public function isExpression()
+    public function isExpression(): bool
     {
         return ($this->type == self::TYPE_EXPR);
     }
@@ -76,7 +76,7 @@ class ColumnDefaultValue
     /**
      * @return string The value, as specified in the schema.
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -84,7 +84,7 @@ class ColumnDefaultValue
     /**
      * @param string $value The value, as specified in the schema.
      */
-    public function setValue($value)
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }
@@ -97,7 +97,7 @@ class ColumnDefaultValue
      * @return boolean Whether this object represents same default value as $other
      * @author     Niklas Närhinen <niklas@narhinen.net>
      */
-    public function equals(ColumnDefaultValue $other)
+    public function equals(ColumnDefaultValue $other): bool
     {
         if ($this->getType() != $other->getType()) {
             return false;

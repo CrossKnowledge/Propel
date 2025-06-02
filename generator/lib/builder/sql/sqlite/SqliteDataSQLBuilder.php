@@ -7,8 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Builder\Sql;
 
-require_once 'builder/sql/DataSQLBuilder.php';
+//require_once 'builder/sql/DataSQLBuilder.php';
 
 /**
  * SQLite class for building data dump SQL.
@@ -26,7 +27,7 @@ class SqliteDataSQLBuilder extends DataSQLBuilder
      *
      * @return string encoded text
      */
-    protected function getBlobSql($blob)
+    protected function getBlobSql(mixed $blob)
     {
         // they took magic __toString() out of PHP5.0.0; this sucks
         if (is_object($blob)) {

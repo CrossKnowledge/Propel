@@ -13,8 +13,7 @@ namespace CK\Generator\Lib\Builder\OM;
 use CK\Generator\Lib\Model\IDMethod;
 use CK\Generator\Lib\Platform\PropelPlatformInterface;
 use CK\Generator\Lib\Model\Validator;
-use CK\Generator\Lib\Model\ForeignKey;
-
+use Exception;
 
 //require_once dirname(__FILE__) . '/OMBuilder.php';
 
@@ -279,8 +278,9 @@ class " . $this->getClassname() . " extends TableMap
      * Adds the method that build the RelationMap objects
      *
      * @param string &$script The script will be modified in this method.
+     * @throws Exception
      */
-    protected function addBuildRelations(&$script)
+    protected function addBuildRelations(string &$script): void
     {
         $script .= "
     /**

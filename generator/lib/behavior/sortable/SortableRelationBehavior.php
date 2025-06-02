@@ -22,9 +22,9 @@ use CK\Generator\Lib\Model\Behavior;
 class SortableRelationBehavior extends Behavior
 {
     protected $builder;
-    protected $name = 'sortable_relation';
+    protected string $name = 'sortable_relation';
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'foreign_table'        => '',
         'foreign_scope_column' => '',
         'foreign_rank_column'  => '',

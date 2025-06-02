@@ -48,7 +48,7 @@ class PhpNameGenerator implements NameGenerator
      *
      * @see        NameGenerator
      */
-    public function generateName($inputs): string
+    public function generateName(array $inputs): string
     {
         $schemaName = $inputs[0];
         $method = $inputs[1];

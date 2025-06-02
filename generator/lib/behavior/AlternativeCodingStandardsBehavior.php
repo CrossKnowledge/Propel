@@ -42,7 +42,7 @@ use CK\Generator\Lib\Model\Behavior;
 class AlternativeCodingStandardsBehavior extends Behavior
 {
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'brackets_newline'        => 'true',
         'remove_closing_comments' => 'true',
         'use_whitespace'          => 'true',

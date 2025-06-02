@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,6 +10,7 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/exception/PropelException.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for PropelException class
@@ -16,7 +18,7 @@ require_once dirname(__FILE__) . '/../../../../runtime/lib/exception/PropelExcep
  * @author     Francois Zaninotto
  * @package    runtime.exception
  */
-class PropelExceptionTest extends PHPUnit_Framework_TestCase
+class PropelExceptionTest extends TestCase
 {
     public function testSimpleConstructor()
     {

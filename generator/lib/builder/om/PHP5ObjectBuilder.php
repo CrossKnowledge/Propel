@@ -15,6 +15,12 @@ use CK\Generator\Lib\Model\PropelTypes;
 use CK\Generator\Lib\Platform\MysqlPlatform;
 use CK\Generator\Lib\Model\ForeignKey;
 use CK\Generator\Lib\Platform\OraclePlatform;
+use CK\Generator\Lib\Exception\EngineException;
+use CK\Generator\Lib\Model\IDMethod;
+use CK\Generator\Lib\Platform\PropelPlatformInterface;
+use CK\Generator\Lib\Platform\MssqlPlatform;
+use sqlsrvPlatform;
+use Exception;
 use DateTime;
 //require_once dirname(__FILE__) . '/ObjectBuilder.php';
 

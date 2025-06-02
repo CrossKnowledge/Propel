@@ -12,6 +12,8 @@ namespace CK\Generator\Lib\Config;
 
 use CK\Generator\Lib\Model\Table;
 use CK\Generator\Lib\Builder\DataModelBuilder;
+use CK\Propel\Generator\Lib\Builder\Util\Pluralizer;
+use PDO;
 /**
  * @package      propel.generator.config
  */
@@ -25,14 +27,14 @@ interface GeneratorConfigInterface
      *
      * @return DataModelBuilder
      */
-    public function getConfiguredBuilder(Table $table, $type);
+    public function getConfiguredBuilder(Table $table, string $type): DataModelBuilder;
 
     /**
      * Gets a configured Pluralizer class.
      *
      * @return Pluralizer
      */
-    public function getConfiguredPluralizer();
+    public function getConfiguredPluralizer(): Pluralizer;
 
     /**
      * Gets a specific propel (renamed) property from the build.
@@ -41,7 +43,7 @@ interface GeneratorConfigInterface
      *
      * @return mixed
      */
-    public function getBuildProperty($name);
+    public function getBuildProperty(string $name): mixed;
 
     /**
      * Sets a specific propel (renamed) property from the build.
@@ -49,7 +51,7 @@ interface GeneratorConfigInterface
      * @param string $name
      * @param mixed  $value
      */
-    public function setBuildProperty($name, $value);
+    public function setBuildProperty(string $name, mixed $value);
 
     /**
      * Creates and configures a new Platform class.

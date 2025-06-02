@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,7 +10,9 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/util/PropelDateTime.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/exception/PropelException.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for DateTime subclass to support serialization.
@@ -18,7 +21,7 @@ require_once dirname(__FILE__) . '/../../../../runtime/lib/exception/PropelExcep
  * @author		 Soenke Ruempler
  * @package		runtime.util
  */
-class PropelDateTimeTest extends PHPUnit_Framework_TestCase
+class PropelDateTimeTest extends TestCase
 {
 
     /**
@@ -32,6 +35,7 @@ class PropelDateTimeTest extends PHPUnit_Framework_TestCase
         // We do this last, because a PHP bug will make this true while the dates
         // may not truly be equal.
         // See: http://bugs.php.net/bug.php?id=40743
+use PHPUnit\Framework\TestCase;
         $this->assertTrue($dt1 == $dt2, sprintf($msg, "dates did not pass equality check (==)."));
     }
 

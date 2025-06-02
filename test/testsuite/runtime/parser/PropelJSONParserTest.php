@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,7 +10,9 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/parser/PropelParser.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/parser/PropelJSONParser.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for PropelJSONParser class
@@ -17,7 +20,7 @@ require_once dirname(__FILE__) . '/../../../../runtime/lib/parser/PropelJSONPars
  * @author     Francois Zaninotto
  * @package    runtime.parser
  */
-class PropelJSONParserTest extends PHPUnit_Framework_TestCase
+class PropelJSONParserTest extends TestCase
 {
     public static function arrayJsonConversionDataProvider()
     {

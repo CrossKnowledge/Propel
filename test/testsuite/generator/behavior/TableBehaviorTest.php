@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -14,14 +15,16 @@
  * @author     Francois Zaninotto
  * @package    generator.behavior
  */
-class TableBehaviorTest extends PHPUnit_Framework_TestCase
+class TableBehaviorTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         set_include_path(get_include_path() . PATH_SEPARATOR . "fixtures/bookstore/build/classes");
         require_once 'behavior/alternative_coding_standards/map/Table3TableMap.php';
+use PHPUnit\Framework\TestCase;
         require_once 'behavior/alternative_coding_standards/Table3Peer.php';
+use PHPUnit\Framework\TestCase;
     }
 
   public function testModifyTable()

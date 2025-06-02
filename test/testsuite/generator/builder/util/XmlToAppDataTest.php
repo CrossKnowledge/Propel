@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,6 +10,7 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/builder/util/XmlToAppData.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for XmlToAppData class
@@ -16,7 +18,7 @@ require_once dirname(__FILE__) . '/../../../../../generator/lib/builder/util/Xml
  * @version    $Revision$
  * @package    generator.builder.util
  */
-class XmlToAppDataTest extends PHPUnit_Framework_TestCase
+class XmlToAppDataTest extends TestCase
 {
 
     public function testParseStringEmptySchema()
@@ -70,7 +72,9 @@ class XmlToAppDataTest extends PHPUnit_Framework_TestCase
         $table = $database->getTable('bar');
         $expectedTable = <<<EOF
 <table name="bar" phpName="Bar" idMethod="native" skipSql="false" readOnly="false" reloadOnInsert="false" reloadOnUpdate="false" abstract="false">
+use PHPUnit\Framework\TestCase;
   <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+use PHPUnit\Framework\TestCase;
 </table>
 EOF;
         $this->assertEquals($expectedTable, $table->toString());
@@ -85,7 +89,9 @@ EOF;
 <app-data>
 <database name="foo" defaultIdMethod="native" defaultPhpNamingMethod="underscore" defaultTranslateMethod="none">
   <table name="bar" phpName="Bar" idMethod="native" skipSql="false" readOnly="false" reloadOnInsert="false" reloadOnUpdate="false" abstract="false">
+use PHPUnit\Framework\TestCase;
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+use PHPUnit\Framework\TestCase;
   </table>
 </database>
 </app-data>
@@ -102,10 +108,14 @@ EOF;
 <app-data>
 <database name="foo" defaultIdMethod="native" defaultPhpNamingMethod="underscore" defaultTranslateMethod="none">
   <table name="bar1" phpName="Bar1" idMethod="native" skipSql="false" readOnly="false" reloadOnInsert="false" reloadOnUpdate="false" abstract="false">
+use PHPUnit\Framework\TestCase;
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+use PHPUnit\Framework\TestCase;
   </table>
   <table name="bar2" phpName="Bar2" idMethod="native" skipSql="false" readOnly="false" reloadOnInsert="false" reloadOnUpdate="false" forReferenceOnly="true" abstract="false">
+use PHPUnit\Framework\TestCase;
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+use PHPUnit\Framework\TestCase;
   </table>
 </database>
 </app-data>

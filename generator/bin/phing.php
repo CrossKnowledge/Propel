@@ -14,6 +14,13 @@
 
 $dirname = dirname(__FILE__);
 $autoloaded = false;
+
+// First, try to load the complete autoloader for legacy class mapping
+if (file_exists($completeAutoloader = $dirname . '/../lib/complete-autoloader.php')) {
+    require_once $completeAutoloader;
+}
+
+// Then load composer autoloader
 foreach (array($dirname . '/../../', $dirname . '/../../../../../') as $dir) {
     if (file_exists($file = realpath($dir) . '/vendor/autoload.php')) {
         set_include_path($dir . '/vendor/phing/phing/classes' . PATH_SEPARATOR . get_include_path());
@@ -22,6 +29,10 @@ foreach (array($dirname . '/../../', $dirname . '/../../../../../') as $dir) {
         $autoloaded = true;
         break;
     }
+}
+
+if (!$autoloaded) {
+    die("ERROR: Unable to find vendor/autoload.php. Did you run 'composer install'?\n");
 }
 
 /* set classpath */
@@ -36,7 +47,8 @@ if (getenv('PHP_CLASSPATH')) {
     }
 }
 
-require_once 'phing/Phing.php';
+//require_once 'phing/Phing.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 try {
     /* Setup Phing environment */

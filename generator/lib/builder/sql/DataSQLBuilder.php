@@ -7,9 +7,16 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Builder\Sql;
 
+use CK\Generator\Lib\Builder\DataModelBuilder;
+use CK\Generator\Lib\Builder\Util\DataRow;
+use CK\Generator\Lib\Builder\Util\ColumnValue;
+
+/*
 require_once 'builder/DataModelBuilder.php';
 require_once 'model/PropelTypes.php';
+*/
 
 /**
  * Baseclass for SQL data dump SQL building classes.
@@ -35,7 +42,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    public static function getDatabaseStartSql()
+    public static function getDatabaseStartSql(): string
     {
         return '';
     }
@@ -45,7 +52,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    public static function getDatabaseEndSql()
+    public static function getDatabaseEndSql(): string
     {
         return '';
     }
@@ -55,7 +62,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    public function getTableStartSql()
+    public function getTableStartSql(): string
     {
         return '';
     }
@@ -65,7 +72,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    public function getTableEndSql()
+    public function getTableEndSql(): string
     {
         return '';
     }
@@ -77,7 +84,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    public function buildRowSql(DataRow $row)
+    public function buildRowSql(DataRow $row): string
     {
         $sql = "";
         $platform = $this->getPlatform();
@@ -114,7 +121,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return mixed The proper value to be added to the string.
      */
-    protected function getColumnValueSql(ColumnValue $colValue)
+    protected function getColumnValueSql(ColumnValue $colValue): mixed
     {
         $column = $colValue->getColumn();
         $method = 'get' . $column->getPhpNative() . 'Sql';
@@ -130,7 +137,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return int
      */
-    protected function getBooleanSql($value)
+    protected function getBooleanSql(bool $value): int
     {
         return (int) $value;
     }
@@ -142,7 +149,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    protected function getBlobSql($blob)
+    protected function getBlobSql(mixed $blob): string
     {
         // they took magic __toString() out of PHP5.0.0; this sucks
         if (is_object($blob)) {
@@ -159,7 +166,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    protected function getClobSql($clob)
+    protected function getClobSql($clob): string
     {
         // they took magic __toString() out of PHP5.0.0; this sucks
         if (is_object($clob)) {
@@ -176,7 +183,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    protected function getDateSql($value)
+    protected function getDateSql($value): string
     {
         return "'" . date('Y-m-d', strtotime($value)) . "'";
     }
@@ -188,7 +195,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return float
      */
-    protected function getDecimalSql($value)
+    protected function getDecimalSql($value): float
     {
         return (float) $value;
     }
@@ -200,7 +207,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return double
      */
-    protected function getDoubleSql($value)
+    protected function getDoubleSql($value): float
     {
         return (double) $value;
     }
@@ -212,7 +219,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return float
      */
-    protected function getFloatSql($value)
+    protected function getFloatSql($value): float
     {
         return (float) $value;
     }
@@ -224,7 +231,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return int
      */
-    protected function getIntSql($value)
+    protected function getIntSql($value): int
     {
         return (int) $value;
     }
@@ -234,7 +241,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return null
      */
-    protected function getNullSql()
+    protected function getNullSql(): ?string
     {
         return 'NULL';
     }
@@ -246,7 +253,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    protected function getStringSql($value)
+    protected function getStringSql($value): string
     {
         return $this->getPlatform()->quote($value);
     }
@@ -258,7 +265,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    protected function getTimeSql($paramIndex, $value)
+    protected function getTimeSql($paramIndex, $value): string
     {
         return "'" . date('H:i:s', strtotime($value)) . "'";
     }
@@ -270,7 +277,7 @@ abstract class DataSQLBuilder extends DataModelBuilder
      *
      * @return string
      */
-    public function getTimestampSql($value)
+    public function getTimestampSql($value): string
     {
         return "'" . date('Y-m-d H:i:s', strtotime($value)) . "'";
     }

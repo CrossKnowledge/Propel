@@ -14,8 +14,19 @@ use CK\Generator\Lib\Model\Column;
 use CK\Generator\Lib\Model\Table;
 use CK\Generator\Lib\Model\Domain;
 use CK\Generator\Lib\Model\PropelTypes;
+use CK\Generator\Lib\Config\GeneratorConfigInterface;
+use CK\Generator\Lib\Exception\EngineException;
+use CK\Generator\Lib\Model\IDMethod;
+use CK\Generator\Lib\Model\Index;
+use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Model\Unique;
+use CK\Generator\Lib\Model\ForeignKey;
+use CK\Generator\Lib\Model\Diff\PropelTableDiff;
+use CK\Generator\Lib\Model\Diff\PropelDatabaseDiff;
+use CK\Generator\Lib\Model\Diff\PropelColumnDiff;
+use PDO;
 
-require_once dirname(__FILE__) . '/PropelPlatformInterface.php';
+//require_once dirname(__FILE__) . '/PropelPlatformInterface.php';
 //require_once dirname(__FILE__) . '/../model/Column.php';
 //require_once dirname(__FILE__) . '/../model/Table.php';
 //require_once dirname(__FILE__) . '/../model/Domain.php';
@@ -98,7 +109,7 @@ class DefaultPlatform implements PropelPlatformInterface
      *
      * @return mixed
      */
-    protected function getBuildProperty($name)
+    protected function getBuildProperty(string $name): mixed
     {
         if ($this->generatorConfig !== null) {
             return $this->generatorConfig->getBuildProperty($name);
@@ -200,9 +211,9 @@ class DefaultPlatform implements PropelPlatformInterface
     }
 
     /**
-     * @return The RDBMS-specific SQL fragment for autoincrement.
+     * @return string The RDBMS-specific SQL fragment for autoincrement.
      */
-    public function getAutoIncrement()
+    public function getAutoIncrement(): string
     {
         return "IDENTITY";
     }
@@ -900,7 +911,7 @@ ALTER TABLE %s RENAME TO %s;
      *
      * @return string
      */
-    public function getRemoveColumnDDL(Column $column)
+    public function getRemoveColumnDDL(Column $column): string
     {
         $pattern = "
 ALTER TABLE %s DROP COLUMN %s;
@@ -917,7 +928,7 @@ ALTER TABLE %s DROP COLUMN %s;
      *
      * @return string
      */
-    public function getRenameColumnDDL($fromColumn, $toColumn)
+    public function getRenameColumnDDL($fromColumn, $toColumn): string
     {
         $pattern = "
 ALTER TABLE %s RENAME COLUMN %s TO %s;
@@ -935,7 +946,7 @@ ALTER TABLE %s RENAME COLUMN %s TO %s;
      *
      * @return string
      */
-    public function getModifyColumnDDL(PropelColumnDiff $columnDiff)
+    public function getModifyColumnDDL(PropelColumnDiff $columnDiff): string
     {
         $toColumn = $columnDiff->getToColumn();
         $pattern = "
@@ -953,7 +964,7 @@ ALTER TABLE %s MODIFY %s;
      *
      * @return string
      */
-    public function getModifyColumnsDDL($columnDiffs)
+    public function getModifyColumnsDDL($columnDiffs): string
     {
         $lines = array();
         $tableName = null;
@@ -986,7 +997,7 @@ ALTER TABLE %s MODIFY
      *
      * @return string
      */
-    public function getAddColumnDDL(Column $column)
+    public function getAddColumnDDL(Column $column): string
     {
         $pattern = "
 ALTER TABLE %s ADD %s;
@@ -1003,7 +1014,7 @@ ALTER TABLE %s ADD %s;
      *
      * @return string
      */
-    public function getAddColumnsDDL($columns)
+    public function getAddColumnsDDL($columns): string
     {
         $lines = array();
         $tableName = null;
@@ -1034,7 +1045,7 @@ ALTER TABLE %s ADD
      *
      * @return boolean True if the type has a size attribute
      */
-    public function hasSize($sqlType)
+    public function hasSize($sqlType): bool
     {
         return true;
     }
@@ -1058,7 +1069,7 @@ ALTER TABLE %s ADD
      *
      * @return string
      */
-    public function quote($text)
+    public function quote($text): string
     {
         if ($con = $this->getConnection()) {
             return $con->quote($text);
@@ -1077,7 +1088,7 @@ ALTER TABLE %s ADD
      *
      * @return string
      */
-    protected function disconnectedEscapeText($text)
+    protected function disconnectedEscapeText($text): string
     {
         return str_replace("'", "''", $text);
     }
@@ -1089,17 +1100,17 @@ ALTER TABLE %s ADD
      *
      * @return string Quoted identifier.
      */
-    public function quoteIdentifier($text)
+    public function quoteIdentifier($text): string
     {
         return $this->isIdentifierQuotingEnabled ? '"' . strtr($text, array('.' => '"."')) . '"' : $text;
     }
 
-    public function setIdentifierQuoting($enabled = true)
+    public function setIdentifierQuoting($enabled = true): void
     {
         $this->isIdentifierQuotingEnabled = $enabled;
     }
 
-    public function getIdentifierQuoting()
+    public function getIdentifierQuoting(): bool
     {
         return $this->isIdentifierQuotingEnabled;
     }
@@ -1109,7 +1120,7 @@ ALTER TABLE %s ADD
      *
      * @return boolean
      */
-    public function supportsNativeDeleteTrigger()
+    public function supportsNativeDeleteTrigger(): bool
     {
         return false;
     }
@@ -1119,7 +1130,7 @@ ALTER TABLE %s ADD
      *
      * @return boolean
      */
-    public function supportsInsertNullPk()
+    public function supportsInsertNullPk(): bool
     {
         return true;
     }
@@ -1129,7 +1140,7 @@ ALTER TABLE %s ADD
      *
      * @return boolean
      */
-    public function hasStreamBlobImpl()
+    public function hasStreamBlobImpl(): bool
     {
         return false;
     }
@@ -1137,7 +1148,7 @@ ALTER TABLE %s ADD
     /**
      * @see        Platform::supportsSchemas()
      */
-    public function supportsSchemas()
+    public function supportsSchemas(): bool
     {
         return false;
     }
@@ -1145,13 +1156,13 @@ ALTER TABLE %s ADD
     /**
      * @see        Platform::supportsMigrations()
      */
-    public function supportsMigrations()
+    public function supportsMigrations(): bool
     {
         return true;
     }
 
 
-    public function supportsVarcharWithoutSize()
+    public function supportsVarcharWithoutSize(): bool
     {
         return false;
     }
@@ -1169,14 +1180,14 @@ ALTER TABLE %s ADD
      *
      * @return mixed
      */
-    public function getBooleanString($b)
+    public function getBooleanString($b): mixed
     {
         $b = ($b === true || strtolower($b) === 'true' || $b === 1 || $b === '1' || strtolower($b) === 'y' || strtolower($b) === 'yes');
 
         return ($b ? '1' : '0');
     }
 
-    public function getPhpArrayString($stringValue)
+    public function getPhpArrayString($stringValue): ?string
     {
         $stringValue = trim($stringValue);
 
@@ -1202,7 +1213,7 @@ ALTER TABLE %s ADD
      *
      * @return string
      */
-    public function getTimestampFormatter()
+    public function getTimestampFormatter(): string
     {
         return 'Y-m-d H:i:s';
     }
@@ -1212,7 +1223,7 @@ ALTER TABLE %s ADD
      *
      * @return string
      */
-    public function getTimeFormatter()
+    public function getTimeFormatter(): string
     {
         return 'H:i:s';
     }
@@ -1222,7 +1233,7 @@ ALTER TABLE %s ADD
      *
      * @return string
      */
-    public function getDateFormatter()
+    public function getDateFormatter(): string
     {
         return 'Y-m-d';
     }
@@ -1232,7 +1243,7 @@ ALTER TABLE %s ADD
      * Warning: duplicates logic from DBAdapter::bindValue().
      * Any code modification here must be ported there.
      */
-    public function getColumnBindingPHP($column, $identifier, $columnValueAccessor, $tab = "			")
+    public function getColumnBindingPHP($column, $identifier, $columnValueAccessor, $tab = "			"): array|string|null
     {
         $script = '';
         $hasValuePreparation = false;
@@ -1268,7 +1279,7 @@ if (is_resource($columnValueAccessor)) {
      * $this->id = $con->lastInsertId();
      * </code>
      */
-    public function getIdentifierPhp($columnValueMutator, $connectionVariableName = '$con', $sequenceName = '', $tab = "			")
+    public function getIdentifierPhp($columnValueMutator, $connectionVariableName = '$con', $sequenceName = '', $tab = "			"): string
     {
         return sprintf(
             "
@@ -1280,12 +1291,12 @@ if (is_resource($columnValueAccessor)) {
         );
     }
 
-    public function getDefaultFKOnDeleteBehavior()
+    public function getDefaultFKOnDeleteBehavior(): string
     {
       return ForeignKey::NONE;
     }
 
-    public function getDefaultFKOnUpdateBehavior()
+    public function getDefaultFKOnUpdateBehavior(): string
     {
       return ForeignKey::NONE;
     }

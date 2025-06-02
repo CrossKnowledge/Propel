@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,17 +10,20 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/util/PropelQuickBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  *
  * @package    generator.util
  */
-class PropelQuickBuilderTest extends PHPUnit_Framework_TestCase
+class PropelQuickBuilderTest extends TestCase
 {
     public function testGetPlatform()
     {
         require_once dirname(__FILE__) . '/../../../../generator/lib/platform/MysqlPlatform.php';
+use PHPUnit\Framework\TestCase;
         $builder = new PropelQuickBuilder();
         $builder->setPlatform(new MysqlPlatform());
         $this->assertTrue($builder->getPLatform() instanceof MysqlPlatform);

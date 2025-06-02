@@ -1,0 +1,13 @@
+{
+  "name": "custom/propel-test",
+  "description": "Test custom Propel connection",
+  "autoload": {
+    "psr-4": {
+      "CK\\Runtime\\Lib\\": "../runtime/lib/",
+      "CK\\Generator\\Lib\\": "../generator/lib/"
+    }
+  },
+  "require": {
+    "ext-pdo": "*"
+  }
+}

@@ -10,6 +10,8 @@
 
 namespace CK\Generator\Lib\Builder\Util;
 
+use InvalidArgumentException;
+use Exception;
 /**
  * Simple templating system to ease behavior writing
  *
@@ -31,7 +33,7 @@ class PropelTemplate
      *
      * @param string $template the template string
      */
-    public function setTemplate($template)
+    public function setTemplate(string $template): void
     {
         $this->template = $template;
     }
@@ -45,7 +47,7 @@ class PropelTemplate
      *
      * @param string $filePath The (absolute or relative to the include path) file path
      */
-    public function setTemplateFile($filePath)
+    public function setTemplateFile(string $filePath): void
     {
         $this->templateFile = $filePath;
     }
@@ -67,7 +69,7 @@ class PropelTemplate
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function render($vars = array())
+    public function render(array $vars = []): string
     {
         if (null === $this->templateFile && null === $this->template) {
             throw new InvalidArgumentException('You must set a template or a template file before rendering');

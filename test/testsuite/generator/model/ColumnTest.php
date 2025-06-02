@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,9 +10,13 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/model/Column.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../generator/lib/builder/util/XmlToAppData.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../generator/lib/platform/DefaultPlatform.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../generator/lib/behavior/AutoAddPkBehavior.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for package handling.
@@ -20,7 +25,7 @@ require_once dirname(__FILE__) . '/../../../../generator/lib/behavior/AutoAddPkB
  * @version    $Revision$
  * @package    generator.model
  */
-class ColumnTest extends PHPUnit_Framework_TestCase
+class ColumnTest extends TestCase
 {
 
     /**
@@ -60,14 +65,17 @@ class ColumnTest extends PHPUnit_Framework_TestCase
     <column name="id" type="INTEGER" primaryKey="true" />
     <column name="author_id" type="INTEGER" />
     <column name="editor_id" type="INTEGER" phpNamingMethod="nochange" />
+use PHPUnit\Framework\TestCase;
   </table>
 </database>
 EOF;
         $appData = $xmlToAppData->parseString($schema);
         $column = $appData->getDatabase('test1')->getTable('table1')->getColumn('author_id');
       $this->assertEquals('AuthorId', $column->getPhpName(), 'setPhpName() uses the default phpNamingMethod');
+use PHPUnit\Framework\TestCase;
         $column = $appData->getDatabase('test1')->getTable('table1')->getColumn('editor_id');
       $this->assertEquals('editor_id', $column->getPhpName(), 'setPhpName() uses the column phpNamingMethod if given');
+use PHPUnit\Framework\TestCase;
   }
 
     public function testDefaultPhpNamingMethod()

@@ -10,6 +10,9 @@
 
 namespace CK\Generator\Lib\Model;
 
+use DOMException;
+use DOMNode;
+use DOMDocument;
 //require_once dirname(__FILE__) . '/Index.php';
 
 /**
@@ -31,15 +34,16 @@ class Unique extends Index
     /**
      * Returns <code>true</code>.
      */
-    public function isUnique()
+    public function isUnique(): true
     {
         return true;
     }
 
     /**
+     * @throws DOMException
      * @see        XMLElement::appendXml(DOMNode)
      */
-    public function appendXml(DOMNode $node)
+    public function appendXml(DOMNode $node): void
     {
         $doc = ($node instanceof DOMDocument) ? $node : $node->ownerDocument;
 

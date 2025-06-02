@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,6 +10,7 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__) . '/../../../fixtures/namespaced/build/classes'));
 
 /**
@@ -18,21 +20,23 @@ set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__
  * @version    $Revision$
  * @package    generator.builder
  */
-class NamespaceTest extends PHPUnit_Framework_TestCase
+class NamespaceTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (version_compare(PHP_VERSION, '5.3.0') < 0) {
             $this->markTestSkipped('Namespace support requires PHP 5.3');
         }
         parent::setUp();
         Propel::init(dirname(__FILE__) . '/../../../fixtures/namespaced/build/conf/bookstore_namespaced-conf.php');
+use PHPUnit\Framework\TestCase;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         Propel::init(dirname(__FILE__) . '/../../../fixtures/bookstore/build/conf/bookstore-conf.php');
+use PHPUnit\Framework\TestCase;
     }
 
     public function testInsert()

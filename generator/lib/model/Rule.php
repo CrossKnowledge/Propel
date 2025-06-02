@@ -10,6 +10,9 @@
 
 namespace CK\Generator\Lib\Model;
 
+use DOMException;
+use DOMNode;
+use DOMDocument;
 //require_once dirname(__FILE__) . '/XMLElement.php';
 
 /**
@@ -23,10 +26,10 @@ namespace CK\Generator\Lib\Model;
 class Rule extends XMLElement
 {
 
-    private $name;
-    private $value;
-    private $message;
-    private $validator;
+    private string $name;
+    private string $value;
+    private string $message;
+    private Validator $validator;
     private $classname;
 
     /**
@@ -189,9 +192,10 @@ class Rule extends XMLElement
     }
 
     /**
+     * @throws DOMException
      * @see        XMLElement::appendXml(DOMNode)
      */
-    public function appendXml(DOMNode $node)
+    public function appendXml(DOMNode $node): void
     {
         $doc = ($node instanceof DOMDocument) ? $node : $node->ownerDocument;
 

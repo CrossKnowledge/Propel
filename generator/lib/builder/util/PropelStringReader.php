@@ -7,8 +7,10 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Builder\Util;
 
-include_once 'phing/system/io/Reader.php';
+use Reader;
+//include_once 'phing/system/io/Reader.php';
 
 /**
  * Overrides Phing's StringReader to allow inclusion inside a BufferedReader
@@ -22,34 +24,34 @@ class PropelStringReader extends Reader
     /**
      * @var string
      */
-    protected $_string;
+    protected string $_string;
 
     /**
      * @var int
      */
-    protected $mark = 0;
+    protected int $mark = 0;
 
     /**
      * @var int
      */
-    protected $currPos = 0;
+    protected int $currPos = 0;
 
     public function __construct($string)
     {
         $this->_string = $string;
     }
 
-    public function skip($n)
+    public function skip($n): void
     {
         $this->currPos = $this->currPos + $n;
     }
 
-    public function eof()
+    public function eof(): bool
     {
         return $this->currPos == strlen($this->_string);
     }
 
-    public function read($len = null)
+    public function read($len = null): int|string
     {
         if ($len === null) {
             return $this->_string;
@@ -64,12 +66,12 @@ class PropelStringReader extends Reader
         }
     }
 
-    public function mark()
+    public function mark(): void
     {
         $this->mark = $this->currPos;
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->currPos = $this->mark;
     }
@@ -86,12 +88,12 @@ class PropelStringReader extends Reader
     {
     }
 
-    public function markSupported()
+    public function markSupported(): true
     {
         return true;
     }
 
-    public function getResource()
+    public function getResource(): string
     {
         return '(string) "' . $this->_string . '"';
     }

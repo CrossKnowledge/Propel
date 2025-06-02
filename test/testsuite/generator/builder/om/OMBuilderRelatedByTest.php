@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,22 +10,27 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../tools/helpers/bookstore/BookstoreTestBase.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/builder/om/OMBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/builder/util/XmlToAppData.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/platform/DefaultPlatform.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for OMBuilder.
  *
  * @author     François Zaninotto
  * @version    $Id: OMBuilderBuilderTest.php 1347 2009-12-03 21:06:36Z francois $
+use PHPUnit\Framework\TestCase;
  * @package    generator.builder.om
  */
-class OMBuilderRelatedByTest extends PHPUnit_Framework_TestCase
+class OMBuilderRelatedByTest extends TestCase
 {
     public static $database;
 
-    public function setUp()
+    public function setUp(): void
     {
         // run only once to save execution time
         if (null == self::$database) {

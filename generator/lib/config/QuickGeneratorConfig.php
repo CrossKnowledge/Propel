@@ -14,6 +14,10 @@ use CK\Generator\Lib\Platform\PropelPlatformInterface;
 use CK\Generator\Lib\Platform\SqlitePlatform;
 use CK\Generator\Lib\Model\Table;
 use CK\Generator\Lib\Builder\DataModelBuilder;
+use CK\Propel\Generator\Lib\Builder\Util\Pluralizer;
+use CK\Generator\Lib\Builder\Util\DefaultEnglishPluralizer;
+use PDO;
+use Exception;
 
 //require_once dirname(__FILE__) . '/GeneratorConfig.php';
 //require_once dirname(__FILE__) . '/GeneratorConfigInterface.php';
@@ -25,32 +29,35 @@ use CK\Generator\Lib\Builder\DataModelBuilder;
  */
 class QuickGeneratorConfig implements GeneratorConfigInterface
 {
-    protected $builders = array(
-        'peer'					=> 'PHP5PeerBuilder',
-        'object'				=> 'PHP5ObjectBuilder',
-        'objectstub'		    => 'PHP5ExtensionObjectBuilder',
-        'peerstub'			    => 'PHP5ExtensionPeerBuilder',
-        'objectmultiextend'     => 'PHP5MultiExtendObjectBuilder',
-        'tablemap'			    => 'PHP5TableMapBuilder',
-        'query'					=> 'QueryBuilder',
-        'querystub'			    => 'ExtensionQueryBuilder',
-        'queryinheritance'      => 'QueryInheritanceBuilder',
-        'queryinheritancestub'  => 'ExtensionQueryInheritanceBuilder',
-        'interface'			    => 'PHP5InterfaceBuilder',
-        'node'					=> 'PHP5NodeBuilder',
-        'nodepeer'			    => 'PHP5NodePeerBuilder',
-        'nodestub'			    => 'PHP5ExtensionNodeBuilder',
-        'nodepeerstub'	        => 'PHP5ExtensionNodePeerBuilder',
-        'nestedset'			    => 'PHP5NestedSetBuilder',
-        'nestedsetpeer'         => 'PHP5NestedSetPeerBuilder',
+    protected array $builders = array(
+        'peer'					=> 'CK\Generator\Lib\Builder\OM\PHP5PeerBuilder',
+        'object'				=> 'CK\Generator\Lib\Builder\OM\PHP5ObjectBuilder',
+        'objectstub'		    => 'CK\Generator\Lib\Builder\OM\PHP5ExtensionObjectBuilder',
+        'peerstub'			    => 'CK\Generator\Lib\Builder\OM\PHP5ExtensionPeerBuilder',
+        'objectmultiextend'     => 'CK\Generator\Lib\Builder\OM\PHP5MultiExtendObjectBuilder',
+        'tablemap'			    => 'CK\Generator\Lib\Builder\OM\PHP5TableMapBuilder',
+        'query'					=> 'CK\Generator\Lib\Builder\OM\QueryBuilder',
+        'querystub'			    => 'CK\Generator\Lib\Builder\OM\ExtensionQueryBuilder',
+        'queryinheritance'      => 'CK\Generator\Lib\Builder\OM\QueryInheritanceBuilder',
+        'queryinheritancestub'  => 'CK\Generator\Lib\Builder\OM\ExtensionQueryInheritanceBuilder',
+        'interface'			    => 'CK\Generator\Lib\Builder\OM\PHP5InterfaceBuilder',
+        'node'					=> 'CK\Generator\Lib\Builder\OM\PHP5NodeBuilder',
+        'nodepeer'			    => 'CK\Generator\Lib\Builder\OM\PHP5NodePeerBuilder',
+        'nodestub'			    => 'CK\Generator\Lib\Builder\OM\PHP5ExtensionNodeBuilder',
+        'nodepeerstub'	        => 'CK\Generator\Lib\Builder\OM\PHP5ExtensionNodePeerBuilder',
+        'nestedset'			    => 'CK\Generator\Lib\Builder\OM\PHP5NestedSetBuilder',
+        'nestedsetpeer'         => 'CK\Generator\Lib\Builder\OM\PHP5NestedSetPeerBuilder',
     );
 
-    protected $buildProperties  = array();
+    protected array $buildProperties  = [];
 
     private $generatorConfig    = null;
 
     private $configuredPlatform = null;
 
+    /**
+     * @throws Exception
+     */
     public function __construct(PropelPlatformInterface $platform = null)
     {
         $this->configuredPlatform = $platform;
@@ -60,10 +67,11 @@ class QuickGeneratorConfig implements GeneratorConfigInterface
     /**
      * Why would Phing use ini while it so fun to invent a new format? (sic)
      * parse_ini_file() doesn't work for Phing property files
+     * @throws Exception
      */
-    protected function parsePseudoIniFile($filepath)
+    protected function parsePseudoIniFile($filepath): array
     {
-        $properties = array();
+        $properties = [];
         if (($lines = @file($filepath)) === false) {
             throw new Exception("Unable to parse contents of $filepath");
         }
@@ -94,10 +102,10 @@ class QuickGeneratorConfig implements GeneratorConfigInterface
      *
      * @return DataModelBuilder
      */
-    public function getConfiguredBuilder(Table $table, $type)
+    public function getConfiguredBuilder(Table $table, string $type): DataModelBuilder
     {
         $class = $this->builders[$type];
-        require_once dirname(__FILE__) . '/../builder/om/' . $class . '.php';
+        //require_once dirname(__FILE__) . '/../builder/om/' . $class . '.php';
         $builder = new $class($table);
         $builder->setGeneratorConfig($this);
 
@@ -109,9 +117,9 @@ class QuickGeneratorConfig implements GeneratorConfigInterface
      *
      * @return Pluralizer
      */
-    public function getConfiguredPluralizer()
+    public function getConfiguredPluralizer(): Pluralizer
     {
-        require_once dirname(__FILE__) . '/../builder/util/DefaultEnglishPluralizer.php';
+        //require_once dirname(__FILE__) . '/../builder/util/DefaultEnglishPluralizer.php';
 
         return new DefaultEnglishPluralizer();
     }
@@ -124,11 +132,11 @@ class QuickGeneratorConfig implements GeneratorConfigInterface
      *
      * @param mixed $props Array or Iterator
      */
-    public function setBuildProperties($props)
+    public function setBuildProperties(mixed $props): void
     {
-        $this->buildProperties = array();
+        $this->buildProperties = [];
 
-        $renamedPropelProps = array();
+        //$renamedPropelProps = array();    //Never used :/
         foreach ($props as $key => $propValue) {
             if (strpos($key, "propel.") === 0) {
                 $newKey = substr($key, strlen("propel."));
@@ -149,18 +157,18 @@ class QuickGeneratorConfig implements GeneratorConfigInterface
      *
      * @return mixed
      */
-    public function getBuildProperty($name)
+    public function getBuildProperty(string $name): mixed
     {
-        return isset($this->buildProperties[$name]) ? $this->buildProperties[$name] : null;
+        return $this->buildProperties[$name] ?? null;
     }
 
     /**
      * Sets a specific propel (renamed) property from the build.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function setBuildProperty($name, $value)
+    public function setBuildProperty(string $name, mixed $value): void
     {
         $this->buildProperties[$name] = $value;
     }
@@ -168,7 +176,7 @@ class QuickGeneratorConfig implements GeneratorConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfiguredPlatform(PDO $con = null, $database = null)
+    public function getConfiguredPlatform(PDO $con = null, $database = null): SqlitePlatform|PropelPlatformInterface|null
     {
         if (null === $this->configuredPlatform) {
             return new SqlitePlatform($con);
@@ -189,7 +197,7 @@ class QuickGeneratorConfig implements GeneratorConfigInterface
         return $this->generatorConfig->getConfiguredBehavior($name);
     }
 
-    private function initGeneratorConfig()
+    private function initGeneratorConfig(): void
     {
         if (null === $this->generatorConfig) {
             $this->generatorConfig = new GeneratorConfig();

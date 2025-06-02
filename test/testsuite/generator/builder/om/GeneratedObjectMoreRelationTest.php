@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /*
  *	$Id$
@@ -16,13 +17,13 @@
  * @version		$Revision$
  * @package		generator.builder.om
  */
-class GeneratedObjectMoreRelationTest extends PHPUnit_Framework_TestCase
+class GeneratedObjectMoreRelationTest extends TestCase
 {
 
     /**
      * Setup schema und some default data
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -31,11 +32,13 @@ class GeneratedObjectMoreRelationTest extends PHPUnit_Framework_TestCase
 <database name="more_relation_test" namespace="MoreRelationTest">
 
     <table name="more_relation_test_page" phpName="Page">
+use PHPUnit\Framework\TestCase;
         <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER" />
         <column name="title" type="VARCHAR" size="100" primaryString="true" />
     </table>
 
     <table name="more_relation_test_content" phpName="Content">
+use PHPUnit\Framework\TestCase;
         <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER" />
         <column name="title" type="VARCHAR" size="100" />
         <column name="content" type="LONGVARCHAR" required="false" />
@@ -46,6 +49,7 @@ class GeneratedObjectMoreRelationTest extends PHPUnit_Framework_TestCase
     </table>
 
     <table name="more_relation_test_comment" phpName="Comment">
+use PHPUnit\Framework\TestCase;
         <column name="user_id" required="true" primaryKey="true" type="INTEGER" />
         <column name="page_id" required="true" primaryKey="true" type="INTEGER" />
         <column name="comment" type="VARCHAR" size="100" />
@@ -55,6 +59,7 @@ class GeneratedObjectMoreRelationTest extends PHPUnit_Framework_TestCase
     </table>
 
     <table name="more_relation_test_content_comment" phpName="ContentComment">
+use PHPUnit\Framework\TestCase;
         <column name="id" required="true" autoIncrement="true" primaryKey="true" type="INTEGER" />
         <column name="content_id" type="INTEGER" />
         <column name="comment" type="VARCHAR" size="100" />

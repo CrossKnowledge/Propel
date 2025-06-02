@@ -23,7 +23,7 @@ use CK\Generator\Lib\Model\Behavior;
 class ConcreteInheritanceParentBehavior extends Behavior
 {
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'descendant_column' => 'descendant_class'
     );
 

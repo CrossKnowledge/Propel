@@ -1,5 +1,7 @@
 <?php
-
+use PHPUnit\Framework\TestCase;
+use CK\Generator\Lib\Util\PropelQuickBuilder;
+use CK\Runtime\Lib\Exception\PropelException;
 /*
  *	$Id$
  * This file is part of the Propel package.
@@ -9,9 +11,12 @@
  * @license    MIT License
  */
 
-require_once dirname(__FILE__) . '/../../../../generator/lib/util/PropelQuickBuilder.php';
-require_once dirname(__FILE__) . '/../../../../generator/lib/behavior/DelegateBehavior.php';
-require_once dirname(__FILE__) . '/../../../../runtime/lib/Propel.php';
+//require_once dirname(__FILE__) . '/../../../../generator/lib/util/PropelQuickBuilder.php';
+
+//require_once dirname(__FILE__) . '/../../../../generator/lib/behavior/DelegateBehavior.php';
+
+//require_once dirname(__FILE__) . '/../../../../runtime/lib/Propel.php';
+
 
 /**
  * Tests for DelegateBehavior class
@@ -20,10 +25,10 @@ require_once dirname(__FILE__) . '/../../../../runtime/lib/Propel.php';
  * @version    $Revision$
  * @package    generator.behavior
  */
-class DelegateBehaviorTest extends PHPUnit_Framework_TestCase
+class DelegateBehaviorTest extends TestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!class_exists('DelegateDelegate')) {
             $schema = <<<EOF
@@ -170,11 +175,9 @@ EOF;
         $this->assertEquals('bar', $main->getSummary());
     }
 
-    /**
-     * @expectedException PropelException
-     */
     public function testAModelCannotHaveCascadingDelegates()
     {
+        $this->expectException(PropelException::class);
         $main = new DelegateMain();
         $main->setSummary('bar');
         $main->setBody('baz');

@@ -1,7 +1,9 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /*
  *	$Id: TableTest.php 1965 2010-09-21 17:44:12Z francois $
+use PHPUnit\Framework\TestCase;
  * This file is part of the Propel package.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,7 +12,9 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../generator/lib/model/Database.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../tools/helpers/DummyPlatforms.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for Database model class.
@@ -18,7 +22,7 @@ require_once dirname(__FILE__) . '/../../../tools/helpers/DummyPlatforms.php';
  * @version    $Revision$
  * @package    generator.model
  */
-class DatabaseTest extends PHPUnit_Framework_TestCase
+class DatabaseTest extends TestCase
 {
     public function providerForTestHasTable()
     {

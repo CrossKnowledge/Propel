@@ -187,6 +187,7 @@ class PropelPDO extends PDO
      * Get the runtime configuration
      *
      * @return PropelConfiguration|array
+     * @throws PropelException
      */
     public function getConfiguration(): PropelConfiguration|array
     {
@@ -443,7 +444,7 @@ class PropelPDO extends PDO
      * @return integer
      * @throws PropelException
      */
-    #[ReturnTypeWillChange] public function exec($sql): int
+    #[ReturnTypeWillChange] public function exec(string $sql): int
     {
         if ($this->useDebug) {
             $debug = $this->getDebugSnapshot();
@@ -700,10 +701,11 @@ class PropelPDO extends PDO
      * 'debugpdo.logging' prefix.  If such a configuration setting hasn't been set, the given default
      * value will be returned.
      *
-     * @param string $key          Key for which to return the value.
-     * @param mixed  $defaultValue Default value to apply if config item hasn't been set.
+     * @param string $key Key for which to return the value.
+     * @param mixed $defaultValue Default value to apply if config item hasn't been set.
      *
      * @return mixed
+     * @throws PropelException
      */
     protected function getLoggingConfig(string $key, mixed $defaultValue): mixed
     {

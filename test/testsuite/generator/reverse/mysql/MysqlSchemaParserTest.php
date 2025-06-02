@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,15 +10,22 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/reverse/mysql/MysqlSchemaParser.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/config/QuickGeneratorConfig.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/model/PropelTypes.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/model/Database.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/platform/DefaultPlatform.php';
+use PHPUnit\Framework\TestCase;
 
 set_include_path(get_include_path().PATH_SEPARATOR.dirname(__FILE__).'/../../../../../generator/lib');
 require_once dirname(__FILE__) . '/../../../../../generator/lib/task/PropelConvertConfTask.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for Mysql database schema parser.
@@ -26,9 +34,9 @@ require_once dirname(__FILE__) . '/../../../../../generator/lib/task/PropelConve
  * @version     $Revision$
  * @package     propel.generator.reverse.mysql
  */
-class MysqlSchemaParserTest extends PHPUnit_Framework_TestCase
+class MysqlSchemaParserTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -36,15 +44,18 @@ class MysqlSchemaParserTest extends PHPUnit_Framework_TestCase
         $xmlDom->load(dirname(__FILE__) . '/../../../../fixtures/reverse/mysql/runtime-conf.xml');
         $xml = simplexml_load_string($xmlDom->saveXML());
         $phpconf = OpenedPropelConvertConfTask::simpleXmlToArray($xml);
+use PHPUnit\Framework\TestCase;
 
         Propel::setConfiguration($phpconf);
+use PHPUnit\Framework\TestCase;
         Propel::initialize();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         Propel::init(dirname(__FILE__) . '/../../../../fixtures/bookstore/build/conf/bookstore-conf.php');
+use PHPUnit\Framework\TestCase;
     }
 
     public function testParse()

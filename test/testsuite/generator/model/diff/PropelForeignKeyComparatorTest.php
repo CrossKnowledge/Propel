@@ -1,7 +1,9 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /*
  *	$Id: TableTest.php 1891 2010-08-09 15:03:18Z francois $
+use PHPUnit\Framework\TestCase;
  * This file is part of the Propel package.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,13 +12,14 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/model/diff/PropelForeignKeyComparator.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the PropelColumnComparator service class.
  *
  * @package    generator.model.diff
  */
-class PropelForeignComparatorTest extends PHPUnit_Framework_TestCase
+class PropelForeignComparatorTest extends TestCase
 {
     public function testCompareNoDifference()
     {

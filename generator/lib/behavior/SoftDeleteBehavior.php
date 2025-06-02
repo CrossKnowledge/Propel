@@ -24,7 +24,7 @@ use CK\Generator\Lib\Model\Behavior;
 class SoftDeleteBehavior extends Behavior
 {
     // default parameters value
-    protected $parameters = array(
+    protected array $parameters = array(
         'deleted_column' => 'deleted_at',
     );
 

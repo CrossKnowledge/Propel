@@ -29,7 +29,7 @@ interface PropelPlatformInterface
     /**
      * Constant for auto-increment id method.
      */
-    const IDENTITY = "identity";
+    const string IDENTITY = "identity";
 
     /**
      * Constant for sequence id method.

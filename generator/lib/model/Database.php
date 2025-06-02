@@ -203,7 +203,7 @@ class Database extends ScopedElement
      *
      * @return string
      */
-    public function getDefaultIdMethod()
+    public function getDefaultIdMethod(): string
     {
         return $this->defaultIdMethod;
     }
@@ -213,7 +213,7 @@ class Database extends ScopedElement
      *
      * @param string $v Value to assign to defaultIdMethod.
      */
-    public function setDefaultIdMethod($v)
+    public function setDefaultIdMethod(string $v): void
     {
         $this->defaultIdMethod = $v;
     }
@@ -224,7 +224,7 @@ class Database extends ScopedElement
      *
      * @return string
      */
-    public function getDefaultPhpNamingMethod()
+    public function getDefaultPhpNamingMethod(): string
     {
         return $this->defaultPhpNamingMethod;
     }
@@ -234,7 +234,7 @@ class Database extends ScopedElement
      *
      * @param string $v The default naming conversion for this database to use.
      */
-    public function setDefaultPhpNamingMethod($v)
+    public function setDefaultPhpNamingMethod(string $v): void
     {
         $this->defaultPhpNamingMethod = $v;
     }
@@ -245,7 +245,7 @@ class Database extends ScopedElement
      *
      * @return string
      */
-    public function getDefaultTranslateMethod()
+    public function getDefaultTranslateMethod(): string
     {
         return $this->defaultTranslateMethod;
     }
@@ -530,10 +530,10 @@ class Database extends ScopedElement
         }
     }
 
-    public function getBuildProperty($key)
+    public function getBuildProperty(mixed $name)
     {
         if ($config = $this->getGeneratorConfig()) {
-            return $config->getBuildProperty($key);
+            return $config->getBuildProperty($name);
         } else {
             return '';
         }

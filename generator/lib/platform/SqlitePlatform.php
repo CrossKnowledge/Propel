@@ -109,13 +109,13 @@ class SqlitePlatform extends DefaultPlatform
         return '';
     }
 
-    public function getAddForeignKeyDDL(ForeignKey $fk)
+    public function getAddForeignKeyDDL(ForeignKey $fk): string
     {
         // no need for an alter table to return comments
         return $this->getForeignKeyDDL($fk);
     }
 
-    public function getDropForeignKeyDDL(ForeignKey $fk)
+    public function getDropForeignKeyDDL(ForeignKey $fk): string
     {
         return '';
     }

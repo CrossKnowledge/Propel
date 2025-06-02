@@ -9,6 +9,9 @@
  * @license    MIT License
  */
 
+use CK\Runtime\Lib\Query\Criteria;
+use CK\Runtime\Lib\Connection\PropelPDO;
+
 require_once dirname(__FILE__) . '/../../../tools/helpers/bookstore/BookstoreTestBase.php';
 
 /**
@@ -21,7 +24,7 @@ require_once dirname(__FILE__) . '/../../../tools/helpers/bookstore/BookstoreTes
 class SoftDeleteBehaviorTest extends BookstoreTestBase
 {
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         Table4Peer::disableSoftDelete();

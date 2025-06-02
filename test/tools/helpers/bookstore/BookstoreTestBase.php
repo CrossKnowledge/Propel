@@ -4,17 +4,18 @@
  * Base class for Bookstore tests
  */
 
-// Use the bootstrap
-require_once dirname(__FILE__) . '/../../../../bootstrap.php';
+// Use the bootstrap - corrected path
+require_once dirname(__FILE__) . '/../../../bootstrap.php';
 
 // Import namespaced classes
 use CK\Runtime\Lib\Propel;
 use CK\Runtime\Lib\Exception\PropelException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Base class contains some methods useful for bookstore tests.
  */
-abstract class BookstoreTestBase extends PHPUnit_Framework_TestCase
+abstract class BookstoreTestBase extends TestCase
 {
     /**
      * @var boolean
@@ -23,8 +24,9 @@ abstract class BookstoreTestBase extends PHPUnit_Framework_TestCase
 
     /**
      * This is run before each unit test.  It empties the database.
+     * @throws PropelException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         if (!$this->isInitialized) {
@@ -35,8 +37,9 @@ abstract class BookstoreTestBase extends PHPUnit_Framework_TestCase
 
     /**
      * Initialize Propel for testing
+     * @throws PropelException
      */
-    protected function initialize()
+    protected function initialize(): void
     {
         if (!Propel::isInit()) {
             // Configuration should already be loaded by bootstrap
@@ -50,6 +53,7 @@ abstract class BookstoreTestBase extends PHPUnit_Framework_TestCase
 
     /**
      * Get a connection to the database
+     * @throws PropelException
      */
     protected function getConnection()
     {

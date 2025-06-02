@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -10,6 +11,7 @@
 
 // Use the new bootstrap system instead of direct require
 require_once dirname(__FILE__) . '/../../../bootstrap.php';
+use PHPUnit\Framework\TestCase;
 
 // Import the namespaced Propel class
 use CK\Runtime\Lib\Propel;
@@ -19,7 +21,7 @@ use CK\Runtime\Lib\Propel;
  *
  * @package    runtime.connection
  */
-class PropelPDOTest extends PHPUnit_Framework_TestCase
+class PropelPDOTest extends TestCase
 {
     public function testSetAttribute()
     {

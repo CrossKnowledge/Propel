@@ -29,7 +29,7 @@ class PHP5ExtensionPeerBuilder extends PeerBuilder
      *
      * @return string
      */
-    public function getUnprefixedClassname()
+    public function getUnprefixedClassname(): string
     {
         return $this->getStubObjectBuilder()->getUnprefixedClassname() . 'Peer';
     }
@@ -39,7 +39,7 @@ class PHP5ExtensionPeerBuilder extends PeerBuilder
      *
      * @param string &$script The script will be modified in this method.
      */
-    protected function addIncludes(&$script)
+    protected function addIncludes(string &$script): void
     {
         switch ($this->getTable()->treeMode()) {
             case 'NestedSet':

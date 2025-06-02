@@ -26,34 +26,34 @@ abstract class ScopedElement extends XMLElement
      *
      * @var       string
      */
-    protected $pkg;
+    protected string $pkg;
 
     /**
      * Whether the package was automatically overridden.
      * If propel.schema.autoPackage or propel.namespace.AutoPackage is true.
      */
-    protected $pkgOverridden = false;
+    protected bool $pkgOverridden = false;
 
     /**
      * Namespace for the generated OM.
      *
      * @var       string
      */
-    protected $namespace;
+    protected string $namespace;
 
     /**
      * Schema this element belongs to.
      *
      * @var       string
      */
-    protected $schema;
+    protected string $schema;
 
     /**
      * retrieves a build property.
      *
      * @param mixed $name
      */
-    abstract protected function getBuildProperty($name);
+    abstract protected function getBuildProperty(mixed $name);
 
     /**
      * Sets up the Rule object based on the attributes that were passed to loadFromXML().
@@ -80,9 +80,9 @@ abstract class ScopedElement extends XMLElement
     /**
      * Set the value of the namespace.
      *
-     * @param   $v Value to assign to namespace.
+     * @param string $v Value to assign to namespace.
      */
-    public function setNamespace($v)
+    public function setNamespace(string $v): void
     {
         if ($v == $this->namespace) {
             return;
@@ -131,9 +131,9 @@ abstract class ScopedElement extends XMLElement
     /**
      * Set the value of schema.
      *
-     * @param   $v Value to assign to schema.
+     * @param string $v Value to assign to schema.
      */
-    public function setSchema($v)
+    public function setSchema(string $v): void
     {
         if ($v == $this->schema) {
             return;

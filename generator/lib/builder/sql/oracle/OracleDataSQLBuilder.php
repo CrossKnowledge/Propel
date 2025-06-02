@@ -7,8 +7,9 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Builder\Sql;
 
-require_once 'builder/sql/DataSQLBuilder.php';
+//require_once 'builder/sql/DataSQLBuilder.php';
 
 /**
  * Oracle class for building data dump SQL.

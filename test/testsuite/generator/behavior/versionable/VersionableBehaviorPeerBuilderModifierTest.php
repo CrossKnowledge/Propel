@@ -1,7 +1,9 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /*
  *	$Id: VersionableBehaviorTest.php 1460 2010-01-17 22:36:48Z francois $
+use PHPUnit\Framework\TestCase;
  * This file is part of the Propel package.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,8 +12,11 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/util/PropelQuickBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/behavior/versionable/VersionableBehavior.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for VersionableBehavior class
@@ -20,10 +25,10 @@ require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
  * @version    $Revision$
  * @package    generator.behavior.versionable
  */
-class VersionableBehaviorPeerBuilderModifierTest extends PHPUnit_Framework_TestCase
+class VersionableBehaviorPeerBuilderModifierTest extends TestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!class_exists('VersionableBehaviorTest10')) {
             $schema = <<<EOF

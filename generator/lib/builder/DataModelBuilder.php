@@ -18,6 +18,8 @@ use CK\Generator\Lib\Builder\OM\ObjectBuilder;
 use CK\Propel\Generator\Lib\Builder\Util\Pluralizer;
 use CK\Generator\Lib\Platform\PropelPlatformInterface;
 use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Builder\Sql\DataSQLBuilder;
+use CK\Generator\Lib\Builder\OM\QueryBuilder;
 
 /**
  * This is the base class for any builder class that is using the data model.

@@ -11,6 +11,9 @@
 namespace CK\Generator\Lib\Builder\OM;
 
 use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\ForeignKey;
+use CK\Generator\Lib\Model\Column;
+
 
 //require_once dirname(__FILE__) . '/OMBuilder.php';
 
@@ -28,8 +31,8 @@ use CK\Generator\Lib\Model\Table;
 abstract class PeerBuilder extends OMBuilder
 {
 
-    protected $basePeerClass;
-    protected $basePeerClassname;
+    protected string $basePeerClass;
+    protected string $basePeerClassname;
 
     /**
      * Constructs a new PeerBuilder subclass.
@@ -49,7 +52,7 @@ abstract class PeerBuilder extends OMBuilder
      *
      * @param string &$script The script will be modified in this method.
      */
-    protected function addSelectMethods(&$script)
+    protected function addSelectMethods(&$script): void
     {
         $this->addAddSelectColumns($script);
 
@@ -308,7 +311,9 @@ abstract class PeerBuilder extends OMBuilder
      */
     public function applyBehaviorModifier($hookName, &$script, $tab = "		")
     {
-        return $this->applyBehaviorModifierBase($hookName, 'PeerBuilderModifier', $script, $tab);
+        //Just like what we did to the secondary method which wasn't returning anything, rather modifying the value by reference, we do the same here.
+        $this->applyBehaviorModifierBase($hookName, 'PeerBuilderModifier', $script, $tab);
+        return $script;
     }
 
     /**
@@ -316,7 +321,7 @@ abstract class PeerBuilder extends OMBuilder
      *
      * @param string $contentName The name of the content as called from one of this class methods, e.g. "parentClassname"
      */
-    public function getBehaviorContent($contentName)
+    public function getBehaviorContent(string $contentName)
     {
         return $this->getBehaviorContentBase($contentName, 'PeerBuilderModifier');
     }
@@ -326,7 +331,7 @@ abstract class PeerBuilder extends OMBuilder
      *
      * @return string The Base Peer Class name
      */
-    public function getBasePeerClassname()
+    public function getBasePeerClassname(): string
     {
         return $this->basePeerClassname;
     }

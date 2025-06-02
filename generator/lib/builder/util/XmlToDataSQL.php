@@ -7,8 +7,22 @@
  *
  * @license    MIT License
  */
+namespace CK\Generator\Lib\Builder\Util;
 
-require_once 'phing/parser/AbstractHandler.php';
+use CK\Generator\Lib\Model\Database;
+use CK\Generator\Lib\Config\GeneratorConfig;
+use CK\Generator\Lib\Builder\Sql\DataSQLBuilder;
+use CK\Generator\Lib\Model\Table;
+use CK\Generator\Lib\Model\Column;
+use ExpatParser;
+use PhingFile;
+use BuildException;
+use FileReader;
+use Exception;
+use BufferedReader;
+use Writer;
+use AbstractHandler;
+//require_once 'phing/parser/AbstractHandler.php';
 
 /**
  * A Class that is used to parse an data dump XML file and create SQL using a DataSQLBuilder class.
@@ -25,21 +39,21 @@ class XmlToDataSQL extends AbstractHandler
      *
      * @var        GeneratorConfig
      */
-    private $generatorConfig;
+    private GeneratorConfig $generatorConfig;
 
     /**
      * The database.
      *
      * @var        Database
      */
-    private $database;
+    private Database $database;
 
     /**
      * The output writer for the SQL file.
      *
      * @var        Writer
      */
-    private $sqlWriter;
+    private Writer $sqlWriter;
 
     /**
      * The database (and output SQL file) encoding.
@@ -48,7 +62,7 @@ class XmlToDataSQL extends AbstractHandler
      *
      * @var        string
      */
-    private $encoding;
+    private string $encoding;
 
     /**
      * The classname of the static class that will perform the building.
@@ -58,21 +72,21 @@ class XmlToDataSQL extends AbstractHandler
      *
      * @var        string
      */
-    private $builderClazz;
+    private string $builderClazz;
 
     /**
      * The name of the current table being processed.
      *
-     * @var        string
+     * @var        ?string
      */
-    private $currTableName;
+    private ?string $currTableName;
 
     /**
      * The DataSQLBuilder for the current table.
      *
-     * @var        DataSQLBuilder
+     * @var        ?DataSQLBuilder
      */
-    private $currBuilder;
+    private ?DataSQLBuilder $currBuilder;
 
     /**
      * Expat Parser.
@@ -84,7 +98,7 @@ class XmlToDataSQL extends AbstractHandler
     /**
      * Flag for enabling debug output to aid in parser tracing.
      */
-    const DEBUG = false;
+    const bool DEBUG = false;
 
     /**
      * Construct new XmlToDataSQL class.
@@ -107,11 +121,12 @@ class XmlToDataSQL extends AbstractHandler
      * Transform the data dump input file into SQL and writes it to the output stream.
      *
      * @param PhingFile $xmlFile
-     * @param Writer    $out
+     * @param Writer $out
      *
      * @throws BuildException
+     * @throws Exception
      */
-    public function transform(PhingFile $xmlFile, Writer $out)
+    public function transform(PhingFile $xmlFile, Writer $out): void
     {
         $this->sqlWriter = $out;
 
@@ -194,10 +209,10 @@ class XmlToDataSQL extends AbstractHandler
     /**
      * Handles closing elements of the xml file.
      *
-     * @param   $name The local name (without prefix), or the empty string if
+     * @param   ?string $name The local name (without prefix), or the empty string if
      *         Namespace processing is not being performed.
      */
-    public function endElement($name)
+    public function endElement($name): void
     {
         if (self::DEBUG) {
             print("endElement(" . $name . ") called\n");

@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,18 +10,22 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/util/PropelQuickBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/behavior/archivable/ArchivableBehavior.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../generator/lib/behavior/concrete_inheritance/ConcreteInheritanceBehavior.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the combination of ArchivableBehavior and ConcreteInheritanceBehavior classes
  */
-class ArchivableAndConcreteInheritanceBehaviorTest extends PHPUnit_Framework_TestCase
+class ArchivableAndConcreteInheritanceBehaviorTest extends TestCase
 {
     protected static $generatedSQL;
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!class_exists('ArchivableConcretePagePeer')) {
             $schema = <<<EOF

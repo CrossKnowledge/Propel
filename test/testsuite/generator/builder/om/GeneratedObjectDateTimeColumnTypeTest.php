@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * This file is part of the Propel package.
@@ -9,7 +10,9 @@
  */
 
 require_once dirname(__FILE__) . '/../../../../../generator/lib/util/PropelQuickBuilder.php';
+use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the generated objects for temporal column types accessor & mutator.
@@ -18,16 +21,18 @@ require_once dirname(__FILE__) . '/../../../../../runtime/lib/Propel.php';
  * @author     Francois Zaninotto
  * @package    generator.builder.om
  */
-class GeneratedObjectDateTimeColumnTypeTest extends PHPUnit_Framework_TestCase
+class GeneratedObjectDateTimeColumnTypeTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         if (!class_exists('DateTimeColumnTypeEntity')) {
             $schema = <<<EOF
 <database name="generated_object_datetime_type_test">
     <table name="date_time_column_type_entity" idMethod="native">
         <column name="id" primaryKey="true" type="INTEGER" phpName="Id" required="true"/>
+use PHPUnit\Framework\TestCase;
         <column name="primary_date" primaryKey="true" type="DATE" phpName="PrimaryDate" required="true"/>
+use PHPUnit\Framework\TestCase;
     </table>
 </database>
 EOF;
