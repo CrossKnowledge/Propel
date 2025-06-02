@@ -33,58 +33,60 @@
 
     <!--
       Load the bootstrap file AFTER properties are set
+      This should set up the autoloader for namespaced classes
     -->
     <php expression="require_once '${propel.home}/lib/bootstrap.php';"/>
 
     <!--
       Do forward declarations of all of our tasks to
       centralize them and clean up the targets.
-    -->
 
-    <path id="propelclasses">
-        <pathelement dir="${propel.home}/lib/"/>
-        <pathelement dir="${propel.project.dir}/"/>
-    </path>
+      IMPORTANT: With namespaces, we need to use fully qualified class names
+      and ensure the autoloader is properly configured in bootstrap.php
+    -->
 
     <taskdef
             name="propel-om"
-            classname="task.PropelOMTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelOMTask"/>
     <taskdef
             name="propel-data-dump"
-            classname="task.PropelDataDumpTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelDataDumpTask"/>
     <taskdef
             name="propel-data-sql"
-            classname="task.PropelDataSQLTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelDataSQLTask"/>
     <taskdef
             name="propel-schema-reverse"
-            classname="task.PropelSchemaReverseTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelSchemaReverseTask"/>
     <taskdef
             name="propel-sql"
-            classname="task.PropelSQLTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelSQLTask"/>
     <taskdef
             name="propel-sql-diff"
-            classname="task.PropelSQLDiffTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelSQLDiffTask"/>
     <taskdef
             name="propel-migration-status"
-            classname="task.PropelMigrationStatusTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelMigrationStatusTask"/>
     <taskdef
             name="propel-migration-up"
-            classname="task.PropelMigrationUpTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelMigrationUpTask"/>
     <taskdef
             name="propel-migration-down"
-            classname="task.PropelMigrationDownTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelMigrationDownTask"/>
     <taskdef
             name="propel-migration"
-            classname="task.PropelMigrationTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelMigrationTask"/>
     <taskdef
             name="propel-sql-exec"
-            classname="task.PropelSQLExec" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelSQLExec"/>
     <taskdef
             name="propel-graphviz"
-            classname="task.PropelGraphvizTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelGraphvizTask"/>
     <taskdef
             name="propel-convert-conf"
-            classname="task.PropelConvertConfTask" classpathRef="propelclasses"/>
+            classname="CK\Generator\Lib\Task\PropelConvertConfTask"/>
+    <taskdef
+            name="propel-build-sql"
+            classname="CK\Generator\Lib\Task\PropelSqlBuildTask"/>
 
     <!-- ================================================================ -->
     <!-- M A I N  T A R G E T                                             -->
@@ -629,10 +631,6 @@
             />
         </propel-graphviz>
     </target>
-
-    <taskdef
-            name="propel-build-sql"
-            classname="task.PropelSqlBuildTask" classpathRef="propelclasses"/>
 
     <target name="build-sql">
         <propel-build-sql outputDirectory="${propel.sql.dir}"
