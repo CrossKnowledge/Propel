@@ -12,8 +12,8 @@ namespace CK\Generator\Lib\Model;
 //require_once dirname(__FILE__) . '/XMLElement.php';
 use DOMDocument;
 use DOMException;
-
-require_once dirname(__FILE__) . '/../exception/EngineException.php';
+use CK\Generator\Lib\Exception\EngineException;
+//require_once dirname(__FILE__) . '/../exception/EngineException.php';
 
 /**
  * Object to hold vendor-specific info.

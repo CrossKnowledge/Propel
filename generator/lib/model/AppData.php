@@ -13,8 +13,9 @@ namespace CK\Generator\Lib\Model;
 use CK\Generator\Lib\Config\GeneratorConfig;
 use CK\Generator\Lib\Platform\PropelPlatformInterface;
 use CK\Generator\Lib\Config\GeneratorConfigInterface;
+use CK\Generator\Lib\Exception\EngineException;
 use Exception;
-require_once dirname(__FILE__) . '/../exception/EngineException.php';
+//require_once dirname(__FILE__) . '/../exception/EngineException.php';
 //require_once dirname(__FILE__) . '/Database.php';
 
 /**

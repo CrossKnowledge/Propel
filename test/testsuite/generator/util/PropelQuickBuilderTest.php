@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
  * @license    MIT License
  */
 
+use CK\Generator\Lib\Platform\MysqlPlatform;
+
 require_once dirname(__FILE__) . '/../../../../generator/lib/util/PropelQuickBuilder.php';
 use PHPUnit\Framework\TestCase;
 require_once dirname(__FILE__) . '/../../../../runtime/lib/Propel.php';
@@ -22,8 +24,8 @@ class PropelQuickBuilderTest extends TestCase
 {
     public function testGetPlatform()
     {
-        require_once dirname(__FILE__) . '/../../../../generator/lib/platform/MysqlPlatform.php';
-use PHPUnit\Framework\TestCase;
+        //require_once dirname(__FILE__) . '/../../../../generator/lib/platform/MysqlPlatform.php';
+        use PHPUnit\Framework\TestCase;
         $builder = new PropelQuickBuilder();
         $builder->setPlatform(new MysqlPlatform());
         $this->assertTrue($builder->getPLatform() instanceof MysqlPlatform);

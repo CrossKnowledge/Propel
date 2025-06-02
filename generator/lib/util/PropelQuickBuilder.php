@@ -15,9 +15,11 @@ use CK\Generator\Lib\Config\GeneratorConfigInterface;
 use CK\Generator\Lib\Config\QuickGeneratorConfig;
 use CK\Runtime\Lib\Adapter\DBSQLite;
 use CK\Runtime\Lib\Connection\PropelPDO;
+use CK\Runtime\Lib\Exception\PropelException;
 use CK\Runtime\Lib\Propel;
 use CK\Generator\Lib\Model\Table;
-use XmlToAppData;
+use CK\Generator\Lib\Builder\Util\XmlToAppData;
+use Exception;
 use PDOStatement;
 use PDO;
 
@@ -32,12 +34,12 @@ class PropelQuickBuilder
 
     protected $classTargets = array('tablemap', 'peer', 'object', 'query', 'peerstub', 'objectstub', 'querystub');
 
-    public function setClassTargets(array $targets)
+    public function setClassTargets(array $targets): void
     {
         $this->classTargets = $targets;
     }
 
-    public function setSchema($schema)
+    public function setSchema($schema): void
     {
         $this->schema = $schema;
     }
@@ -60,7 +62,7 @@ class PropelQuickBuilder
     public function getPlatform()
     {
         if (null === $this->platform) {
-            require_once dirname(__FILE__) . '/../platform/SqlitePlatform.php';
+            //require_once dirname(__FILE__) . '/../platform/SqlitePlatform.php';
             $this->platform = new SqlitePlatform();
         }
 
@@ -81,17 +83,21 @@ class PropelQuickBuilder
      * Getter for the config property
      *
      * @return GeneratorConfigInterface
+     * @throws Exception
      */
     public function getConfig()
     {
         if (null === $this->config) {
-            require_once dirname(__FILE__) . '/../config/QuickGeneratorConfig.php';
+            //require_once dirname(__FILE__) . '/../config/QuickGeneratorConfig.php';
             $this->config = new QuickGeneratorConfig($this->getPlatform());
         }
 
         return $this->config;
     }
 
+    /**
+     * @throws PropelException
+     */
     public static function buildSchema($schema, $dsn = null, $user = null, $pass = null, $adapter = null)
     {
         $builder = new self;
@@ -100,6 +106,10 @@ class PropelQuickBuilder
         return $builder->build($dsn, $user, $pass, $adapter);
     }
 
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function build($dsn = null, $user = null, $pass = null, $adapter = null, array $classTargets = null)
     {
         if (null === $dsn) {
@@ -126,6 +136,9 @@ class PropelQuickBuilder
         return $con;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getDatabase()
     {
         if (null === $this->database) {
@@ -138,7 +151,10 @@ class PropelQuickBuilder
         return $this->database;
     }
 
-    public function buildSQL(PDO $con)
+    /**
+     * @throws Exception
+     */
+    public function buildSQL(PDO $con): int
     {
         $statements = PropelSQLParser::parseString($this->getSQL());
         foreach ($statements as $statement) {
@@ -156,16 +172,25 @@ class PropelQuickBuilder
         return count($statements);
     }
 
-    public function getSQL()
+    /**
+     * @throws Exception
+     */
+    public function getSQL(): string
     {
         return $this->getPlatform()->getAddTablesDDL($this->getDatabase());
     }
 
+    /**
+     * @throws Exception
+     */
     public function buildClasses(array $classTargets = null)
     {
         eval($this->getClasses($classTargets));
     }
 
+    /**
+     * @throws Exception
+     */
     public function getClasses(array $classTargets = null)
     {
         $script = '';
@@ -176,6 +201,9 @@ class PropelQuickBuilder
         return $script;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getClassesForTable(Table $table, array $classTargets = null)
     {
         if (null === $classTargets) {
@@ -245,6 +273,9 @@ class PropelQuickBuilder
         return $script;
     }
 
+    /**
+     * @throws Exception
+     */
     public static function debugClassesForTable($schema, $tableName)
     {
         $builder = new self;
