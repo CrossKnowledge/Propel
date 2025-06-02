@@ -39,6 +39,7 @@ class ConcreteInheritanceModels
             'concrete_comment' => [
                 'id' => 'INT AUTO_INCREMENT PRIMARY KEY',
                 'message' => 'TEXT',
+                'body' => 'TEXT',
                 'concrete_content_id' => 'INT'
             ]
         ];
