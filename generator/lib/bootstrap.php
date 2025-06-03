@@ -31,36 +31,34 @@ if (!$autoloaded) {
 
 // 2. Register the file-based autoloader for Phing compatibility
 spl_autoload_register(function ($class) {
-    // Only handle namespaced classes prefixed with CK\
+    // Handle CK\* only
     if (strpos($class, 'CK\\') !== 0) {
         return false;
     }
 
-    // Map CK\Generator\Lib\Platform\MysqlPlatform
-    // to lib/platform/MysqlPlatform.php
-    $relative = substr($class, 3); // Remove "CK\"
-    $parts = explode('\\', $relative);
+    // Map namespace to base path
+    $prefixMap = [
+        'CK\\Generator\\Lib\\' => __DIR__, // Assuming __DIR__ is generator/lib
+        'CK\\Runtime\\Lib\\'   => dirname(__DIR__, 2) . '/runtime/lib',
+    ];
 
-    // Remove the fixed "Generator\Lib" prefix from namespace
-    if ($parts[0] === 'Generator' && $parts[1] === 'Lib') {
-        array_shift($parts); // remove 'Generator'
-        array_shift($parts); // remove 'Lib'
+    foreach ($prefixMap as $prefix => $baseDir) {
+        if (strpos($class, $prefix) === 0) {
+            $relative = substr($class, strlen($prefix));
+            $file = $baseDir . '/' . str_replace('\\', '/', $relative) . '.php';
+
+            echo "\n[Autoload] $class → $file";
+
+            if (file_exists($file)) {
+                require_once $file;
+                echo " ✅ Loaded.\n";
+                return true;
+            } else {
+                echo " ❌ File not found.\n";
+            }
+        }
     }
 
-    $filename = array_pop($parts);
-    $folders = array_map('strtolower', $parts);
-
-    $path = __DIR__ . '/' . implode('/', $folders) . '/' . $filename . '.php';
-
-    echo "\nAutoloading class $class → $path";
-
-    if (file_exists($path)) {
-        require_once $path;
-        echo " ✅ Loaded.\n";
-        return true;
-    }
-
-    echo " ❌ File not found.\n";
     return false;
 }, true, true);
 
