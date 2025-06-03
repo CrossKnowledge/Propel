@@ -1,58 +1,85 @@
 <?php
-// Bootstrap file that loads all necessary autoloaders
 
-// Load composer autoloader first
-require_once dirname(__FILE__) . '/../../vendor/autoload.php';
+/**
+ * Bootstrap file for custom Propel 1 generator usage (namespaced).
+ * Loads its own autoloader and registers legacy class aliases.
+ */
 
-// Load the legacy class mapper
-require_once dirname(__FILE__) . '/complete-autoloader.php';
+// 1. Try to load the internal composer autoloader (self-contained logic)
+$autoloadPaths = [
+    // Running standalone inside the custom Propel repo
+    __DIR__ . '/../../vendor/autoload.php',
 
-// Set up custom error handler to intercept platform loading errors
-set_error_handler(function($errno, $errstr, $errfile, $errline) {
-    // Check if this is a platform import error
-    if (strpos($errstr, 'Error importing platform/') !== false) {
-        // Extract the platform class name
-        if (preg_match('/platform\/(\w+)\.php/', $errstr, $matches)) {
-            $platformName = $matches[1];
-            $fullClassName = "CK\\Generator\\Lib\\Platform\\$platformName";
+    // Running as a dependency under vendor/ (e.g., in CKLS)
+    __DIR__ . '/../../../../../vendor/autoload.php',
+];
 
-            // Check if the class exists and create an alias
-            if (class_exists($fullClassName)) {
-                class_alias($fullClassName, $platformName);
-                return true; // Suppress the error
-            }
-        }
+$autoloaded = false;
+
+foreach ($autoloadPaths as $path) {
+    if (file_exists($path)) {
+        require_once $path;
+        $autoloaded = true;
+        break;
     }
-
-    // For other errors, use default error handling
-    return false;
-}, E_WARNING | E_USER_WARNING);
-
-// Create a custom include path for platform files
-$platformStubDir = sys_get_temp_dir() . '/propel-stubs-' . getmypid();
-if (!is_dir($platformStubDir)) {
-    mkdir($platformStubDir, 0777, true);
-    mkdir($platformStubDir . '/platform', 0777, true);
-
-    // Create stub files for common platforms
-    $platforms = ['MysqlPlatform', 'SqlitePlatform', 'PgsqlPlatform', 'OraclePlatform', 'MssqlPlatform', 'DefaultPlatform'];
-    foreach ($platforms as $platform) {
-        $stubContent = "<?php\nif (!class_exists('$platform')) {\n    class_alias('CK\\\\Generator\\\\Lib\\\\Platform\\\\$platform', '$platform');\n}\n";
-        file_put_contents($platformStubDir . "/platform/$platform.php", $stubContent);
-    }
-
-    // Add to include path
-    set_include_path($platformStubDir . PATH_SEPARATOR . get_include_path());
 }
 
-// Register shutdown function to clean up
-register_shutdown_function(function() use ($platformStubDir) {
-    if (is_dir($platformStubDir)) {
-        $files = glob($platformStubDir . '/platform/*.php');
-        foreach ($files as $file) {
-            @unlink($file);
-        }
-        @rmdir($platformStubDir . '/platform');
-        @rmdir($platformStubDir);
+if (!$autoloaded) {
+    fwrite(STDERR, "[BOOTSTRAP ERROR] Could not find composer autoloader.\n");
+    exit(1);
+}
+
+// 2. Register the file-based autoloader for Phing compatibility
+spl_autoload_register(function ($class) {
+    // Only handle namespaced classes prefixed with CK\
+    if (strpos($class, 'CK\\') !== 0) {
+        return false;
     }
-});
+
+    // Remove 'CK\' prefix
+    $relative = substr($class, 3);
+
+    // Break into parts
+    $parts = explode('\\', $relative);
+
+    // Extract filename (leave case as-is) and lowercase folder names
+    $filename = array_pop($parts);
+    $folders = array_map('strtolower', $parts);
+
+    // Build full path relative to generator/lib/
+    $path = __DIR__ . '/' . implode('/', $folders) . '/' . $filename . '.php';
+
+    if (file_exists($path)) {
+        require_once $path;
+        return true;
+    }
+
+    return false;
+}, true, true);
+
+// 3. Register lazy aliases for legacy Propel classes
+$aliasesFile = __DIR__ . '/../../../propel_aliases.php';
+if (file_exists($aliasesFile)) {
+    require_once $aliasesFile;
+
+    if (class_exists(\CK\PropelAliases::class)) {
+        \CK\PropelAliases::register();
+    } else {
+        fwrite(STDERR, "[BOOTSTRAP WARNING] CK\\PropelAliases class not found.\n");
+    }
+}
+
+// 4. Load the complete autoloader for comprehensive coverage
+$completeAutoloaderFile = __DIR__ . '/complete-autoloader.php';
+if (file_exists($completeAutoloaderFile)) {
+    require_once $completeAutoloaderFile;
+}
+
+// 5. Optional: define dummy class equivalents for any old include_once('X.php')-based file
+
+// Example legacy placeholder for old platform/Platform.php
+if (!class_exists('Platform') && class_exists(\CK\Generator\Lib\Platform\Platform::class)) {
+    class_alias(\CK\Generator\Lib\Platform\Platform::class, 'Platform');
+}
+
+// More legacy class_alias() mappings can go here, or be handled inside PropelAliases

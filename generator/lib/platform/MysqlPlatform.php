@@ -605,6 +605,7 @@ RENAME TABLE %s TO %s;
     /**
      * Builds the DDL SQL to remove a column
      *
+     * @param Column $column
      * @return string
      */
     public function getRemoveColumnDDL(Column $column): string
@@ -622,6 +623,8 @@ ALTER TABLE %s DROP %s;
     /**
      * Builds the DDL SQL to rename a column
      *
+     * @param $fromColumn
+     * @param $toColumn
      * @return string
      */
     public function getRenameColumnDDL($fromColumn, $toColumn): string
@@ -634,7 +637,7 @@ ALTER TABLE %s DROP %s;
      *
      * @return string
      */
-    public function getModifyColumnDDL(PropelColumnDiff $columnDiff)
+    public function getModifyColumnDDL(PropelColumnDiff $columnDiff): string
     {
         return $this->getChangeColumnDDL($columnDiff->getFromColumn(), $columnDiff->getToColumn());
     }
@@ -662,7 +665,7 @@ ALTER TABLE %s CHANGE %s %s;
      *
      * @return string
      */
-    public function getModifyColumnsDDL($columnDiffs)
+    public function getModifyColumnsDDL($columnDiffs): string
     {
         $ret = '';
         foreach ($columnDiffs as $columnDiff) {
@@ -702,7 +705,7 @@ ALTER TABLE %s CHANGE %s %s;
      *
      * @return string
      */
-    public function getAddColumnsDDL($columns)
+    public function getAddColumnsDDL($columns): string
     {
         $lines = array();
         $tableName = null;
@@ -730,12 +733,12 @@ ALTER TABLE %s
     /**
      * @see        Platform::supportsSchemas()
      */
-    public function supportsSchemas()
+    public function supportsSchemas(): bool
     {
         return true;
     }
 
-    public function hasSize($sqlType)
+    public function hasSize($sqlType): bool
     {
         return !("MEDIUMTEXT" == $sqlType || "LONGTEXT" == $sqlType || "BLOB" == $sqlType || "MEDIUMBLOB" == $sqlType || "LONGBLOB" == $sqlType);
     }
@@ -747,7 +750,7 @@ ALTER TABLE %s
      *
      * @return string
      */
-    public function disconnectedEscapeText($text)
+    public function disconnectedEscapeText($text): string
     {
         // mysql_escape_string doesn't work in PHP >= 5.4
         if (version_compare(PHP_VERSION, '5.4', '<') && function_exists('mysql_escape_string')) {
@@ -766,17 +769,17 @@ ALTER TABLE %s
      *
      * @return string the quoted identifier
      */
-    public function quoteIdentifier($text)
+    public function quoteIdentifier($text): string
     {
         return $this->isIdentifierQuotingEnabled ? '`' . strtr($text, array('.' => '`.`')) . '`' : $text;
     }
 
-    public function getTimestampFormatter()
+    public function getTimestampFormatter(): string
     {
         return 'Y-m-d H:i:s';
     }
 
-    public function getColumnBindingPHP($column, $identifier, $columnValueAccessor, $tab = "			")
+    public function getColumnBindingPHP($column, $identifier, $columnValueAccessor, $tab = "			"): array|string|null
     {
         // FIXME - This is a temporary hack to get around apparent bugs w/ PDO+MYSQL
         // See http://pecl.php.net/bugs/bug.php?id=9919
@@ -793,12 +796,12 @@ ALTER TABLE %s
         return parent::getColumnBindingPHP($column, $identifier, $columnValueAccessor, $tab);
     }
 
-    public function getDefaultFKOnDeleteBehavior()
+    public function getDefaultFKOnDeleteBehavior(): string
     {
       return ForeignKey::RESTRICT;
     }
 
-    public function getDefaultFKOnUpdateBehavior()
+    public function getDefaultFKOnUpdateBehavior(): string
     {
       return ForeignKey::RESTRICT;
     }

@@ -5,10 +5,39 @@ spl_autoload_register(function ($class) {
     // Remove any leading backslash
     $class = ltrim($class, '\\');
 
+    // Handle CK\ namespaced classes for file inclusion (Phing compatibility)
+    if (strpos($class, 'CK\\') === 0) {
+        // Remove 'CK\' prefix
+        $relative = substr($class, 3);
+
+        // Break into parts
+        $parts = explode('\\', $relative);
+
+        // Extract filename (leave case as-is) and lowercase folder names
+        $filename = array_pop($parts);
+        $folders = array_map('strtolower', $parts);
+
+        // Build full path relative to generator/lib/
+        $basePath = __DIR__;
+        $path = $basePath . '/' . implode('/', $folders) . '/' . $filename . '.php';
+
+        if (file_exists($path)) {
+            require_once $path;
+            return true;
+        }
+
+        // Try runtime path as well
+        $runtimePath = dirname(dirname($basePath)) . '/runtime/lib/' . implode('/', $folders) . '/' . $filename . '.php';
+        if (file_exists($runtimePath)) {
+            require_once $runtimePath;
+            return true;
+        }
+    }
+
     // Generator namespace mappings
     $generatorMappings = [
         'task\\' => 'CK\\Generator\\Lib\\Task\\',
-        'builder\\om\\' => 'CK\\Generator\\Lib\\Builder\\Om\\',
+        'builder\\om\\' => 'CK\\Generator\\Lib\\Builder\\OM\\',
         'builder\\sql\\' => 'CK\\Generator\\Lib\\Builder\\Sql\\',
         'builder\\util\\' => 'CK\\Generator\\Lib\\Builder\\Util\\',
         'builder\\' => 'CK\\Generator\\Lib\\Builder\\',
