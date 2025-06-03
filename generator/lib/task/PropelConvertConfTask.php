@@ -12,10 +12,10 @@ namespace CK\Generator\Lib\Task;
 use DateTime;
 use IOException;
 use NullPointerException;
-use PhingFile;
-use BuildException;
+use Phing\Io\File;
+use Phing\Exception\BuildException;
 use DOMDocument;
-use Project;
+use Phing\Project;
 use CK\Generator\Lib\Builder\OM\ClassTools;
 /*
 require_once 'task/AbstractPropelTask.php';
@@ -34,9 +34,9 @@ class PropelConvertConfTask extends AbstractPropelDataModelTask
 {
 
     /**
-     * @var        PhingFile The XML runtime configuration file to be converted.
+     * @var        File The XML runtime configuration file to be converted.
      */
-    private PhingFile $xmlConfFile;
+    private File $xmlConfFile;
 
     /**
      * @var        string This is the file where the converted conf array dump will be placed.
@@ -51,9 +51,9 @@ class PropelConvertConfTask extends AbstractPropelDataModelTask
     /**
      * [REQUIRED] Set the input XML runtime conf file.
      *
-     * @param PhingFile $v The XML runtime configuration file to be converted.
+     * @param File $v The XML runtime configuration file to be converted.
      */
-    public function setXmlConfFile(PhingFile $v): void
+    public function setXmlConfFile(File $v): void
     {
         $this->xmlConfFile = $v;
     }
@@ -134,7 +134,7 @@ class PropelConvertConfTask extends AbstractPropelDataModelTask
 
         // Write resulting PHP data to output file
         try {
-            $outfile = new PhingFile($this->outputDirectory, $this->outputFile);
+            $outfile = new File($this->outputDirectory, $this->outputFile);
         } catch (IOException|NullPointerException $e) {
 
         }
@@ -166,7 +166,7 @@ class PropelConvertConfTask extends AbstractPropelDataModelTask
         // add classmap
         $phpconfClassmap = $this->getClassMap();
         try {
-            $outfile = new PhingFile($this->outputDirectory, $this->outputClassmapFile);
+            $outfile = new File($this->outputDirectory, $this->outputClassmapFile);
         } catch (IOException|NullPointerException $e) {
 
         }

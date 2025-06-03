@@ -10,7 +10,7 @@
 namespace CK\Generator\Lib\Config;
 
 use PDO;
-use BuildException;
+use Phing\Exception\BuildException;
 use Phing;
 use CK\Generator\Lib\Platform\PropelPlatformInterface;
 use CK\Generator\Lib\Model\Table;

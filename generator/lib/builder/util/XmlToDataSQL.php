@@ -15,8 +15,8 @@ use CK\Generator\Lib\Builder\Sql\DataSQLBuilder;
 use CK\Generator\Lib\Model\Table;
 use CK\Generator\Lib\Model\Column;
 use ExpatParser;
-use PhingFile;
-use BuildException;
+use Phing\Io\File;
+use Phing\Exception\BuildException;
 use FileReader;
 use Exception;
 use BufferedReader;
@@ -120,13 +120,13 @@ class XmlToDataSQL extends AbstractHandler
     /**
      * Transform the data dump input file into SQL and writes it to the output stream.
      *
-     * @param PhingFile $xmlFile
+     * @param File $xmlFile
      * @param Writer $out
      *
      * @throws BuildException
      * @throws Exception
      */
-    public function transform(PhingFile $xmlFile, Writer $out): void
+    public function transform(File $xmlFile, Writer $out): void
     {
         $this->sqlWriter = $out;
 

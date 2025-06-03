@@ -16,11 +16,11 @@ use FileSet;
 use Mapper;
 use NullPointerException;
 use PDO;
-use PhingFile;
+use Phing\Io\File;
 use IOException;
-use BuildException;
+use Phing\Exception\BuildException;
 use PDOException;
-use Project;
+use Phing\Project;
 use FileSystem;
 use CK\Generator\Lib\Model\AppData;
 use CK\Generator\Lib\Util\PropelSchemaValidator;
@@ -105,14 +105,14 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
     /**
      * Destination directory for results of template scripts.
      *
-     * @var        PhingFile
+     * @var        File
      */
     protected $outputDirectory;
 
     /**
      * Whether to package the datamodels or not
      *
-     * @var        PhingFile
+     * @var        File
      */
     protected $packageObjectModel;
 
@@ -126,14 +126,14 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
     /**
      * The XSD schema file to use for validation.
      *
-     * @var        PhingFile
+     * @var        File
      */
     protected $xsdFile;
 
     /**
      * XSL file to use to normalize (or otherwise transform) schema before validation.
      *
-     * @var        PhingFile
+     * @var        File
      */
     protected $xslFile;
 
@@ -275,9 +275,9 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
     /**
      * Set the XSD schema to use for validation of any datamodel schema.xml file(s).
      *
-     * @param   $v PhingFile
+     * @param   $v File
      */
-    public function setXsd(PhingFile $v)
+    public function setXsd(File $v)
     {
         $this->xsdFile = $v;
     }
@@ -285,9 +285,9 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
     /**
      * Set the normalization XSLT to use to transform datamodel schema.xml file(s) before validation and parsing.
      *
-     * @param   $v PhingFile
+     * @param   $v File
      */
-    public function setXsl(PhingFile $v)
+    public function setXsl(File $v)
     {
         $this->xslFile = $v;
     }
@@ -296,12 +296,12 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
      * [REQUIRED] Set the output directory. It will be
      * created if it doesn't exist.
      *
-     * @param PhingFile $outputDirectory
+     * @param File $outputDirectory
      *
      * @return void
      * @throws BuildException
      */
-    public function setOutputDirectory(PhingFile $outputDirectory)
+    public function setOutputDirectory(File $outputDirectory)
     {
         try {
             if (!$outputDirectory->exists()) {
@@ -387,7 +387,7 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
      *
      * @param string $from
      *
-     * @return PhingFile      Resolved File object.
+     * @return File      Resolved File object.
      * @throws BuildException - if no Mapper element se
      *                          - if unable to map new filename.
      */
@@ -404,7 +404,7 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
         }
         // Mappers always return arrays since it's possible for some mappers to map to multiple names.
         $outFilename = array_shift($mapped);
-        $outFile = new PhingFile($this->getOutputDirectory(), $outFilename);
+        $outFile = new File($this->getOutputDirectory(), $outFilename);
 
         return $outFile;
     }
@@ -472,7 +472,7 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
 
                 $this->log("Processing: " . $dmFilename, Project::MSG_VERBOSE);
                 try {
-                    $xmlFile = new PhingFile($srcDir, $dmFilename);
+                    $xmlFile = new File($srcDir, $dmFilename);
                 } catch (IOException|NullPointerException $e) {
 
                 }
@@ -574,9 +574,9 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
             $this->log('Processing external schema: ' . $include, Project::MSG_VERBOSE);
             $externalSchema->parentNode->removeChild($externalSchema);
             if ($fs->prefixLength($include) != 0) {
-                $externalSchemaFile = new PhingFile($include);
+                $externalSchemaFile = new File($include);
             } else {
-                $externalSchemaFile = new PhingFile($srcDir, $include);
+                $externalSchemaFile = new File($srcDir, $include);
             }
             $externalSchemaDom = new DomDocument('1.0', 'UTF-8');
             $externalSchemaDom->load($externalSchemaFile->getAbsolutePath());

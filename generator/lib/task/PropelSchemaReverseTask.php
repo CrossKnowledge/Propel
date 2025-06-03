@@ -17,14 +17,14 @@ use CK\Generator\Lib\Model\Column;
 
 use CK\Generator\Lib\Model\Rule;
 use CK\Generator\Lib\Model\Validator;
-use Project;
-use PhingFile;
+use Phing\Project;
+use Phing\Io\File;
 use DOMDocument;
 use DOMElement;
-use BuildException;
-use FileWriter;
+use Phing\Exception\BuildException;
+use Phing\Io\FileWriter;
 use Exception;
-use PDOTask;
+use Phing\Task\System\Pdo\PDOTask;
 
 /*
 require_once 'phing/tasks/ext/pdo/PDOTask.php';
@@ -83,7 +83,7 @@ class PropelSchemaReverseTask extends PDOTask
      *
      * @var        PhingFIle
      */
-    protected PhingFile $xmlSchema;
+    protected File $xmlSchema;
 
     /**
      * DB encoding to use
@@ -273,9 +273,9 @@ class PropelSchemaReverseTask extends PDOTask
     /**
      * Sets the output name for the XML file.
      *
-     * @param PhingFile $v
+     * @param File $v
      */
-    public function setOutputFile(PhingFile $v)
+    public function setOutputFile(File $v)
     {
         $this->xmlSchema = $v;
     }

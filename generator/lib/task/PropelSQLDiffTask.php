@@ -15,8 +15,8 @@ use CK\Generator\Lib\Model\Database;
 use CK\Generator\Lib\Util\PropelMigrationManager;
 use CK\Generator\Lib\Model\IDMethod;
 use CK\Generator\Lib\Model\Diff\PropelDatabaseComparator;
-use PhingFile;
-use Project;
+use Phing\Io\File;
+use Phing\Project;
 /*
 require_once dirname(__FILE__) . '/AbstractPropelDataModelTask.php';
 require_once dirname(__FILE__) . '/../builder/om/ClassTools.php';
@@ -188,7 +188,7 @@ class PropelSQLDiffTask extends AbstractPropelDataModelTask
         $migrationFileName = $manager->getMigrationFileName($timestamp);
         $migrationClassBody = $manager->getMigrationClassBody($migrationsUp, $migrationsDown, $timestamp);
 
-        $_f = new PhingFile($this->getOutputDirectory(), $migrationFileName);
+        $_f = new File($this->getOutputDirectory(), $migrationFileName);
         file_put_contents($_f->getAbsolutePath(), $migrationClassBody);
         $this->log(sprintf('"%s" file successfully created in %s', $_f->getName(), $_f->getParent()));
         if ($editorCmd = $this->getEditorCmd()) {

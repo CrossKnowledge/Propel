@@ -11,10 +11,10 @@
 namespace CK\Generator\Lib\Task;
 
 use CK\Generator\Lib\Config\GeneratorConfig;
-use BuildException;
-use Project;
+use Phing\Exception\BuildException;
+use Phing\Project;
 use IOException;
-use PhingFile;
+use Phing\Io\File;
 //require_once 'task/AbstractPropelTask.php';
 
 /**
@@ -28,9 +28,9 @@ abstract class BasePropelMigrationTask extends AbstractPropelTask
     /**
      * Destination directory for results of template scripts.
      *
-     * @var        PhingFile|string : we added the string because that's what the code returns as well
+     * @var        File|string : we added the string because that's what the code returns as well
      */
-    protected PhingFile|string $outputDirectory;
+    protected File|string $outputDirectory;
 
     /**
      * An initialized GeneratorConfig object containing the converted Phing props.
@@ -70,12 +70,12 @@ abstract class BasePropelMigrationTask extends AbstractPropelTask
      * [REQUIRED] Set the output directory. It will be
      * created if it doesn't exist.
      *
-     * @param PhingFile $outputDirectory
+     * @param File $outputDirectory
      *
      * @return void
      * @throws BuildException
      */
-    public function setOutputDirectory(PhingFile $outputDirectory): void
+    public function setOutputDirectory(File $outputDirectory): void
     {
         try {
             if (!$outputDirectory->exists()) {
@@ -93,9 +93,9 @@ abstract class BasePropelMigrationTask extends AbstractPropelTask
     /**
      * Get the output directory.
      *
-     * @return PhingFile|string
+     * @return File|string
      */
-    public function getOutputDirectory(): PhingFile|string
+    public function getOutputDirectory(): File|string
     {
         return $this->outputDirectory;
     }

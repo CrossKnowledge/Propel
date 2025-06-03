@@ -9,9 +9,9 @@
  */
 namespace CK\Generator\Lib\Task;
 
-use BuildException;
-use PhingFile;
-use Project;
+use Phing\Exception\BuildException;
+use Phing\Io\File;
+use Phing\Project;
 use CK\Generator\Lib\Builder\OM\OMBuilder;
 /*
 require_once 'task/AbstractPropelDataModelTask.php';
@@ -64,7 +64,7 @@ class PropelOMTask extends AbstractPropelDataModelTask
      */
     protected function ensureDirExists($path)
     {
-        $f = new PhingFile($this->getOutputDirectory(), $path);
+        $f = new File($this->getOutputDirectory(), $path);
         if (!$f->exists()) {
             if (!$f->mkdirs()) {
                 throw new BuildException("Error creating directories: " . $f->getPath());
@@ -87,7 +87,7 @@ class PropelOMTask extends AbstractPropelDataModelTask
         $path = $builder->getClassFilePath();
         $this->ensureDirExists(dirname($path));
 
-        $_f = new PhingFile($this->getOutputDirectory(), $path);
+        $_f = new File($this->getOutputDirectory(), $path);
 
         // skip files already created once
         if ($_f->exists() && !$overwrite) {

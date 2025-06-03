@@ -16,10 +16,10 @@ use CK\Runtime\Lib\Exception\PropelException;
 use Exception;
 use PDOStatement;
 use DOMDocument;
-use PhingFile;
+use Phing\Io\File;
 use IOException;
-use BuildException;
-use Project;
+use Phing\Exception\BuildException;
+use Phing\Project;
 use Properties;
 use PDOException;
 
@@ -81,7 +81,7 @@ class PropelDataDumpTask extends AbstractPropelDataModelTask
     /**
      * Properties file that maps a data XML file to a particular database.
      *
-     * @var        PhingFile
+     * @var        File
      */
     private $datadbmap;
 
@@ -99,11 +99,11 @@ class PropelDataDumpTask extends AbstractPropelDataModelTask
     /**
      * Set the file that maps between data XML files and databases.
      *
-     * @param PhingFile $datadbmap the db map
+     * @param File $datadbmap the db map
      *
      * @return void
      */
-    public function setDataDbMap(PhingFile $datadbmap)
+    public function setDataDbMap(File $datadbmap)
     {
         $this->datadbmap = $datadbmap;
     }
@@ -111,7 +111,7 @@ class PropelDataDumpTask extends AbstractPropelDataModelTask
     /**
      * Get the file that maps between data XML files and databases.
      *
-     * @return PhingFile $datadbmap.
+     * @return File $datadbmap.
      */
     public function getDataDbMap()
     {

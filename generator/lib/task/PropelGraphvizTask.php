@@ -12,7 +12,7 @@ namespace CK\Generator\Lib\Task;
 use CK\Generator\Lib\Util\PropelDotGenerator;
 use IOException;
 use NullPointerException;
-use PhingFile;
+use Phing\Io\File;
 /*
 require_once 'task/AbstractPropelDataModelTask.php';
 require_once 'model/AppData.php';
@@ -33,9 +33,9 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
     /**
      * The properties file that maps an SQL file to a particular database.
      *
-     * @var        PhingFile
+     * @var        File
      */
-    private PhingFile $sqldbmap;
+    private File $sqldbmap;
 
     /**
      * Name of the database.
@@ -50,10 +50,10 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
     /**
      * Set the sqldbmap.
      *
-     * @param PhingFile $out The db map.
+     * @param File $out The db map.
      * @throws IOException
      */
-    public function setOutputDirectory(PhingFile $out): void
+    public function setOutputDirectory(File $out): void
     {
         if (!$out->exists()) {
             $out->mkdirs();
@@ -64,9 +64,9 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
     /**
      * Set the sqldbmap.
      *
-     * @param PhingFile $sqldbmap The db map.
+     * @param File $sqldbmap The db map.
      */
-    public function setSqlDbMap(PhingFile $sqldbmap): void
+    public function setSqlDbMap(File $sqldbmap): void
     {
         $this->sqldbmap = $sqldbmap;
     }
@@ -74,7 +74,7 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
     /**
      * Get the sqldbmap.
      *
-     * @return PhingFile $sqldbmap.
+     * @return File $sqldbmap.
      */
     public function getSqlDbMap()
     {
@@ -114,10 +114,10 @@ class PropelGraphvizTask extends AbstractPropelDataModelTask
     /**
      * probably insecure
      */
-    public function writeDot($dotSyntax, PhingFile $outputDir, $baseFilename): void
+    public function writeDot($dotSyntax, File $outputDir, $baseFilename): void
     {
         try {
-            $file = new PhingFile($outputDir, $baseFilename . '.schema.dot');
+            $file = new File($outputDir, $baseFilename . '.schema.dot');
         } catch (IOException|NullPointerException $e) {
 
         }

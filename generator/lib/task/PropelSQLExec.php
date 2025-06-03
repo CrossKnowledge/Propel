@@ -9,11 +9,11 @@
  */
 namespace CK\Generator\Lib\Task;
 
-use PhingFile;
-use BuildException;
+use Phing\Io\File;
+use Phing\Exception\BuildException;
 use CK\Generator\Lib\Config\GeneratorConfig;
 use CK\Generator\Lib\Util\PropelSQLParser;
-use Project;
+use Phing\Project;
 use PDO;
 use IOException;
 use PDOException;
@@ -81,10 +81,10 @@ class PropelSQLExec extends AbstractPropelTask
     /**
      * Set the sqldbmap properties file.
      *
-     * @param PhingFile $sqldbmap filename for the sqldbmap
+     * @param File $sqldbmap filename for the sqldbmap
      * @throws IOException
      */
-    public function setSqlDbMap(PhingFile $sqldbmap): void
+    public function setSqlDbMap(File $sqldbmap): void
     {
         $this->sqldbmap = $this->project->resolveFile($sqldbmap);
     }
@@ -92,9 +92,9 @@ class PropelSQLExec extends AbstractPropelTask
     /**
      * Get the sqldbmap properties file.
      *
-     * @return PhingFile for the sqldbmap
+     * @return File for the sqldbmap
      */
-    public function getSqlDbMap(): PhingFile
+    public function getSqlDbMap(): File
     {
         return $this->sqldbmap;
     }
@@ -143,9 +143,9 @@ class PropelSQLExec extends AbstractPropelTask
     /**
      * Set the src directory for the sql files listed in the sqldbmap file.
      *
-     * @param PhingFile $srcDir sql source directory
+     * @param File $srcDir sql source directory
      */
-    public function setSrcDir(PhingFile $srcDir)
+    public function setSrcDir(File $srcDir)
     {
         $this->srcDir = $srcDir;
     }
@@ -153,7 +153,7 @@ class PropelSQLExec extends AbstractPropelTask
     /**
      * Get the src directory for the sql files listed in the sqldbmap file.
      *
-     * @return PhingFile SQL Source directory
+     * @return File SQL Source directory
      */
     public function getSrcDir()
     {

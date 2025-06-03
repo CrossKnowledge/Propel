@@ -12,7 +12,7 @@ namespace CK\Generator\Lib\Task;
 use CK\Generator\Lib\Util\PropelMigrationManager;
 use CK\Generator\Lib\Util\PropelSQLParser;
 use CK\Runtime\Lib\Exception\PropelException;
-use Project;
+use Phing\Project;
 use PDOException;
 
 /*

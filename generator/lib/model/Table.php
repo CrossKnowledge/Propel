@@ -15,7 +15,7 @@ use CK\Generator\Lib\Platform\MysqlPlatform;
 use CK\Generator\Lib\Config\GeneratorConfig;
 use DOMNode;
 use DomDocument;
-use BuildException;
+use Phing\Exception\BuildException;
 
 //require_once dirname(__FILE__) . '/ScopedElement.php';
 //require_once dirname(__FILE__) . '/../exception/EngineException.php';

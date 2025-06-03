@@ -8,7 +8,7 @@
  * @license    MIT License
  */
 namespace CK\Generator\Lib\Exception;
-use BuildException;
+use Phing\Exception\BuildException;
 
 //require_once 'phing/BuildException.php';
 

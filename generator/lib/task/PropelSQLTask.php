@@ -15,10 +15,10 @@ use CK\Generator\Lib\Platform\PropelPlatformInterface;
 use CK\Generator\Lib\Platform\MssqlPlatform;
 use CK\Generator\Lib\Platform\OraclePlatform;
 use CK\Generator\Lib\Model\AppData;
-use PhingFile;
+use Phing\Io\File;
 use IOException;
-use Project;
-use BuildException;
+use Phing\Project;
+use Phing\Exception\BuildException;
 use Properties;
 
 /**
@@ -35,9 +35,9 @@ class PropelSQLTask extends AbstractPropelDataModelTask
     /**
      * The properties file that maps an SQL file to a particular database.
      *
-     * @var        PhingFile
+     * @var        File
      */
-    private PhingFile $sqldbmap;
+    private File $sqldbmap;
 
     /**
      * Name of the database.
@@ -47,9 +47,9 @@ class PropelSQLTask extends AbstractPropelDataModelTask
     /**
      * Set the sqldbmap.
      *
-     * @param PhingFile $sqldbmap The db map.
+     * @param File $sqldbmap The db map.
      */
-    public function setSqlDbMap(PhingFile $sqldbmap)
+    public function setSqlDbMap(File $sqldbmap)
     {
         $this->sqldbmap = $sqldbmap;
     }
@@ -57,7 +57,7 @@ class PropelSQLTask extends AbstractPropelDataModelTask
     /**
      * Get the sqldbmap.
      *
-     * @return PhingFile $sqldbmap.
+     * @return File $sqldbmap.
      */
     public function getSqlDbMap()
     {

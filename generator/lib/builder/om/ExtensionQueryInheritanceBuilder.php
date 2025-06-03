@@ -10,7 +10,7 @@
 
 namespace CK\Generator\Lib\Builder\OM;
 
-use BuildException;
+use Phing\Exception\BuildException;
 use CK\Generator\Lib\Model\Inheritance;
 use DateTime;
 
