@@ -11,7 +11,7 @@ namespace CK\Generator\Lib\Config;
 
 use PDO;
 use Phing\Exception\BuildException;
-use Phing;
+use Phing\Phing;
 use CK\Generator\Lib\Platform\PropelPlatformInterface;
 use CK\Generator\Lib\Model\Table;
 use CK\Generator\Lib\Builder\DataModelBuilder;
@@ -144,9 +144,7 @@ class GeneratorConfig implements GeneratorConfigInterface
             throw new BuildException("Unable to find class path for '$propname' property.");
         }
 
-        $clazz = Phing::import($classpath);
-
-        return $clazz;
+        return Phing::import($classpath);
     }
 
     /**
@@ -247,9 +245,7 @@ class GeneratorConfig implements GeneratorConfigInterface
     public function getConfiguredPluralizer(): Pluralizer
     {
         $classname = $this->getBuilderClassname('pluralizer');
-        $pluralizer = new $classname();
-
-        return $pluralizer;
+        return new $classname();
     }
 
     /**
