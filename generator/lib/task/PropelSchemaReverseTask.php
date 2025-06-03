@@ -15,6 +15,8 @@ use CK\Generator\Lib\Model\IDMethod;
 use CK\Generator\Lib\Model\PropelTypes;
 use CK\Generator\Lib\Model\Column;
 
+use CK\Generator\Lib\Model\Rule;
+use CK\Generator\Lib\Model\Validator;
 use Project;
 use PhingFile;
 use DOMDocument;
@@ -44,65 +46,65 @@ class PropelSchemaReverseTask extends PDOTask
     /**
      * Zero bit for no validators
      */
-    const VALIDATORS_NONE = 0;
+    const int VALIDATORS_NONE = 0;
 
     /**
      * Bit for maxLength validator
      */
-    const VALIDATORS_MAXLENGTH = 1;
+    const int VALIDATORS_MAXLENGTH = 1;
 
     /**
      * Bit for maxValue validator
      */
-    const VALIDATORS_MAXVALUE = 2;
+    const int VALIDATORS_MAXVALUE = 2;
 
     /**
      * Bit for type validator
      */
-    const VALIDATORS_TYPE = 4;
+    const int VALIDATORS_TYPE = 4;
 
     /**
      * Bit for required validator
      */
-    const VALIDATORS_REQUIRED = 8;
+    const int VALIDATORS_REQUIRED = 8;
 
     /**
      * Bit for unique validator
      */
-    const VALIDATORS_UNIQUE = 16;
+    const int VALIDATORS_UNIQUE = 16;
 
     /**
      * Bit for all validators
      */
-    const VALIDATORS_ALL = 255;
+    const int VALIDATORS_ALL = 255;
 
     /**
      * File to contain XML database schema.
      *
      * @var        PhingFIle
      */
-    protected $xmlSchema;
+    protected PhingFile $xmlSchema;
 
     /**
      * DB encoding to use
      *
      * @var        string
      */
-    protected $dbEncoding = 'iso-8859-1';
+    protected string $dbEncoding = 'iso-8859-1';
 
     /**
      * DB schema to use.
      *
      * @var        string
      */
-    protected $dbSchema;
+    protected string $dbSchema;
 
     /**
      * The datasource name (used for <database name=""> in schema.xml)
      *
      * @var        string
      */
-    protected $databaseName;
+    protected string $databaseName;
 
     /**
      * DOM document produced.
@@ -123,42 +125,42 @@ class PropelSchemaReverseTask extends PDOTask
      *
      * @var        array
      */
-    protected $primaryKeys;
+    protected array $primaryKeys;
 
     /**
      * Whether to use same name for phpName or not.
      *
      * @var        boolean
      */
-    protected $samePhpName;
+    protected bool $samePhpName;
 
     /**
      * whether to add vendor info or not
      *
      * @var        boolean
      */
-    protected $addVendorInfo;
+    protected bool $addVendorInfo;
 
     /**
      * Bitfield to switch on/off which validators will be created.
      *
      * @var        int
      */
-    protected $validatorBits = PropelSchemaReverseTask::VALIDATORS_NONE;
+    protected int $validatorBits = PropelSchemaReverseTask::VALIDATORS_NONE;
 
     /**
      * Collect validatorInfos to create validators.
      *
      * @var        int
      */
-    protected $validatorInfos;
+    protected int $validatorInfos;
 
     /**
      * An initialized GeneratorConfig object containing the converted Phing props.
      *
      * @var        GeneratorConfig
      */
-    private $generatorConfig;
+    private GeneratorConfig $generatorConfig;
 
     /**
      * Maps validator type tokens to bits
@@ -168,7 +170,7 @@ class PropelSchemaReverseTask extends PDOTask
      *
      * @var        array
      */
-    protected static $validatorBitMap = array (
+    protected static array $validatorBitMap = array (
         'none' => PropelSchemaReverseTask::VALIDATORS_NONE,
         'maxlength' => PropelSchemaReverseTask::VALIDATORS_MAXLENGTH,
         'maxvalue' => PropelSchemaReverseTask::VALIDATORS_MAXVALUE,
