@@ -225,11 +225,11 @@ class AppData
      * Add a database to the list and sets the AppData property to this
      * AppData
      *
-     * @param string|Database $db the database to add
+     * @param string|Database|array $db the database to add
      *
      * @return Database
      */
-    public function addDatabase(string|Database $db): Database
+    public function addDatabase(string|Database|array $db): Database
     {
         if ($db instanceof Database) {
             $db->setAppData($this);

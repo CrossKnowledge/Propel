@@ -15,6 +15,7 @@ use CK\Generator\Lib\Model\AppData;
 use CK\Generator\Lib\Config\GeneratorConfigInterface;
 use CK\Generator\Lib\Exception\SchemaException;
 use Exception;
+use XMLParser;
 
 //require_once dirname(__FILE__) . '/../../model/AppData.php';
 //require_once dirname(__FILE__) . '/../../exception/SchemaException.php';
@@ -147,17 +148,13 @@ use Exception;
     /**
      * Handles opening elements of the xml file.
      *
-     * @param string $uri
-     * @param string $localName The local name (without prefix), or the empty string if
-     *         Namespace processing is not being performed.
-     * @param string $rawName The qualified name (with prefix), or the empty string if
-     *         qualified names are not available.
-     * @param string $attributes The specified or defaulted attributes
+     * @param XMLParser $parser | Previously was just a string, but not any more from PHP >= 8.x
+     * @param string $name
+     * @param string|array $attributes The specified or defaulted attributes
      *
      * @throws SchemaException
-     * @throws Exception
      */
-    public function startElement(string $parser, string $name, string|array $attributes): void
+    public function startElement(XMLParser $parser, string $name, string|array $attributes): void
     {
         $parentTag = $this->peekCurrentSchemaTag();
 
