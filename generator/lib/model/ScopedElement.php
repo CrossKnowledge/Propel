@@ -80,9 +80,9 @@ abstract class ScopedElement extends XMLElement
     /**
      * Set the value of the namespace.
      *
-     * @param string $v Value to assign to namespace.
+     * @param ?string $v Value to assign to namespace.
      */
-    public function setNamespace(string $v): void
+    public function setNamespace(?string $v): void
     {
         if ($v == $this->namespace) {
             return;
@@ -131,9 +131,9 @@ abstract class ScopedElement extends XMLElement
     /**
      * Set the value of schema.
      *
-     * @param string $v Value to assign to schema.
+     * @param ?string $v Value to assign to schema.
      */
-    public function setSchema(string $v): void
+    public function setSchema(?string $v): void
     {
         if ($v == $this->schema) {
             return;

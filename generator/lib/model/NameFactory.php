@@ -31,12 +31,12 @@ class NameFactory
     /**
      * The class name of the PHP name generator.
      */
-    const string PHP_GENERATOR = 'PhpNameGenerator';
+    const string PHP_GENERATOR = \CK\Generator\Lib\Model\PhpNameGenerator::class; //'PhpNameGenerator';
 
     /**
      * The fully qualified class name of the constraint name generator.
      */
-    const string CONSTRAINT_GENERATOR = 'ConstraintNameGenerator';
+    const string CONSTRAINT_GENERATOR = \CK\Generator\Lib\Model\ConstraintNameGenerator::class; //'ConstraintNameGenerator';
 
     /**
      * The single instance of this class.

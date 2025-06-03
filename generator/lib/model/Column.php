@@ -43,8 +43,8 @@ class Column extends XMLElement
     const string DEFAULT_VISIBILITY = 'public';
     public static array $valid_visibilities = array('public', 'protected', 'private');
 
-    private ?string $name;
-    private ?string $description;
+    private ?string $name = null;
+    private ?string $description = null;
     private $phpName = null;
     private $phpNamingMethod;
     private $isNotNull = false;
@@ -57,16 +57,16 @@ class Column extends XMLElement
      * The name to use for the Peer constant that identifies this column.
      * (Will be converted to all-uppercase in the templates.)
      *
-     * @var string
+     * @var ?string
      */
-    private string $peerName;
+    private ?string $peerName = null;
 
     /**
      * Native PHP type (scalar or class name)
      *
-     * @var string "string", "boolean", "int", "double"
+     * @var ?string "string", "boolean", "int", "double"
      */
-    private string $phpType;
+    private ?string $phpType = null;
 
     /**
      * @var Table
@@ -84,7 +84,7 @@ class Column extends XMLElement
     private bool $isAutoIncrement = false;
     private bool $isLazyLoad = false;
     private $defaultValue;
-    private array $referrers;
+    private array $referrers = [];
     private bool $isPrimaryString = false;
 
     // only one type is supported currently, which assumes the
@@ -865,12 +865,12 @@ class Column extends XMLElement
 
     public function clearReferrers()
     {
-        $this->referrers = null;
+        $this->referrers = [];
     }
 
     public function clearInheritanceList()
     {
-        $this->inheritanceList = array();
+        $this->inheritanceList = [];
     }
 
     /**
@@ -1381,7 +1381,7 @@ class Column extends XMLElement
 
     public function __clone()
     {
-        $this->referrers = null;
+        $this->referrers = [];
     }
 
     public static function generatePhpName($name, $phpNamingMethod = PhpNameGenerator::CONV_METHOD_CLEAN, $namePrefix = null)

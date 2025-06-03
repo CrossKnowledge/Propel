@@ -31,30 +31,32 @@ if (!$autoloaded) {
 
 // 2. Register the file-based autoloader for Phing compatibility
 spl_autoload_register(function ($class) {
-    // Handle CK\* only
-    if (strpos($class, 'CK\\') !== 0) {
-        return false;
-    }
-
-    // Map namespace to base path
     $prefixMap = [
-        'CK\\Generator\\Lib\\' => __DIR__, // Assuming __DIR__ is generator/lib
+        'CK\\Generator\\Lib\\' => __DIR__,
         'CK\\Runtime\\Lib\\'   => dirname(__DIR__, 2) . '/runtime/lib',
+        'CrossKnowledge\\'     => '/data/ckls/classes', // Full path retained
     ];
 
     foreach ($prefixMap as $prefix => $baseDir) {
         if (strpos($class, $prefix) === 0) {
-            $relative = substr($class, strlen($prefix));
-            $file = $baseDir . '/' . str_replace('\\', '/', $relative) . '.php';
+            if ($prefix === 'CrossKnowledge\\') {
+                // Keep full path for CrossKnowledge
+                $relativePath = str_replace('\\', '/', $class);
+            } else {
+                // Strip the prefix for CK\* namespaces
+                $relativePath = str_replace('\\', '/', substr($class, strlen($prefix)));
+            }
+
+            $file = rtrim($baseDir, '/') . '/' . $relativePath . '.php';
 
             echo "\n[Autoload] $class → $file";
 
             if (file_exists($file)) {
                 require_once $file;
-                echo "\r\n $file: ✅ Loaded.\n";
+                echo "\n$file: ✅ Loaded.\n";
                 return true;
             } else {
-                echo "\r\n $file: ❌ File not found.\n";
+                echo "\n$file: ❌ File not found.\n";
             }
         }
     }

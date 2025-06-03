@@ -162,7 +162,7 @@ class SortableBehavior extends Behavior
     /**
      * {@inheritdoc}
      */
-    public function addParameter($attribute)
+    public function addParameter($attribute): void
     {
         if ('scope_column' === $attribute['name']) {
             $this->parameters['scope_column'] .= ($this->parameters['scope_column'] ? ',' : '') . $attribute['value'];
@@ -193,7 +193,7 @@ class SortableBehavior extends Behavior
         return count($this->getScopes()) > 1;
     }
 
-    public function getObjectBuilderModifier()
+    public function getObjectBuilderModifier(): static
     {
         if (is_null($this->objectBuilderModifier)) {
             $this->objectBuilderModifier = new SortableBehaviorObjectBuilderModifier($this);
@@ -202,7 +202,7 @@ class SortableBehavior extends Behavior
         return $this->objectBuilderModifier;
     }
 
-    public function getQueryBuilderModifier()
+    public function getQueryBuilderModifier(): static
     {
         if (is_null($this->queryBuilderModifier)) {
             $this->queryBuilderModifier = new SortableBehaviorQueryBuilderModifier($this);
@@ -211,7 +211,7 @@ class SortableBehavior extends Behavior
         return $this->queryBuilderModifier;
     }
 
-    public function getPeerBuilderModifier()
+    public function getPeerBuilderModifier(): static
     {
         if (is_null($this->peerBuilderModifier)) {
             $this->peerBuilderModifier = new SortableBehaviorPeerBuilderModifier($this);
