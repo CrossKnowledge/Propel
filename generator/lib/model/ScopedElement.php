@@ -24,9 +24,9 @@ abstract class ScopedElement extends XMLElement
     /**
      * The package for the generated OM.
      *
-     * @var       string
+     * @var       ?string
      */
-    protected string $pkg;
+    protected ?string $pkg = null;
 
     /**
      * Whether the package was automatically overridden.
