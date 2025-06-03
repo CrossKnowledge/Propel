@@ -37,16 +37,16 @@ abstract class ScopedElement extends XMLElement
     /**
      * Namespace for the generated OM.
      *
-     * @var       string
+     * @var       ?string
      */
-    protected string $namespace;
+    protected ?string $namespace = null;
 
     /**
      * Schema this element belongs to.
      *
-     * @var       string
+     * @var       ?string
      */
-    protected string $schema;
+    protected ?string $schema = null;
 
     /**
      * retrieves a build property.
