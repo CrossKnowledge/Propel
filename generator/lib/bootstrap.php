@@ -36,24 +36,31 @@ spl_autoload_register(function ($class) {
         return false;
     }
 
-    // Remove 'CK\' prefix
-    $relative = substr($class, 3);
-
-    // Break into parts
+    // Map CK\Generator\Lib\Platform\MysqlPlatform
+    // to lib/platform/MysqlPlatform.php
+    $relative = substr($class, 3); // Remove "CK\"
     $parts = explode('\\', $relative);
 
-    // Extract filename (leave case as-is) and lowercase folder names
+    // Remove the fixed "Generator\Lib" prefix from namespace
+    if ($parts[0] === 'Generator' && $parts[1] === 'Lib') {
+        array_shift($parts); // remove 'Generator'
+        array_shift($parts); // remove 'Lib'
+    }
+
     $filename = array_pop($parts);
     $folders = array_map('strtolower', $parts);
 
-    // Build full path relative to generator/lib/
     $path = __DIR__ . '/' . implode('/', $folders) . '/' . $filename . '.php';
+
+    echo "\nAutoloading class $class → $path";
 
     if (file_exists($path)) {
         require_once $path;
+        echo " ✅ Loaded.\n";
         return true;
     }
 
+    echo " ❌ File not found.\n";
     return false;
 }, true, true);
 
