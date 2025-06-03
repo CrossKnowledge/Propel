@@ -51,10 +51,10 @@ spl_autoload_register(function ($class) {
 
             if (file_exists($file)) {
                 require_once $file;
-                echo " ✅ Loaded.\n";
+                echo "\r\n $file: ✅ Loaded.\n";
                 return true;
             } else {
-                echo " ❌ File not found.\n";
+                echo "\r\n $file: ❌ File not found.\n";
             }
         }
     }
