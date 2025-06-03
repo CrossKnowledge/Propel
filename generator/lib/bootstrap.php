@@ -80,11 +80,4 @@ if (file_exists($completeAutoloaderFile)) {
     require_once $completeAutoloaderFile;
 }
 
-// 5. Optional: define dummy class equivalents for any old include_once('X.php')-based file
-
-// Example legacy placeholder for old platform/Platform.php
-if (!class_exists('Platform') && class_exists(\CK\Generator\Lib\Platform\Platform::class)) {
-    class_alias(\CK\Generator\Lib\Platform\Platform::class, 'Platform');
-}
-
 // More legacy class_alias() mappings can go here, or be handled inside PropelAliases
