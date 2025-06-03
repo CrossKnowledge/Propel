@@ -13,7 +13,7 @@ use CK\Generator\Lib\Model\Database;
 use Exception;
 use Phing\Exception\BuildException;
 use Properties;
-use IOException;
+use Phing\Io\IOException;
 use Phing\Io\FileWriter;
 use Phing\Project;
 use Phing\Io\File;

@@ -10,7 +10,7 @@
 namespace CK\Generator\Lib\Task;
 
 use DateTime;
-use IOException;
+use Phing\Io\IOException;
 use NullPointerException;
 use Phing\Io\File;
 use Phing\Exception\BuildException;

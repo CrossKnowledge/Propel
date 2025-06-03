@@ -17,7 +17,7 @@ use Exception;
 use PDOStatement;
 use DOMDocument;
 use Phing\Io\File;
-use IOException;
+use Phing\Io\IOException;
 use Phing\Exception\BuildException;
 use Phing\Project;
 use Properties;

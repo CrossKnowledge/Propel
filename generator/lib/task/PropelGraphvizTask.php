@@ -10,7 +10,7 @@
 namespace CK\Generator\Lib\Task;
 
 use CK\Generator\Lib\Util\PropelDotGenerator;
-use IOException;
+use Phing\Io\IOException;
 use NullPointerException;
 use Phing\Io\File;
 /*

@@ -15,7 +15,7 @@ use CK\Generator\Lib\Config\GeneratorConfig;
 use CK\Generator\Lib\Util\PropelSQLParser;
 use Phing\Project;
 use PDO;
-use IOException;
+use Phing\Io\IOException;
 use PDOException;
 use Properties;
 /*

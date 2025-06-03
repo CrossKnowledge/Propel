@@ -16,7 +16,7 @@ use CK\Generator\Lib\Platform\MssqlPlatform;
 use CK\Generator\Lib\Platform\OraclePlatform;
 use CK\Generator\Lib\Model\AppData;
 use Phing\Io\File;
-use IOException;
+use Phing\Io\IOException;
 use Phing\Project;
 use Phing\Exception\BuildException;
 use Properties;

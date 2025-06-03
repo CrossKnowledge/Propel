@@ -12,20 +12,19 @@ namespace CK\Generator\Lib\Task;
 use CK\Generator\Lib\Config\GeneratorConfig;
 use CK\Generator\Lib\Exception\EngineException;
 use DOMDocument;
-use FileSet;
-use Mapper;
-use NullPointerException;
+use Phing\Type\FileSet;
+use Phing\Type\Mapper;
 use PDO;
 use Phing\Io\File;
-use IOException;
+use Phing\Io\IOException;
 use Phing\Exception\BuildException;
 use PDOException;
 use Phing\Project;
-use FileSystem;
+use Phing\Io\FileSystem;
 use CK\Generator\Lib\Model\AppData;
 use CK\Generator\Lib\Util\PropelSchemaValidator;
 use XSLTProcessor;
-use XmlToAppData;
+use CK\Generator\Lib\Builder\Util\XmlToAppData;
 
 //use XSLTProcessor;
 
@@ -473,7 +472,7 @@ abstract class AbstractPropelDataModelTask extends AbstractPropelTask
                 $this->log("Processing: " . $dmFilename, Project::MSG_VERBOSE);
                 try {
                     $xmlFile = new File($srcDir, $dmFilename);
-                } catch (IOException|NullPointerException $e) {
+                } catch (IOException $e) {
 
                 }
 

@@ -13,7 +13,7 @@ namespace CK\Generator\Lib\Task;
 use CK\Generator\Lib\Config\GeneratorConfig;
 use Phing\Exception\BuildException;
 use Phing\Project;
-use IOException;
+use Phing\Io\IOException;
 use Phing\Io\File;
 //require_once 'task/AbstractPropelTask.php';
 
