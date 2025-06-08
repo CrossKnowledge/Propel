@@ -30,33 +30,41 @@ if (!$autoloaded) {
 }
 
 // 2. Register the file-based autoloader for Phing compatibility
-spl_autoload_register(function ($class) {
+spl_autoload_register(function ($originalClass) {
     $prefixMap = [
         'CK\\Generator\\Lib\\' => __DIR__,
         'CK\\Runtime\\Lib\\'   => dirname(__DIR__, 2) . '/runtime/lib',
-        'CrossKnowledge\\'     => '/data/ckls/classes', // Full path retained
+        'CrossKnowledge\\'     => '/data/ckls/classes',
     ];
 
+    // Save original for matching, normalize for case-insensitive matching
+    $lowerClass = strtolower($originalClass);
+
     foreach ($prefixMap as $prefix => $baseDir) {
-        if (strpos($class, $prefix) === 0) {
+        $lowerPrefix = strtolower($prefix);
+
+        if (strpos($lowerClass, $lowerPrefix) === 0) {
+            // Determine if we strip the prefix (for CK) or keep it (CrossKnowledge)
             if ($prefix === 'CrossKnowledge\\') {
-                // Keep full path for CrossKnowledge
-                $relativePath = str_replace('\\', '/', $class);
+                // Preserve full namespace path with original casing
+                $relativeClass = str_replace('\\', '/', $originalClass);
             } else {
-                // Strip the prefix for CK\* namespaces
-                $relativePath = str_replace('\\', '/', substr($class, strlen($prefix)));
+                // Strip prefix, split, lowercase folders, keep class filename case
+                $suffix = substr($originalClass, strlen($prefix));
+                $parts = explode('\\', $suffix);
+                $classFile = array_pop($parts); // Keep filename case
+                $folders = array_map('strtolower', $parts); // lowercase folders only
+                $relativeClass = implode('/', $folders) . '/' . $classFile;
             }
 
-            $file = rtrim($baseDir, '/') . '/' . $relativePath . '.php';
-
-            echo "\n[Autoload] $class → $file";
+            $file = rtrim($baseDir, '/') . '/' . $relativeClass . '.php';
 
             if (file_exists($file)) {
                 require_once $file;
-                echo "\n$file: ✅ Loaded.\n";
+                echo "\n[Autoload] ✅ $originalClass → $file\n";
                 return true;
             } else {
-                echo "\n$file: ❌ File not found.\n";
+                echo "\n[Autoload] ❌ $originalClass → $file (Not found)\n";
             }
         }
     }

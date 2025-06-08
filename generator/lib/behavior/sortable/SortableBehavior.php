@@ -193,7 +193,7 @@ class SortableBehavior extends Behavior
         return count($this->getScopes()) > 1;
     }
 
-    public function getObjectBuilderModifier(): static
+    public function getObjectBuilderModifier(): static|SortableBehaviorObjectBuilderModifier
     {
         if (is_null($this->objectBuilderModifier)) {
             $this->objectBuilderModifier = new SortableBehaviorObjectBuilderModifier($this);
@@ -202,7 +202,7 @@ class SortableBehavior extends Behavior
         return $this->objectBuilderModifier;
     }
 
-    public function getQueryBuilderModifier(): static
+    public function getQueryBuilderModifier(): static|SortableBehaviorQueryBuilderModifier
     {
         if (is_null($this->queryBuilderModifier)) {
             $this->queryBuilderModifier = new SortableBehaviorQueryBuilderModifier($this);
@@ -211,7 +211,7 @@ class SortableBehavior extends Behavior
         return $this->queryBuilderModifier;
     }
 
-    public function getPeerBuilderModifier(): static
+    public function getPeerBuilderModifier(): static|SortableBehaviorPeerBuilderModifier
     {
         if (is_null($this->peerBuilderModifier)) {
             $this->peerBuilderModifier = new SortableBehaviorPeerBuilderModifier($this);

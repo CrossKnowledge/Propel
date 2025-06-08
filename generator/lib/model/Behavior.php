@@ -10,6 +10,9 @@
 
 namespace CK\Generator\Lib\Model;
 
+use CK\Generator\Lib\Behavior\Sortable\SortableBehaviorObjectBuilderModifier;
+use CK\Generator\Lib\Behavior\Sortable\SortableBehaviorPeerBuilderModifier;
+use CK\Generator\Lib\Behavior\Sortable\SortableBehaviorQueryBuilderModifier;
 use CK\Generator\Lib\Builder\Util\PropelTemplate;
 use CK\Runtime\Lib\Map\ColumnMap;
 use DOMException;
@@ -294,17 +297,17 @@ class Behavior extends XMLElement
         return $this;
     }
 
-    public function getObjectBuilderModifier(): static
+    public function getObjectBuilderModifier(): static|SortableBehaviorObjectBuilderModifier
     {
         return $this;
     }
 
-    public function getQueryBuilderModifier(): static
+    public function getQueryBuilderModifier(): static|SortableBehaviorQueryBuilderModifier
     {
         return $this;
     }
 
-    public function getPeerBuilderModifier(): static
+    public function getPeerBuilderModifier(): static|SortableBehaviorPeerBuilderModifier
     {
         return $this;
     }
