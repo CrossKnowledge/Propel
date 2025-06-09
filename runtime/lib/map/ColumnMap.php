@@ -35,7 +35,7 @@ class ColumnMap
     protected string $type;
 
     // Size of the column
-    protected int $size = 0;
+    protected ?int $size = 0;
 
     // Is it a primary key?
     protected bool $pk = false;
