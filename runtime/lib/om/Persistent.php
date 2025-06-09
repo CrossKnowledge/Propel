@@ -80,7 +80,7 @@ interface Persistent
      *
      * @return void
      */
-    public function resetModified(): void;
+    public function resetModified(): static;
 
     /**
      * Whether this object has been deleted.
@@ -96,7 +96,7 @@ interface Persistent
      *
      * @return void
      */
-    public function setDeleted(bool $b): void;
+    public function setDeleted(bool $b): static;
 
     /**
      * Deletes the object.
