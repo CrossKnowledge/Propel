@@ -244,11 +244,11 @@ class ColumnMap
     /**
      * Set the size of this column.
      *
-     * @param int $size An int specifying the size.
+     * @param int|null $size An int specifying the size.
      *
      * @return void
      */
-    public function setSize(int $size): void
+    public function setSize(?int $size): void
     {
         $this->size = $size;
     }

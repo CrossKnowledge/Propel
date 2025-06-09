@@ -78,7 +78,7 @@ abstract class BaseObject
      *
      * @return boolean True if the object has been modified.
      */
-    public function isModified()
+    public function isModified(): bool
     {
         return !empty($this->modifiedColumns);
     }
@@ -90,7 +90,7 @@ abstract class BaseObject
      *
      * @return boolean True if $col has been modified.
      */
-    public function isColumnModified($col)
+    public function isColumnModified(string $col): bool
     {
         return in_array($col, $this->modifiedColumns);
     }
@@ -112,7 +112,7 @@ abstract class BaseObject
      *
      * @return true, if the object has never been persisted.
      */
-    public function isNew()
+    public function isNew(): bool
     {
         return $this->_new;
     }
@@ -136,7 +136,7 @@ abstract class BaseObject
      *
      * @return boolean The deleted state of this object.
      */
-    public function isDeleted()
+    public function isDeleted(): bool
     {
         return $this->_deleted;
     }
@@ -148,7 +148,7 @@ abstract class BaseObject
      *
      * @return self
      */
-    public function setDeleted($b)
+    public function setDeleted(bool $b): static
     {
         $this->_deleted = (boolean) $b;
 
@@ -255,7 +255,7 @@ abstract class BaseObject
      *
      * @return self
      */
-    public function resetModified($col = null)
+    public function resetModified($col = null): static
     {
         if ($col !== null) {
             while (($offset = array_search($col, $this->modifiedColumns)) !== false) {

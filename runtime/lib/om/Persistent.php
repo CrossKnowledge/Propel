@@ -113,8 +113,8 @@ interface Persistent
      *
      * @param PropelPDO|null $con
      *
-     * @return void
+     * @return int
      * @throws Exception
      */
-    public function save(PropelPDO $con = null): void;
+    public function save(PropelPDO $con = null): int;
 }
