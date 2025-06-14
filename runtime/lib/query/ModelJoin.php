@@ -26,14 +26,14 @@ class ModelJoin extends Join
     protected RelationMap $relationMap;
 
     /**
-     * @var TableMap
+     * @var ?TableMap
      */
-    protected TableMap $tableMap;
+    protected ?TableMap $tableMap = null;
 
     /**
-     * @var ModelJoin
+     * @var ?ModelJoin
      */
-    protected ModelJoin $previousJoin;
+    protected ?ModelJoin $previousJoin = null;
 
     public function setRelationMap(RelationMap $relationMap, $leftTableAlias = null, $relationAlias = null): static
     {

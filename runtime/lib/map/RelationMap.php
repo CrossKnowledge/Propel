@@ -273,7 +273,7 @@ class RelationMap
      */
     public function setOnUpdate($onUpdate)
     {
-        $this->onUpdate = $onUpdate;
+        $this->onUpdate = (int) $onUpdate;
     }
 
     /**
@@ -293,7 +293,7 @@ class RelationMap
      */
     public function setOnDelete($onDelete)
     {
-        $this->onDelete = $onDelete;
+        $this->onDelete = (int) $onDelete;
     }
 
     /**

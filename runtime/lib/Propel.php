@@ -13,6 +13,7 @@ namespace CK\Runtime\Lib;
 use CK\Runtime\Lib\Config\PropelConfiguration;
 use CK\Runtime\Lib\Connection\PropelPDO;
 use CK\Runtime\Lib\Adapter\DBAdapter;
+use CK\Runtime\Lib\Logger\BasicLogger;
 use CK\Runtime\Lib\Map\DatabaseMap;
 use CK\Runtime\Lib\Exception\PropelException;
 use CK\Runtime\Lib\Util\PropelAutoloader;
@@ -148,7 +149,7 @@ class Propel
      * old-var        Log optional logger
      * @var ?SimpleFileLogger
      */
-    private static ?SimpleFileLogger $logger = null;
+    private static ?BasicLogger $logger = null;
 
     /**
      * @var        string The name of the database mapper class
@@ -416,7 +417,7 @@ class Propel
      * @param object $logger The new logger to use. ([PEAR] Log or BasicLogger) Going to see if SimpleFileLogger is
      * to be used instead
      */
-    public static function setLogger(SimpleFileLogger $logger): void
+    public static function setLogger(BasicLogger $logger): void
     {
         self::$logger = $logger;
     }
@@ -809,7 +810,7 @@ class Propel
      */
     public static function getDefaultDB(): string
     {
-        if (self::$defaultDBName === null) {
+        if (!isset(self::$defaultDBName)) {
             // Determine default database name.
             self::$defaultDBName = isset(self::$configuration['datasources']['default']) && is_scalar(self::$configuration['datasources']['default']) ? self::$configuration['datasources']['default'] : self::DEFAULT_NAME;
         }

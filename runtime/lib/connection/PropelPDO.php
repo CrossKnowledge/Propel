@@ -191,7 +191,7 @@ class PropelPDO extends PDO
      */
     public function getConfiguration(): PropelConfiguration|array
     {
-        if (null === $this->configuration) {
+        if (!isset($this->configuration)) {
             $this->configuration = Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT);
         }
 

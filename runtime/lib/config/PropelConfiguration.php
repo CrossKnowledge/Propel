@@ -76,9 +76,9 @@ class PropelConfiguration implements ArrayAccess
      *
      * @param integer $offset
      *
-     * @return array
+     * @return array|string
      */
-    #[ReturnTypeWillChange] public function offsetGet($offset): array
+    #[ReturnTypeWillChange] public function offsetGet($offset): array|string
     {
         return $this->parameters[$offset];
     }
