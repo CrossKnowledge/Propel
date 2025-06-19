@@ -51,8 +51,8 @@ class PropelCollection extends ArrayObject implements Serializable
      * @ var       ?ArrayIterator: though this is the parent's, the rest of the code expects PropelOnDemandIterator
      *
      */
-    //protected ?ArrayIterator $iterator;
-    protected PropelOnDemandIterator $iterator;
+    protected ?ArrayIterator $iterator;
+//    protected PropelOnDemandIterator $iterator;
 
     /**
      * @var       PropelFormatter
@@ -426,7 +426,7 @@ class PropelCollection extends ArrayObject implements Serializable
      */
     public function getInternalIterator(): ?ArrayIterator
     {
-        if (null === $this->iterator) {
+        if (empty($this->iterator)) {
             return $this->getIterator();
         }
 

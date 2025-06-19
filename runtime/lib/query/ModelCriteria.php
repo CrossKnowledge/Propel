@@ -1923,7 +1923,7 @@ class ModelCriteria extends Criteria
                 }
                 $criterion = new Criterion($this, $clause, $value, Criteria::RAW, $bindingType);
             } else {
-                $criterion = new Criterion($this, null, $clause, Criteria::CUSTOM);
+                $criterion = new Criterion($this, '', $clause, Criteria::CUSTOM);
             }
         }
 

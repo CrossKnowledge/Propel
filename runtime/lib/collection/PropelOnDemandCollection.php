@@ -9,6 +9,7 @@
  */
 namespace CK\Runtime\Lib\Collection;
 
+use ArrayIterator;
 use CK\Runtime\Lib\Formatter\PropelFormatter;
 use CK\Runtime\Lib\Exception\PropelException;
 use PDOStatement;
@@ -23,10 +24,10 @@ use ReturnTypeWillChange;
 class PropelOnDemandCollection extends PropelCollection
 {
     /**
-     * @var       PropelOnDemandIterator
+     * @var       ArrayIterator|null
      */
-    //protected \ArrayIterator $iterator;
-    protected PropelOnDemandIterator $iterator;
+    protected ?ArrayIterator $iterator;
+//    protected PropelOnDemandIterator $iterator;
 
     /**
      * @param PropelFormatter $formatter
@@ -70,7 +71,7 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         throw new PropelException('The On Demand Collection does not allow access by offset');
     }
@@ -82,7 +83,7 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         throw new PropelException('The On Demand Collection does not allow access by offset');
     }
@@ -93,7 +94,7 @@ class PropelOnDemandCollection extends PropelCollection
      * @param integer $offset
      * @param mixed   $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -103,7 +104,7 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @param integer $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -138,69 +139,69 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @return integer Number of results
      */
-    public function count()
+    public function count(): int
     {
         return $this->iterator->count();
     }
 
     // ArrayObject methods
 
-    public function append($value)
+    public function append($value): void
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function prepend(mixed $value)
+    public function prepend(mixed $value): int
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function asort()
+    public function asort(int $flags = SORT_REGULAR): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function exchangeArray($input)
+    public function exchangeArray($input): array
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function getArrayCopy()
+    public function getArrayCopy(): array
     {
         throw new PropelException('The On Demand Collection does not allow access by offset');
     }
 
-    public function getFlags()
+    public function getFlags(): int
     {
         throw new PropelException('The On Demand Collection does not allow access by offset');
     }
 
-    #[ReturnTypeWillChange] public function ksort(int $flags = SORT_REGULAR)
+    public function ksort(int $flags = SORT_REGULAR): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function natcasesort()
+    public function natcasesort(): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function natsort()
+    public function natsort(): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function setFlags($flags)
+    public function setFlags($flags): void
     {
         throw new PropelException('The On Demand Collection does not allow acces by offset');
     }
 
-    public function uasort($cmp_function)
+    public function uasort($cmp_function): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function uksort($cmp_function)
+    public function uksort($cmp_function): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }

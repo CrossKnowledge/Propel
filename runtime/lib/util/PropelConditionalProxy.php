@@ -126,7 +126,7 @@ class PropelConditionalProxy
 
     public function getCriteriaOrProxy()
     {
-        if ($this->state && $this->parentState) {
+        if (isset($this->state) && isset($this->parentState)) {
             return $this->criteria;
         }
 

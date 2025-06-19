@@ -18,6 +18,7 @@ use CK\Runtime\Lib\Exception\PropelException;
 use PDO;
 use PDOStatement;
 use ReturnTypeWillChange;
+use ArrayIterator;
 
 /**
  * Class for iterating over a statement and returning one Propel object at a time
@@ -25,7 +26,7 @@ use ReturnTypeWillChange;
  * @author     Francois Zaninotto
  * @package    propel.runtime.collection
  */
-class PropelOnDemandIterator implements Iterator
+class PropelOnDemandIterator extends ArrayIterator
 {
     /**
      * @ var PropelObjectFormatter
@@ -58,6 +59,7 @@ class PropelOnDemandIterator implements Iterator
      */
     public function __construct(PropelFormatter $formatter, PDOStatement $stmt)
     {
+        parent::__construct([]);
         $this->formatter = $formatter;
         $this->stmt = $stmt;
         $this->enableInstancePoolingOnFinish = Propel::disableInstancePooling();
