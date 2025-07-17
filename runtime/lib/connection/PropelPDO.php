@@ -438,28 +438,23 @@ class PropelPDO extends PDO
 
     /**
      * Executes an SQL statement, returning a result set as a PDOStatement object.
-     * Despite its signature here, this method takes a variety of parameters.
+     * Compatible with PHP 7.4 and PHP 8.3+.
      *
      * Overrides PDO::query() to log queries when required
      *
      * @see       http://php.net/manual/en/pdo.query.php for a description of the possible parameters.
      *
-     * @return PDOStatement
+     * @return PDOStatement|false
      */
-    public function query($query, $fetchMode = PDO::ATTR_DEFAULT_FETCH_MODE, $arg3 = null, $ctorargs = [])
+    public function query(...$args)
     {
         if ($this->useDebug) {
             $debug = $this->getDebugSnapshot();
         }
 
-        $args = func_get_args();
-        if (version_compare(PHP_VERSION, '5.3', '<')) {
-            $return = call_user_func_array(array($this, 'parent::query'), $args);
-        } else {
-            $return = call_user_func_array('parent::query', $args);
-        }
+        $return = parent::query(...$args);
 
-        if ($this->useDebug) {
+        if ($this->useDebug && isset($args[0])) {
             $sql = $args[0];
             $this->log($sql, null, __METHOD__, $debug);
             $this->setLastExecutedQuery($sql);
@@ -797,6 +792,11 @@ class PropelPDO extends PDO
      */
     public function __destruct()
     {
+        if ($this->useDebug) {
+            $this->log('Closing connection', null, __METHOD__, $this->getDebugSnapshot());
+        }
+    }
+}
         if ($this->useDebug) {
             $this->log('Closing connection', null, __METHOD__, $this->getDebugSnapshot());
         }
