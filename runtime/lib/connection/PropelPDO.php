@@ -797,8 +797,3 @@ class PropelPDO extends PDO
         }
     }
 }
-        if ($this->useDebug) {
-            $this->log('Closing connection', null, __METHOD__, $this->getDebugSnapshot());
-        }
-    }
-}
