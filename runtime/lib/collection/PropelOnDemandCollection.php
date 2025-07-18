@@ -145,62 +145,62 @@ class PropelOnDemandCollection extends PropelCollection
 
     // ArrayObject methods
 
-    public function append($value)
+    public function append(mixed $value): void
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function prepend($value)
+    public function prepend(mixed $value): void
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function asort()
+    public function asort(int $flags = SORT_REGULAR): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function exchangeArray($input)
+    public function exchangeArray(array $array): array
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function getArrayCopy()
+    public function getArrayCopy(): array
     {
         throw new PropelException('The On Demand Collection does not allow acces by offset');
     }
 
-    public function getFlags()
+    public function getFlags(): int
     {
         throw new PropelException('The On Demand Collection does not allow acces by offset');
     }
 
-    public function ksort()
+    public function ksort(int $flags = SORT_REGULAR): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function natcasesort()
+    public function natcasesort(): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function natsort()
+    public function natsort(): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function setFlags($flags)
+    public function setFlags(int $flags): void
     {
         throw new PropelException('The On Demand Collection does not allow acces by offset');
     }
 
-    public function uasort($cmp_function)
+    public function uasort(callable $callback): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function uksort($cmp_function)
+    public function uksort(callable $callback): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
