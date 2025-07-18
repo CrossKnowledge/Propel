@@ -67,7 +67,7 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         if ($offset == $this->currentKey) {
             return true;
@@ -81,7 +81,7 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if ($offset == $this->currentKey) {
             return $this->currentRow;
@@ -95,7 +95,7 @@ class PropelOnDemandCollection extends PropelCollection
      * @param integer $offset
      * @param mixed   $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -104,7 +104,7 @@ class PropelOnDemandCollection extends PropelCollection
      * @throws PropelException
      * @param  integer         $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -138,7 +138,7 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @return integer Number of results
      */
-    public function count()
+    public function count(): int
     {
         return $this->iterator->count();
     }
@@ -160,7 +160,7 @@ class PropelOnDemandCollection extends PropelCollection
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function exchangeArray(array $array): array
+    public function exchangeArray(mixed $array): array
     {
         throw new PropelException('The On Demand Collection is read only');
     }
