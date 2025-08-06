@@ -119,18 +119,17 @@ class DelegateBehavior extends Behavior
                 $relationName = $builder->getFKPhpNameAffix($fk);
             }
                 $script .= "
-    \$delegate = \$this->get$relationName();
-    if (!\$delegate) {
-        \$delegate = new $ARClassName();
-        \$this->set$relationName(\$delegate);
-    }
+\$delegate = \$this->get$relationName();
+if (!\$delegate) {
+    \$delegate = new $ARClassName();
+    \$this->set$relationName(\$delegate);
+}
 
-    if (method_exists(\$delegate, \$name)) {
-        return call_user_func_array(array(\$delegate, \$name), \$params);
-    }
-
+if (method_exists(\$delegate, \$name)) {
     return call_user_func_array(array(\$delegate, \$name), \$params);
-}";
+}
+
+";
         }
 
         return $script;
