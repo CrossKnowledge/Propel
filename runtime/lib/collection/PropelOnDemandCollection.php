@@ -160,7 +160,7 @@ class PropelOnDemandCollection extends PropelCollection
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function exchangeArray($array)
+    public function exchangeArray($input)
     {
         throw new PropelException('The On Demand Collection is read only');
     }
