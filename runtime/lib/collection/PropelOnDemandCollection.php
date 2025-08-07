@@ -150,7 +150,7 @@ class PropelOnDemandCollection extends PropelCollection
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function prepend(mixed $value): void
+    public function prepend($value)
     {
         throw new PropelException('The On Demand Collection is read only');
     }
