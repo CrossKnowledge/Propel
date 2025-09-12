@@ -388,7 +388,8 @@ class PropelPDO extends PDO
      *
      * @return PDOStatement|false
      */
-    public function prepare($sql, $driver_options = array()): PDOStatement|false
+    #[\ReturnTypeWillChange]
+    public function prepare($sql, $driver_options = array())
     {
         if ($this->useDebug) {
             $debug = $this->getDebugSnapshot();
@@ -419,7 +420,8 @@ class PropelPDO extends PDO
      * @param  string  $sql
      * @return int|false
      */
-    public function exec($sql): int|false
+    #[\ReturnTypeWillChange]
+    public function exec($sql)
     {
         if ($this->useDebug) {
             $debug = $this->getDebugSnapshot();
