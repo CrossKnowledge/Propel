@@ -361,7 +361,7 @@ class PropelPDO extends PDO
      * @param  integer $attribute The attribute to get (e.g. PropelPDO::PROPEL_ATTR_CACHE_PREPARES).
      * @return mixed
      */
-    public function getAttribute($attribute)
+    public function getAttribute($attribute): mixed
     {
         switch ($attribute) {
             case self::PROPEL_ATTR_CACHE_PREPARES:
@@ -386,9 +386,9 @@ class PropelPDO extends PDO
      * @param array  $driver_options One $array or more key => value pairs to set attribute values
      *                                      for the PDOStatement object that this method returns.
      *
-     * @return PDOStatement
+     * @return PDOStatement|false
      */
-    public function prepare($sql, $driver_options = array())
+    public function prepare($sql, $driver_options = array()): PDOStatement|false
     {
         if ($this->useDebug) {
             $debug = $this->getDebugSnapshot();
@@ -417,9 +417,9 @@ class PropelPDO extends PDO
      * Overrides PDO::exec() to log queries when required
      *
      * @param  string  $sql
-     * @return integer
+     * @return int|false
      */
-    public function exec($sql)
+    public function exec($sql): int|false
     {
         if ($this->useDebug) {
             $debug = $this->getDebugSnapshot();

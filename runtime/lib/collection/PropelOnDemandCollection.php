@@ -54,7 +54,7 @@ class PropelOnDemandCollection extends PropelCollection
     /**
      * @return PropelOnDemandIterator
      */
-    public function getIterator()
+    public function getIterator(): Iterator
     {
         return $this->iterator;
     }
@@ -67,7 +67,7 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         if ($offset == $this->currentKey) {
             return true;
@@ -81,7 +81,7 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if ($offset == $this->currentKey) {
             return $this->currentRow;
@@ -95,7 +95,7 @@ class PropelOnDemandCollection extends PropelCollection
      * @param integer $offset
      * @param mixed   $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -104,7 +104,7 @@ class PropelOnDemandCollection extends PropelCollection
      * @throws PropelException
      * @param  integer         $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -114,7 +114,7 @@ class PropelOnDemandCollection extends PropelCollection
     /**
      * @throws PropelException
      */
-    public function serialize()
+    public function serialize(): string
     {
         throw new PropelException('The On Demand Collection cannot be serialized');
     }
@@ -125,7 +125,7 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @return void
      */
-    public function unserialize($data)
+    public function unserialize($data): void
     {
         throw new PropelException('The On Demand Collection cannot be serialized');
     }
@@ -138,14 +138,14 @@ class PropelOnDemandCollection extends PropelCollection
      *
      * @return integer Number of results
      */
-    public function count()
+    public function count(): int
     {
         return $this->iterator->count();
     }
 
     // ArrayObject methods
 
-    public function append($value)
+    public function append($value): void
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -155,52 +155,52 @@ class PropelOnDemandCollection extends PropelCollection
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function asort($flags = SORT_REGULAR)
+    public function asort($flags = SORT_REGULAR): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function exchangeArray($input)
+    public function exchangeArray($input): array
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function getArrayCopy()
+    public function getArrayCopy(): array
     {
         throw new PropelException('The On Demand Collection does not allow acces by offset');
     }
 
-    public function getFlags()
+    public function getFlags(): int
     {
         throw new PropelException('The On Demand Collection does not allow acces by offset');
     }
 
-    public function ksort($flags = SORT_REGULAR)
+    public function ksort($flags = SORT_REGULAR): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function natcasesort()
+    public function natcasesort(): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function natsort()
+    public function natsort(): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function setFlags($flags)
+    public function setFlags($flags): void
     {
         throw new PropelException('The On Demand Collection does not allow acces by offset');
     }
 
-    public function uasort($cmp_function)
+    public function uasort($cmp_function): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function uksort($cmp_function)
+    public function uksort($cmp_function): true
     {
         throw new PropelException('The On Demand Collection is read only');
     }

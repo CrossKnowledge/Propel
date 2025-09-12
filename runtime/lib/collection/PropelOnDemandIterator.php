@@ -69,7 +69,7 @@ class PropelOnDemandIterator implements Iterator
      *
      * @return BaseObject
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->formatter->getAllObjectsFromRow($this->currentRow);
     }
@@ -79,7 +79,7 @@ class PropelOnDemandIterator implements Iterator
      *
      * @return string
      */
-    public function key()
+    public function key(): mixed
     {
         return $this->currentKey;
     }
@@ -88,7 +88,7 @@ class PropelOnDemandIterator implements Iterator
      * Advances the curesor in the statement
      * Closes the cursor if the end of the statement is reached
      */
-    public function next()
+    public function next(): void
     {
         $this->currentRow = $this->stmt->fetch(PDO::FETCH_NUM);
         $this->currentKey++;
@@ -105,7 +105,7 @@ class PropelOnDemandIterator implements Iterator
      * Initializes the iterator by advancing to the first position
      * This method can only be called once (this is a NoRewindIterator)
      */
-    public function rewind()
+    public function rewind(): void
     {
         // check that the hydration can begin
         if (null === $this->formatter) {
@@ -125,7 +125,7 @@ class PropelOnDemandIterator implements Iterator
     /**
      * @return boolean
      */
-    public function valid()
+    public function valid(): bool
     {
         return (boolean) $this->isValid;
     }
