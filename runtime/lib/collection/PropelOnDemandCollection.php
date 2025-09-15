@@ -155,7 +155,8 @@ class PropelOnDemandCollection extends PropelCollection
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function asort($flags = SORT_REGULAR): true
+    #[\ReturnTypeWillChange]
+    public function asort($flags = SORT_REGULAR)
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -175,17 +176,20 @@ class PropelOnDemandCollection extends PropelCollection
         throw new PropelException('The On Demand Collection does not allow acces by offset');
     }
 
-    public function ksort($flags = SORT_REGULAR): true
+    #[\ReturnTypeWillChange]
+    public function ksort($flags = SORT_REGULAR)
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function natcasesort(): true
+    #[\ReturnTypeWillChange]
+    public function natcasesort()
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function natsort(): true
+    #[\ReturnTypeWillChange]
+    public function natsort()
     {
         throw new PropelException('The On Demand Collection is read only');
     }
@@ -195,12 +199,14 @@ class PropelOnDemandCollection extends PropelCollection
         throw new PropelException('The On Demand Collection does not allow acces by offset');
     }
 
-    public function uasort($cmp_function): true
+    #[\ReturnTypeWillChange]
+    public function uasort($cmp_function)
     {
         throw new PropelException('The On Demand Collection is read only');
     }
 
-    public function uksort($cmp_function): true
+    #[\ReturnTypeWillChange]
+    public function uksort($cmp_function)
     {
         throw new PropelException('The On Demand Collection is read only');
     }
