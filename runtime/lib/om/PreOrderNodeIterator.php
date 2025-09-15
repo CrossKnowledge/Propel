@@ -47,17 +47,20 @@ class PreOrderNodeIterator implements Iterator
         return ($this->curNode !== null);
     }
 
-    public function current(): mixed
+    #[\ReturnTypeWillChange]
+    public function current()
     {
         return $this->curNode;
     }
 
-    public function key(): mixed
+    #[\ReturnTypeWillChange]
+    public function key()
     {
         return $this->curNode->getNodePath();
     }
 
-    public function next(): void
+    #[\ReturnTypeWillChange]
+    public function next()
     {
         if ($this->valid()) {
             $nextNode = $this->curNode->getFirstChildNode($this->querydb, $this->con);

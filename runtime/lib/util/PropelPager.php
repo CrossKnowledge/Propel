@@ -553,7 +553,8 @@ class PropelPager implements Countable, Iterator
      * Returns the current element of the iterator
      * @return mixed
      */
-    public function current(): mixed
+    #[\ReturnTypeWillChange]
+    public function current()
     {
         if (!isset($this->rs)) {
             $this->doRs();
@@ -566,7 +567,8 @@ class PropelPager implements Countable, Iterator
      * Returns the current key of the iterator
      * @return int
      */
-    public function key(): mixed
+    #[\ReturnTypeWillChange]
+    public function key()
     {
         return $this->currentKey;
     }

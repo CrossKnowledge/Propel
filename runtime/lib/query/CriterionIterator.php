@@ -42,12 +42,14 @@ class CriterionIterator implements Iterator
         return $this->idx < $this->criteriaSize;
     }
 
-    public function key(): mixed
+    #[\ReturnTypeWillChange]
+    public function key()
     {
         return $this->criteriaKeys[$this->idx];
     }
 
-    public function current(): mixed
+    #[\ReturnTypeWillChange]
+    public function current()
     {
         return $this->criteria->getCriterion($this->criteriaKeys[$this->idx]);
     }

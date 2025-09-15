@@ -69,7 +69,8 @@ class PropelOnDemandIterator implements Iterator
      *
      * @return BaseObject
      */
-    public function current(): mixed
+    #[\ReturnTypeWillChange]
+    public function current()
     {
         return $this->formatter->getAllObjectsFromRow($this->currentRow);
     }
@@ -79,7 +80,8 @@ class PropelOnDemandIterator implements Iterator
      *
      * @return string
      */
-    public function key(): mixed
+    #[\ReturnTypeWillChange]
+    public function key()
     {
         return $this->currentKey;
     }
