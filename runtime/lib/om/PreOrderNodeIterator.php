@@ -37,26 +37,29 @@ class PreOrderNodeIterator implements Iterator
             $this->querydb = $opts['querydb'];
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->curNode = $this->topNode;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return ($this->curNode !== null);
     }
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->curNode;
     }
 
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->curNode->getNodePath();
     }
 
+    #[\ReturnTypeWillChange]
     public function next()
     {
         if ($this->valid()) {
