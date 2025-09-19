@@ -88,7 +88,7 @@ CREATE TABLE `thread`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- post
