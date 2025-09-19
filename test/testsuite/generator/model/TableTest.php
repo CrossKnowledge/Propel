@@ -152,7 +152,7 @@ CREATE TABLE `bar`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (`id`),
     INDEX `bar_FI_1` (`id`, `subid`)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 ";
         $appData = $xmlToAppData->parseString($schema);
         set_include_path($include_path);
