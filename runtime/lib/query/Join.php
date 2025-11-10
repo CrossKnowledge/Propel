@@ -149,9 +149,9 @@ class Join
         $this->leftTableAlias = $leftTableAlias;
         $this->rightTableName = $rightTableName;
         $this->rightTableAlias = $rightTableAlias;
-        $this->left[]= $leftColumnName;
-        $this->right[]= $rightColumnName;
-        $this->operator[]= $operator;
+        $this->left[] = $leftColumnName;
+        $this->right[] = $rightColumnName;
+        $this->operator[] = $operator;
         $this->count++;
     }
 
