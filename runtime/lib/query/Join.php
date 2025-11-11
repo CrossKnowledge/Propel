@@ -130,13 +130,14 @@ class Join
     }
 
     /**
-     * @param string $leftTableName
-     * @param string $leftColumnName
+     * @param string      $leftTableName
+     * @param string      $leftColumnName
      * @param string|null $leftTableAlias
-     * @param string $rightTableName
-     * @param string $rightColumnName
+     * @param string|null $rightTableName
+     * @param string|null $rightColumnName
      * @param string|null $rightTableAlias
-     * @param string $operator
+     * @param string      $operator
+     *
      * @return void
      */
     public function addExplicitCondition(
