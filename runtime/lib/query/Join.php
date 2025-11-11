@@ -130,33 +130,32 @@ class Join
     }
 
     /**
-     * Join condition definition.
-     * @example
-     * <code>
-     * $join = new Join();
-     * $join->setJoinType(Criteria::LEFT_JOIN);
-     * $join->addExplicitCondition('book', 'AUTHOR_ID', null, 'author', 'ID', 'a', Join::EQUAL);
-     * echo $join->getClause();
-     * // LEFT JOIN author a ON (book.AUTHOR_ID=a.ID)
-     * </code>
+     * @param string      $leftTableName
+     * @param string      $leftColumnName
+     * @param string|null $leftTableAlias
+     * @param string|null $rightTableName
+     * @param string|null $rightColumnName
+     * @param string|null $rightTableAlias
+     * @param string      $operator
      *
-     * @param string $leftTableName
-     * @param string $leftColumnName
-     * @param string $leftTableAlias
-     * @param string $rightTableName
-     * @param string $rightColumnName
-     * @param string $rightTableAlias
-     * @param string $operator        The comparison operator of the join condition, default Join::EQUAL
+     * @return void
      */
-    public function addExplicitCondition($leftTableName, $leftColumnName, $leftTableAlias = null, $rightTableName, $rightColumnName, $rightTableAlias = null, $operator = self::EQUAL)
-    {
-        $this->leftTableName   = $leftTableName;
-        $this->leftTableAlias  = $leftTableAlias;
-        $this->rightTableName  = $rightTableName;
+    public function addExplicitCondition(
+        $leftTableName,
+        $leftColumnName,
+        $leftTableAlias = null,
+        $rightTableName = null,
+        $rightColumnName = null,
+        $rightTableAlias = null,
+        $operator = self::EQUAL
+    ) {
+        $this->leftTableName = $leftTableName;
+        $this->leftTableAlias = $leftTableAlias;
+        $this->rightTableName = $rightTableName;
         $this->rightTableAlias = $rightTableAlias;
-        $this->left     []= $leftColumnName;
-        $this->right    []= $rightColumnName;
-        $this->operator []= $operator;
+        $this->left[] = $leftColumnName;
+        $this->right[] = $rightColumnName;
+        $this->operator[] = $operator;
         $this->count++;
     }
 
