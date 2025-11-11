@@ -131,7 +131,7 @@ class Join
 
     /**
      * @param string $leftTableName
-     * @param string $leftColumnName  
+     * @param string $leftColumnName
      * @param string|null $leftTableAlias
      * @param string $rightTableName
      * @param string $rightColumnName
@@ -139,12 +139,15 @@ class Join
      * @param string $operator
      * @return void
      */
-    public function addExplicitCondition($leftTableName, $leftColumnName, $leftTableAlias = null, $rightTableName = null, $rightColumnName = null, $rightTableAlias = null, $operator = self::EQUAL)
-    {
-        if ($rightTableName === null || $rightColumnName === null) {
-            throw new InvalidArgumentException('rightTableName and rightColumnName are required parameters');
-        }
-        
+    public function addExplicitCondition(
+        $leftTableName,
+        $leftColumnName,
+        $leftTableAlias = null,
+        $rightTableName = null,
+        $rightColumnName = null,
+        $rightTableAlias = null,
+        $operator = self::EQUAL
+    ) {
         $this->leftTableName = $leftTableName;
         $this->leftTableAlias = $leftTableAlias;
         $this->rightTableName = $rightTableName;
