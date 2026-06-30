@@ -52,6 +52,10 @@ class ModelCriteria extends Criteria
     protected $isKeepQuery = true; // whether to clone the current object before termination methods
     protected $select = null;  // this is for the select method
 
+    protected $replacedColumns = [];
+    protected $currentAlias = '';
+    protected $foundMatch = false;
+
     /**
      * Creates a new instance with the default capacity which corresponds to
      * the specified database.
