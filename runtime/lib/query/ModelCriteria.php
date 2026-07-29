@@ -2274,6 +2274,54 @@ class ModelCriteria extends Criteria
      */
     public function exists($con = null)
     {
-        return 0 !== $this->count($con);
+        if ($con === null) {
+            $con = Propel::getConnection($this->getDbName(), Propel::CONNECTION_READ);
+        }
+
+        $this->basePreSelect($con);
+        $criteria = $this->isKeepQuery() ? clone $this : $this;
+        $criteria->setDbName($this->getDbName()); // Set the correct dbName
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the existence check
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(constant($this->modelPeerName.'::TABLE_NAME'));
+
+        // Ensure we have at least one select column (but no more than one, since this is an EXISTS query)
+        $criteria->clearSelectColumns();
+        $criteria->addSelectColumn('1');
+
+        // Get the database adapter and map
+        $dbMap = Propel::getDatabaseMap($criteria->getDbName());
+        $db = Propel::getDB($criteria->getDbName());
+
+        // // Limit to 1 row for better performance (EXISTS stops at first match)
+        // $criteria->limit(1);
+
+        // Generate the SQL query with parameters
+        $params = [];
+        $selectSql = BasePeer::createSelectSql($criteria, $params);
+
+        // Wrap in SELECT EXISTS(...)
+        $sql = "SELECT EXISTS($selectSql) AS exists_result";
+
+        try {
+            $stmt = $con->prepare($sql);
+            $db->bindValues($stmt, $params, $dbMap);
+            $stmt->execute();
+
+            if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+                $result = (bool) $row[0];
+            } else {
+                $result = false;
+            }
+            $stmt->closeCursor();
+
+            return $result;
+        } catch (Exception $e) {
+            Propel::log($e->getMessage(), Propel::LOG_ERR);
+            throw new PropelException(sprintf('Unable to execute EXISTS statement [%s]', $sql), $e);
+        }
     }
 }
