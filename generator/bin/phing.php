@@ -8,14 +8,17 @@
  * @version $Revision: 552 $
  */
 
+use Phing\Exception\ConfigurationException;
+use Phing\Phing;
+
 // Set any INI options for PHP
 // ---------------------------
 
 $dirname = dirname(__FILE__);
-$autolaoded = false;
+$autoloaded = false;
 foreach (array($dirname . '/../../', $dirname . '/../../../../../') as $dir) {
     if (file_exists($file = realpath($dir) . '/vendor/autoload.php')) {
-        set_include_path($dir . '/vendor/phing/phing/classes' . PATH_SEPARATOR . get_include_path() );
+        set_include_path($dir . '/vendor/phing/phing/src' . PATH_SEPARATOR . get_include_path() );
         include_once $file;
 
         $autoloaded = true;
@@ -35,8 +38,6 @@ if (getenv('PHP_CLASSPATH')) {
     }
 }
 
-require_once 'phing/Phing.php';
-
 try {
     /* Setup Phing environment */
     Phing::startup();
@@ -51,13 +52,12 @@ try {
 
     // Invoke the commandline entry point
     Phing::fire($args);
-
-    // Invoke any shutdown routines.
-    Phing::shutdown();
 } catch (ConfigurationException $x) {
+    Phing::shutdown();
     Phing::printMessage($x);
     exit(-1); // This was convention previously for configuration errors.
 } catch (Exception $x) {
+    Phing::shutdown();
     // Assume the message was already printed as part of the build and
     // exit with non-0 error code.
     exit(1);
