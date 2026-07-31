@@ -11,6 +11,8 @@
 require_once 'phing/Task.php';
 require_once dirname(__FILE__) . '/../util/PropelSQLParser.php';
 
+use Phing\Io\File as PhingFile;
+
 /**
  * Executes all SQL files referenced in the sqldbmap file against their mapped databases.
  *

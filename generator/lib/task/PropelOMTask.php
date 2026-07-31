@@ -12,6 +12,8 @@ require_once 'task/AbstractPropelDataModelTask.php';
 require_once 'builder/om/ClassTools.php';
 require_once 'builder/om/OMBuilder.php';
 
+use Phing\Io\File as PhingFile;
+
 /**
  * This Task creates the OM classes based on the XML schema file.
  *

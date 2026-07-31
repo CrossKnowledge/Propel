@@ -128,7 +128,14 @@ class GeneratorConfig implements GeneratorConfigInterface
             throw new BuildException("Unable to find class path for '$propname' property.");
         }
 
-        $clazz = Phing::import($classpath);
+        // Phing 3.x import() doesn't convert dots to directory separators
+        $lastDot = strrpos($classpath, '.');
+        if ($lastDot !== false) {
+            Phing::import(str_replace('.', DIRECTORY_SEPARATOR, $classpath));
+            $clazz = substr($classpath, $lastDot + 1);
+        } else {
+            $clazz = Phing::import($classpath);
+        }
 
         return $clazz;
     }
@@ -157,7 +164,9 @@ class GeneratorConfig implements GeneratorConfigInterface
     {
         $buildConnection = $this->getBuildConnection($database);
         if (null !== $buildConnection['adapter']) {
-            $clazz = Phing::import('platform.' . ucfirst($buildConnection['adapter']) . 'Platform');
+            $platformClass = ucfirst($buildConnection['adapter']) . 'Platform';
+            Phing::import('platform' . DIRECTORY_SEPARATOR . $platformClass);
+            $clazz = $platformClass;
         } elseif ($this->getBuildProperty('platformClass')) {
             // propel.platform.class = platform.${propel.database}Platform by default
             $clazz = $this->getClassname('platformClass');

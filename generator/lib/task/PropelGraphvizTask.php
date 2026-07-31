@@ -12,6 +12,8 @@ require_once 'task/AbstractPropelDataModelTask.php';
 require_once 'model/AppData.php';
 require_once 'util/PropelDotGenerator.php';
 
+use Phing\Io\File as PhingFile;
+
 /**
  * A task to generate Graphviz dot files from Propel datamodel.
  *

@@ -37,49 +37,50 @@
   -->
 
   <path id="propelclasses">
+    <pathelement dir="${propel.home}/lib/task/"/>
     <pathelement dir="${propel.home}/lib/"/>
     <pathelement dir="${propel.project.dir}/"/>
   </path>
 
   <taskdef
     name="propel-om"
-    classname="task.PropelOMTask" classpathRef="propelclasses"/>
+    classname="PropelOMTask" classpathRef="propelclasses"/>
   <taskdef
     name="propel-data-dump"
-    classname="task.PropelDataDumpTask" classpathRef="propelclasses"/>
+    classname="PropelDataDumpTask" classpathRef="propelclasses"/>
   <taskdef
     name="propel-data-sql"
-    classname="task.PropelDataSQLTask" classpathRef="propelclasses"/>
+    classname="PropelDataSQLTask" classpathRef="propelclasses"/>
    <taskdef
     name="propel-schema-reverse"
-    classname="task.PropelSchemaReverseTask" classpathRef="propelclasses"/>
+    classname="PropelSchemaReverseTask" classpathRef="propelclasses"/>
   <taskdef
     name="propel-sql"
-    classname="task.PropelSQLTask" classpathRef="propelclasses"/>
+    classname="PropelSQLTask" classpathRef="propelclasses"/>
   <taskdef
     name="propel-sql-diff"
-    classname="task.PropelSQLDiffTask" classpathRef="propelclasses"/>
+    classname="PropelSQLDiffTask" classpathRef="propelclasses"/>
   <taskdef
     name="propel-migration-status"
-    classname="task.PropelMigrationStatusTask" classpathRef="propelclasses"/>
+    classname="PropelMigrationStatusTask" classpathRef="propelclasses"/>
   <taskdef
     name="propel-migration-up"
-    classname="task.PropelMigrationUpTask" classpathRef="propelclasses"/>
+    classname="PropelMigrationUpTask" classpathRef="propelclasses"/>
   <taskdef
     name="propel-migration-down"
-    classname="task.PropelMigrationDownTask" classpathRef="propelclasses"/>
+    classname="PropelMigrationDownTask" classpathRef="propelclasses"/>
   <taskdef
     name="propel-migration"
-    classname="task.PropelMigrationTask" classpathRef="propelclasses"/>
+    classname="PropelMigrationTask" classpathRef="propelclasses"/>
   <taskdef
     name="propel-sql-exec"
-    classname="task.PropelSQLExec" classpathRef="propelclasses"/>
+    classname="PropelSQLExec" classpathRef="propelclasses"/>
   <taskdef
     name="propel-graphviz"
-    classname="task.PropelGraphvizTask" classpathRef="propelclasses"/>
+    classname="PropelGraphvizTask" classpathRef="propelclasses"/>
   <taskdef
     name="propel-convert-conf"
-    classname="task.PropelConvertConfTask" classpathRef="propelclasses"/>
+    classname="PropelConvertConfTask" classpathRef="propelclasses"/>
 
   <!-- ================================================================ -->
   <!-- M A I N  T A R G E T                                             -->
@@ -621,7 +622,7 @@
 
   <taskdef
     name="propel-build-sql"
-    classname="task.PropelSqlBuildTask" classpathRef="propelclasses" />
+    classname="PropelSqlBuildTask" classpathRef="propelclasses" />
 
   <target name="build-sql">
     <propel-build-sql outputDirectory="${propel.sql.dir}"
