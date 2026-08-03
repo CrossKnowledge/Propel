@@ -13,6 +13,8 @@ require_once 'model/Database.php';
 require_once 'builder/util/XmlToAppData.php';
 require_once 'builder/util/XmlToDataSQL.php';
 
+use Phing\Io\File as PhingFile;
+
 /**
  * Task that transforms XML datadump files into files containing SQL INSERT statements.
  *

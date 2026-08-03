@@ -12,6 +12,8 @@ require_once 'phing/tasks/ext/pdo/PDOTask.php';
 require_once 'config/GeneratorConfig.php';
 require_once 'model/PropelTypes.php';
 
+use Phing\Io\File as PhingFile;
+
 /**
  * This class generates an XML schema of an existing database from
  * the database metadata.

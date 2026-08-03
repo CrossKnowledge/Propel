@@ -10,6 +10,8 @@
 
 require_once 'phing/Task.php';
 
+use Phing\Io\File as PhingFile;
+
 /**
  * This Task lists the migrations yet to be executed
  *
@@ -73,7 +75,8 @@ abstract class BasePropelMigrationTask extends Task
                     throw new IOException("Unable to create Ouptut directory: " . $outputDirectory->getAbsolutePath());
                 }
             }
-            $this->outputDirectory = $outputDirectory->getCanonicalPath();
+            $canonical = $outputDirectory->getCanonicalPath();
+            $this->outputDirectory = ($canonical !== false && $canonical !== null) ? $canonical : $outputDirectory->getAbsolutePath();
         } catch (IOException $ioe) {
             throw new BuildException($ioe);
         }

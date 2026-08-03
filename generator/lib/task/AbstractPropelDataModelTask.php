@@ -16,6 +16,8 @@ include_once 'model/Database.php';
 include_once 'builder/util/XmlToAppData.php';
 include_once 'util/PropelSchemaValidator.php';
 
+use Phing\Io\File as PhingFile;
+
 /**
  * An abstract base Propel task to perform work related to the XML schema file.
  *

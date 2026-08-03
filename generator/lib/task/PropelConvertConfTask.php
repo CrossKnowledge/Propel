@@ -13,6 +13,8 @@ require_once 'task/AbstractPropelDataModelTask.php';
 require_once 'builder/om/OMBuilder.php';
 require_once 'builder/om/ClassTools.php';
 
+use Phing\Io\File as PhingFile;
+
 /**
  * This Task converts the XML runtime configuration file into a PHP array for faster performance.
  *

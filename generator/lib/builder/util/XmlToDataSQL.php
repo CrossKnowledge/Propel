@@ -10,6 +10,8 @@
 
 require_once 'phing/parser/AbstractHandler.php';
 
+use Phing\Io\File as PhingFile;
+
 /**
  * A Class that is used to parse an data dump XML file and create SQL using a DataSQLBuilder class.
  *

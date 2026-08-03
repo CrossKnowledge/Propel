@@ -130,6 +130,17 @@
 	</if>
 	<echo msg="Loading project-specific props from ${propel.project.dir}/${build.properties}"/>
 	<property file="${propel.project.dir}/${build.properties}"/>
+	<!-- Phing 3.x: resolveAllProperties() expands cross-refs within loaded files before project props are consulted,
+	     so set concrete values here to ensure sub-projects inherit correct paths. -->
+	<property name="propel.output.dir" value="${propel.project.dir}/build"/>
+	<property name="propel.conf.dir" value="${propel.project.dir}"/>
+	<property name="propel.schema.dir" value="${propel.project.dir}"/>
+	<property name="propel.sql.dir" value="${propel.output.dir}/sql"/>
+	<property name="propel.migration.dir" value="${propel.output.dir}/migrations"/>
+	<property name="propel.php.dir" value="${propel.output.dir}/classes"/>
+	<property name="propel.phpconf.dir" value="${propel.output.dir}/conf"/>
+	<property name="propel.graph.dir" value="${propel.output.dir}/graph"/>
+	<property name="propel.dbd2propel.dir" value="${propel.project.dir}/dbd"/>
 </target>
 
 <target name="main" depends="configure" description="The main target. Includes project-specific build.properties and calls the build-propel.xml script">

@@ -10,6 +10,8 @@
 
 require_once 'model/AppData.php';
 
+use Phing\Io\File as PhingFile;
+
 /**
  * The task for building SQL DDL based on the XML datamodel.
  *

@@ -25,6 +25,9 @@
  * @version    $Revision$
  * @package    propel.generator.task
  */
+
+use Phing\Io\File as PhingFile;
+
 class PropelDataDumpTask extends AbstractPropelDataModelTask
 {
 
