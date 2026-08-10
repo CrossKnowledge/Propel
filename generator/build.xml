@@ -141,6 +141,14 @@
 	<property name="propel.phpconf.dir" value="${propel.output.dir}/conf"/>
 	<property name="propel.graph.dir" value="${propel.output.dir}/graph"/>
 	<property name="propel.dbd2propel.dir" value="${propel.project.dir}/dbd"/>
+	<property name="propel.platform.class" value="platform.${propel.database}Platform"/>
+	<property name="propel.builder.datasql.class" value="builder.sql.${propel.database}.${propel.database}DataSQLBuilder"/>
+	<property name="propel.reverse.parser.class" value="reverse.${propel.database}.${propel.database}SchemaParser"/>
+	<property name="propel.database.buildUrl" value="${propel.database.url}"/>
+	<property name="propel.database.createUrl" value="${propel.database.buildUrl}"/>
+	<property name="propel.targetPackage" value="${propel.project}"/>
+	<property name="propel.runtime.phpconf.file" value="${propel.project}-conf.php"/>
+	<property name="propel.runtime.phpconf-classmap.file" value="classmap-${propel.project}-conf.php"/>
 </target>
 
 <target name="main" depends="configure" description="The main target. Includes project-specific build.properties and calls the build-propel.xml script">
