@@ -94,6 +94,13 @@ class GeneratorConfig implements GeneratorConfigInterface
      */
     public function setBuildProperty($name, $value)
     {
+        // Phing 3 keeps boolean property values as strings.
+        if ($value === 'true') {
+            $value = true;
+        } elseif ($value === 'false') {
+            $value = false;
+        }
+
         $this->buildProperties[$name] = $value;
     }
 

@@ -18,6 +18,14 @@ Propel has some nice features you should know about:
 
 Read the [Propel documentation](http://www.propelorm.org/).
 
+## Generator properties with Phing 3 ##
+
+Phing 3 passes property values to the generator as strings. `GeneratorConfig`
+converts the literal values `true` and `false` to PHP booleans so options such as
+`propel.addTimeStamp = false` and `propel.emulateForeignKeyConstraints = false`
+remain disabled. Other property values, including class names and date formats,
+are preserved.
+
 
 ## License ##
 
